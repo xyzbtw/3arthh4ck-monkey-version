@@ -6,8 +6,6 @@ final class SwingData extends DefaultData<Swing> {
     public SwingData(Swing module) {
         super(module);
         register(module.swingSpeed, "The speed at which your hand swings. 6 is default speed. Higher the speed is, more it will take to swing.");
-        register(module.changeMainhand, "The progress of mainhand");
-        register(module.changeOffhand, "The progress of offhand");
 
     }
 

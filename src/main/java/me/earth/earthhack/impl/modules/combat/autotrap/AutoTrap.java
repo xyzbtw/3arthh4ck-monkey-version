@@ -86,6 +86,8 @@ protected final Setting<Boolean> top               =
             register(new BooleanSetting("Upper-FP", false));
     protected final Setting<Boolean> instant     =
             register(new BooleanSetting("Instant", false));
+    protected final Setting<Boolean> logoutTrap =
+           register(new BooleanSetting("TrapLogouts", false));
     // maybe help bombing?
 
 
@@ -187,6 +189,18 @@ protected final Setting<Boolean> top               =
         {
             newTrapping = getPositions(newTarget);
         }
+
+        if(     logoutTrap.getValue()
+                && LOGOUTSPOTS.isEnabled())
+        {
+            EntityPlayer logged = loggedOutPlayer.get(LOGOUTSPOTS).getModel().getPlayer();
+            cached.put(logged, getPositions(logged));
+            if(!Managers.FRIENDS.contains(logged))
+            {
+                newTrapping = cached.get(logged);
+            }
+        }
+
 
 
         return result.setTargets(newTrapping);
@@ -391,6 +405,7 @@ protected final Setting<Boolean> top               =
                         <= MathUtil.square(range.getValue()))
                 .collect(Collectors.toList());
     }
+
 
     /**
      * Creates trapping positions

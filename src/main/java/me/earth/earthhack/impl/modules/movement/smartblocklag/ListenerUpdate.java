@@ -18,28 +18,28 @@ public class ListenerUpdate extends ModuleListener<SmartBlockLag, UpdateEvent> {
         super(module, UpdateEvent.class);
     }
     private static final ModuleCache<BlockLag> burrow = Caches.getModule(BlockLag.class);
-    boolean burrowed = false;
-    StopWatch delayTimer;
+
 
     @Override
     public void invoke(UpdateEvent event) {
         EntityPlayer target = EntityUtil.getClosestEnemy();
         if ((!(module.holeonly.getValue())
                 || PlayerUtil.isInHole(mc.player))
-                    && !mc.isSingleplayer() && target!=null
-                && delayTimer.passed(module.delay.getValue()))
+                    && !mc.isSingleplayer()
+                && target!=null
+                && module.delayTimer.passed(module.delay.getValue()))
         {
             if (mc.player.getDistance(target) < module.smartRange.getValue()
                     && !PlayerUtil.isInHole(target)
                     && !burrow.isEnabled()
                     && mc.world.getBlockState(PlayerUtil.getPlayerPos().add(0, 0.2, 0)).getBlock() instanceof BlockAir
-                    && !burrowed) {
+                    && !module.isPhasing()) {
                 burrow.enable();
+                module.delayTimer.reset();
                 if(module.turnoff.getValue()){
                     module.disable();
                 }
             }
-            burrowed= !(mc.world.getBlockState(PlayerUtil.getPlayerPos()).getBlock() instanceof BlockAir);
         }
     }
 }

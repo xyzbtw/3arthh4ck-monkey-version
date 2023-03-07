@@ -4,7 +4,8 @@ public enum Complexity {
     Beginner,
     Medium,
     Expert,
-    Dev;
+    Dev,
+    Hide;
 
     public boolean shouldDisplay(Setting<?> setting) {
         return setting.getComplexity().ordinal() <= this.ordinal();

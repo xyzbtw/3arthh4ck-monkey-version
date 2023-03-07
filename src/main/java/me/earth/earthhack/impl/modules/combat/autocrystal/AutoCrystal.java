@@ -101,7 +101,7 @@ public class AutoCrystal extends Module
     protected final Setting<Float> placeRange =
             register(new NumberSetting<>("PlaceRange", 6.0f, 0.0f, 6.0f));
     protected final Setting<Float> placeTrace =
-            register(new NumberSetting<>("PlaceTrace", 6.0f, 0.0f, 6.0f))
+            register(new NumberSetting<>("PlaceWallsRange", 6.0f, 0.0f, 6.0f))
                     .setComplexity(Complexity.Expert);
     public final Setting<Float> minDamage =
             register(new NumberSetting<>("MinDamage", 6.0f, 0.1f, 20.0f));
@@ -146,6 +146,15 @@ public class AutoCrystal extends Module
     protected final Setting<Boolean> fallbackTrace =
             register(new BooleanSetting("Fallback-Trace", true))
                     .setComplexity(Complexity.Expert);
+    protected final Setting<Boolean> ignoreNonFull =
+            register(new BooleanSetting("IgnoreNonFull", false))
+                    .setComplexity(Complexity.Expert);
+    protected final Setting<Boolean> efficientPlacements =
+            register(new BooleanSetting("EfficientPlacements", false))
+                    .setComplexity(Complexity.Expert);
+    protected final Setting<Integer> simulatePlace =
+            register(new NumberSetting<>("Simulate-Place", 0, 0, 10))
+                    .setComplexity(Complexity.Medium);
     protected final Setting<Boolean> rayTraceBypass =
             register(new BooleanSetting("RayTraceBypass", false))
                     .setComplexity(Complexity.Medium);
@@ -170,15 +179,7 @@ public class AutoCrystal extends Module
     protected final Setting<Integer> bypassRotationTime =
             register(new NumberSetting<>("RayBypassRotationTime", 500, 0, 1000))
                     .setComplexity(Complexity.Expert);
-    protected final Setting<Boolean> ignoreNonFull =
-            register(new BooleanSetting("IgnoreNonFull", false))
-                    .setComplexity(Complexity.Expert);
-    protected final Setting<Boolean> efficientPlacements =
-            register(new BooleanSetting("EfficientPlacements", false))
-                    .setComplexity(Complexity.Expert);
-    protected final Setting<Integer> simulatePlace =
-            register(new NumberSetting<>("Simulate-Place", 0, 0, 10))
-                    .setComplexity(Complexity.Medium);
+
 
     /* ---------------- Break Settings -------------- */
     protected final Setting<Attack> attackMode = // TODO: Calc isnt implemented yet!
@@ -190,7 +191,7 @@ public class AutoCrystal extends Module
     protected final Setting<Integer> breakDelay =
             register(new NumberSetting<>("BreakDelay", 25, 0, 500));
     protected final Setting<Float> breakTrace =
-            register(new NumberSetting<>("BreakTrace", 3.0f, 0.0f, 6.0f))
+            register(new NumberSetting<>("BreakWallsRange", 3.0f, 0.0f, 6.0f))
                     .setComplexity(Complexity.Medium);
     protected final Setting<Float> minBreakDamage =
             register(new NumberSetting<>("MinBreakDmg", 0.5f, 0.0f, 20.0f))
@@ -516,9 +517,6 @@ public class AutoCrystal extends Module
                     .setComplexity(Complexity.Expert);
     protected final Setting<RenderDamagePos> renderDamage =
             register(new EnumSetting<>("DamageRender", RenderDamagePos.None))
-                    .setComplexity(Complexity.Medium);
-    protected final Setting<Boolean> placedCrystals =
-            register(new BooleanSetting("DrawBroken", false))
                     .setComplexity(Complexity.Medium);
     protected final Setting<RenderDamage> renderMode =
             register(new EnumSetting<>("DamageMode", RenderDamage.Normal))
@@ -1134,7 +1132,7 @@ public class AutoCrystal extends Module
         this.listeners.addAll(sequentialHelper.getListeners());
 
         new PageBuilder<>(this, pages)
-                .addPage(p -> p == ACPages.Place, place, simulatePlace)
+                .addPage(p -> p == ACPages.Place, place, bypassRotationTime)
                 .addPage(p -> p == ACPages.Break, attackMode, breakSwing)
                 .addPage(p -> p == ACPages.Rotate, rotate, pingExisted)
                 .addPage(p -> p == ACPages.Misc, targetRange, motionCalc)
@@ -1205,10 +1203,6 @@ public class AutoCrystal extends Module
             breakTimer.reset(breakDelay.getValue());
             placeTimer.reset(breakDelay.getValue());
         }
-        if(placedCrystals.getValue() && CrystalsPerSecondTimer.passed(1000)){
-            crystalsAmount = 0;
-            CrystalsPerSecondTimer.setTime(0);
-        }
 
 
         boolean start = false;
@@ -1259,9 +1253,7 @@ public class AutoCrystal extends Module
             crystalsAmount = 0;
         }
 
-        if(placedCrystals.getValue()){
-            return t == null ? null : t.getName() + ", " + crystalsAmount;
-        }
+
 
         if (switching) {
             return TextColor.GREEN + "Switching";

@@ -66,8 +66,6 @@ public class AutoCrystalData extends DefaultData<AutoCrystal>
         register(module.stopWhenEatingOffhand, "Similar to StopWhenEating, but this" +
                 " only stops AutoCrystal when you are eating with" +
                 " your offhand.");
-        register(module.placedCrystals, "Draws the amount of crystals per second" +
-                " in the arraylist. This is similar to what Future does.");
         register(module.smartTrace, "Only for really strict RayTrace Servers." +
                 " Has to make complicated Calculations.");
         register(module.fallbackTrace, "Will place upwards if it has to.");

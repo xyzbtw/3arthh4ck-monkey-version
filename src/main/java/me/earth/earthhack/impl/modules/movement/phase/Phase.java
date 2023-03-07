@@ -40,8 +40,6 @@ public class Phase extends BlockESPModule implements CollisionEvent.Listener
             register(new BooleanSetting("ConstStrafe", false));
     protected final Setting<Boolean> constTeleport =
             register(new BooleanSetting("ConstTeleport", false));
-    protected final Setting<Boolean> sneakCheck =
-            register(new BooleanSetting("SneakCheck", false));
     protected final Setting<Boolean> cancel =
         register(new BooleanSetting("Cancel", false));
     protected final Setting<Boolean> limit =

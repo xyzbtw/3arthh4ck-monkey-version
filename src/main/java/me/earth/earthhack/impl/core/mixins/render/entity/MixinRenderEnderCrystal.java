@@ -38,6 +38,8 @@ public abstract class MixinRenderEnderCrystal
     extends Render<EntityEnderCrystal> {
     private static final ModuleCache<CrystalScale> SCALE =
         Caches.getModule(CrystalScale.class);
+    private static final ModuleCache<CrystalChams> CHAMS =
+            Caches.getModule(CrystalChams.class);
     @Shadow
     @Final
     private ModelBase modelEnderCrystal;
@@ -87,8 +89,8 @@ public abstract class MixinRenderEnderCrystal
         }
 
         float limbSwing = 0.0F;
-        float limbSwingAmount = f * 3.0F;
-        float ageInTicks = f1 * 0.2F;
+        float limbSwingAmount = CHAMS.get().modify.getValue() ? (f * 3.0F * CHAMS.get().spinnerspeed.getValue()) : f * 3.0F;
+        float ageInTicks = CHAMS.get().modify.getValue() ? (f1 * 0.2F * CHAMS.get().bouncespeed.getValue()) : f1 * 0.2F;
         float netHeadYaw = 0.0F;
         float headPitch = 0.0F;
         float scale = 0.0625F;
@@ -130,8 +132,8 @@ public abstract class MixinRenderEnderCrystal
         float entityYaw, float partialTicks, CallbackInfo ci,
         float f, float f1) {
 
-        float limbSwingAmount = f * 3.0F;
-        float ageInTicks = f1 * 0.2F;
+        float limbSwingAmount = CHAMS.get().modify.getValue() ? (f * 3.0F * CHAMS.get().spinnerspeed.getValue()) : f * 3.0F;
+        float ageInTicks = CHAMS.get().modify.getValue() ? (f1 * 0.2F * CHAMS.get().bouncespeed.getValue()) : f1 * 0.2F;
         ModelBase modelBase = entity.shouldShowBottom()
             ? modelEnderCrystal : modelEnderCrystalNoBase;
         RenderEnderCrystal renderLiving = RenderEnderCrystal.class.cast(this);

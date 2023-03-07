@@ -19,22 +19,13 @@ public class Swing extends Module {
 
     public final BooleanSetting clientside =
             register(new BooleanSetting("ClientSide", false));
-    public final BooleanSetting changeMainhand =
-            register(new BooleanSetting("ChangeMainhand", false));
-    public final BooleanSetting changeOffhand =
-            register(new BooleanSetting("ChangeOffhand", false));
 
     protected final EnumSetting<SwingEnum> hand =
             register(new EnumSetting<>("Hand", SwingEnum.MAINHAND));
-    public Setting<Float> mainhand =
-            register(new NumberSetting<>("MainhandProgress",1.0f, 0.1f, 30f));
-    public Setting<Float> offhand =
-            register(new NumberSetting<>("OffhandProgress",1.0f, 0.1f, 30f));
 
     public Swing() {
         super("Swing", Category.Player);
         this.setData(new SwingData(this));
-        this.listeners.add(new ListenerUpdate(this));
         this.listeners.add(new LambdaListener<>(UpdateEvent.class, e -> {
             if(mc.player == null && mc.world == null) return;
 

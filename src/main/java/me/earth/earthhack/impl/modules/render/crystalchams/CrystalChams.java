@@ -41,10 +41,8 @@ public class CrystalChams extends Module {
             register(new NumberSetting<>("SpinSpeed", 1.0f, 0.1f, 100f));
     public final NumberSetting<Float> bouncespeed =
             register(new NumberSetting<>("BounceSpeed", 1.0f, 0.0f, 100f));
-    public final Setting<Boolean> spinner    =
-            register(new BooleanSetting("CrystalSpin", false));
-    public final Setting<Boolean> bouncer    =
-            register(new BooleanSetting("CrystalBounce", false));
+    public final Setting<Boolean> modify    =
+            register(new BooleanSetting("Modify", false));
 
     public CrystalChams() {
         super("CrystalChams", Category.Render);
@@ -61,8 +59,8 @@ public class CrystalChams extends Module {
                 glDisable(GL_TEXTURE_2D);
                 float alpha = color.getValue().getAlpha() / 255.0f;
                 glColor4f(1.0f, 1.0f, 1.0f, alpha);
-                e.getModel().render(e.getEntity(), e.getLimbSwing(), spinner.getValue() ? (e.getLimbSwingAmount() * spinnerspeed.getValue()) : e.getLimbSwingAmount(),
-                        bouncer.getValue() ? (e.getAgeInTicks()*bouncespeed.getValue()) : e.getAgeInTicks(), e.getNetHeadYaw(), e.getHeadPitch(), e.getScale());
+                e.getModel().render(e.getEntity(), e.getLimbSwing(), modify.getValue() ? (e.getLimbSwingAmount() * spinnerspeed.getValue()) : e.getLimbSwingAmount(),
+                        modify.getValue() ? (e.getAgeInTicks()*bouncespeed.getValue()) : e.getAgeInTicks(), e.getNetHeadYaw(), e.getHeadPitch(), e.getScale());
                 glEnable(GL_TEXTURE_2D);
 
                 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -84,7 +82,7 @@ public class CrystalChams extends Module {
                     GlStateManager.rotate(30.0F - (float)i * 60.0F, 0.0F, 0.0F, 0.5F);
                     GlStateManager.translate(0.0F, f * (0.001F + (float)i * 0.003F) * 20.0F, 0.0F);
                     GlStateManager.matrixMode(5888);
-                    e.getModel().render(e.getEntity(), e.getLimbSwing(), spinner.getValue() ? (e.getLimbSwingAmount() * spinnerspeed.getValue()) : e.getLimbSwingAmount(), bouncer.getValue() ? (e.getAgeInTicks()*bouncespeed.getValue()) : e.getAgeInTicks(), e.getNetHeadYaw(), e.getHeadPitch(), e.getScale());
+                    e.getModel().render(e.getEntity(), e.getLimbSwing(), modify.getValue() ? (e.getLimbSwingAmount() * spinnerspeed.getValue()) : e.getLimbSwingAmount(), modify.getValue() ? (e.getAgeInTicks()*bouncespeed.getValue()) : e.getAgeInTicks(), e.getNetHeadYaw(), e.getHeadPitch(), e.getScale());
                 }
 
                 GlStateManager.matrixMode(5890);
@@ -115,8 +113,8 @@ public class CrystalChams extends Module {
                               wireColor.getGreen() / 255.0f,
                               wireColor.getBlue() / 255.0f,
                               wireColor.getAlpha() / 255.0f);
-                    e.getModel().render(e.getEntity(), e.getLimbSwing(), spinner.getValue() ? (e.getLimbSwingAmount() * spinnerspeed.getValue()) : e.getLimbSwingAmount(),
-                            bouncer.getValue() ? (e.getAgeInTicks()*bouncespeed.getValue()) : e.getAgeInTicks(), e.getNetHeadYaw(), e.getHeadPitch(), e.getScale());
+                    e.getModel().render(e.getEntity(), e.getLimbSwing(),modify.getValue() ? (e.getLimbSwingAmount() * spinnerspeed.getValue()) : e.getLimbSwingAmount(),
+                            modify.getValue() ? (e.getAgeInTicks()*bouncespeed.getValue()) : e.getAgeInTicks(), e.getNetHeadYaw(), e.getHeadPitch(), e.getScale());
                     glPopAttrib();
                 }
 
@@ -138,8 +136,8 @@ public class CrystalChams extends Module {
                               chamsColor.getGreen() / 255.0f,
                               chamsColor.getBlue() / 255.0f,
                               chamsColor.getAlpha() / 255.0f);
-                    e.getModel().render(e.getEntity(), e.getLimbSwing(), spinner.getValue() ? (e.getLimbSwingAmount() * spinnerspeed.getValue()) : e.getLimbSwingAmount(),
-                                        bouncer.getValue() ? (e.getAgeInTicks()*bouncespeed.getValue()) : e.getAgeInTicks(), e.getNetHeadYaw(), e.getHeadPitch(), e.getScale());
+                    e.getModel().render(e.getEntity(), e.getLimbSwing(), modify.getValue() ? (e.getLimbSwingAmount() * spinnerspeed.getValue()) : e.getLimbSwingAmount(),
+                            modify.getValue() ? (e.getAgeInTicks()*bouncespeed.getValue()) : e.getAgeInTicks(), e.getNetHeadYaw(), e.getHeadPitch(), e.getScale());
                     glPopAttrib();
                 }
             }
