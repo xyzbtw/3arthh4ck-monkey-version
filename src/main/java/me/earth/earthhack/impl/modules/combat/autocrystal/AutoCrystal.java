@@ -163,22 +163,22 @@ public class AutoCrystal extends Module
                     .setComplexity(Complexity.Medium);
     protected final Setting<Boolean> rayBypassFacePlace =
             register(new BooleanSetting("RayBypassFacePlace", false))
-                    .setComplexity(Complexity.Expert);
+                    .setComplexity(Complexity.Medium);
     protected final Setting<Boolean> rayBypassFallback =
             register(new BooleanSetting("RayBypassFallback", false))
-                    .setComplexity(Complexity.Expert);
+                    .setComplexity(Complexity.Medium);
     protected final Setting<Integer> bypassTicks =
             register(new NumberSetting<>("BypassTicks", 10, 0, 20))
-                    .setComplexity(Complexity.Expert);
+                    .setComplexity(Complexity.Medium);
     protected final Setting<Float> rbYaw =
             register(new NumberSetting<>("RB-Yaw", 180.0f, 0.0f, 180.0f))
-                    .setComplexity(Complexity.Expert);
+                    .setComplexity(Complexity.Medium);
     protected final Setting<Float> rbPitch =
             register(new NumberSetting<>("RB-Pitch", 90.0f, 0.0f, 90.0f))
-                    .setComplexity(Complexity.Expert);
+                    .setComplexity(Complexity.Medium);
     protected final Setting<Integer> bypassRotationTime =
             register(new NumberSetting<>("RayBypassRotationTime", 500, 0, 1000))
-                    .setComplexity(Complexity.Expert);
+                    .setComplexity(Complexity.Medium);
 
 
     /* ---------------- Break Settings -------------- */
@@ -265,16 +265,16 @@ public class AutoCrystal extends Module
                     .setComplexity(Complexity.Medium);
     protected final Setting<Float> smoothSpeed =
             register(new NumberSetting<>("Smooth-Speed", 0.5f, 0.1f, 2.0f))
-                    .setComplexity(Complexity.Medium);
+                    .setComplexity(Complexity.Expert);
     protected final Setting<Integer> endRotations =
             register(new NumberSetting<>("End-Rotations", 250, 0, 1000))
                     .setComplexity(Complexity.Expert);
     protected final Setting<Float> angle =
             register(new NumberSetting<>("Break-Angle", 180.0f, 0.1f, 180.0f))
-                    .setComplexity(Complexity.Medium);
+                    .setComplexity(Complexity.Expert);
     protected final Setting<Float> placeAngle =
             register(new NumberSetting<>("Place-Angle", 180.0f, 0.1f, 180.0f))
-                    .setComplexity(Complexity.Medium);
+                    .setComplexity(Complexity.Expert);
     protected final Setting<Float> height =
             register(new NumberSetting<>("Height", 0.05f, 0.0f, 1.0f))
                     .setComplexity(Complexity.Expert);
@@ -283,7 +283,7 @@ public class AutoCrystal extends Module
                     .setComplexity(Complexity.Expert);
     protected final Setting<Integer> rotationTicks =
             register(new NumberSetting<>("Rotations-Existed", 0, 0, 500))
-                    .setComplexity(Complexity.Medium);
+                    .setComplexity(Complexity.Expert);
     protected final Setting<Boolean> focusRotations =
             register(new BooleanSetting("Focus-Rotations", false))
                     .setComplexity(Complexity.Expert);

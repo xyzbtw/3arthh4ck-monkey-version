@@ -20,7 +20,8 @@ public class SettingsModule extends Module {
             "-Beginner: these settings can be understood by everyone!\n" +
             "-Medium: requires some knowledge of clients and CrystalPvP.\n" +
             "-Expert: possibly requires knowledge of the code base and can " +
-                "cause serious issues when badly configured.");
+                    "cause serious issues when badly configured\n"+
+               "-Hide: don't use it, made to hide extra settings." );
         this.setData(data);
     }
 
