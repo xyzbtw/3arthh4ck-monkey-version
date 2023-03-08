@@ -1,6 +1,9 @@
 package me.earth.earthhack.impl.event.events.render;
 
+import me.earth.earthhack.api.cache.ModuleCache;
 import me.earth.earthhack.api.event.events.Event;
+import me.earth.earthhack.impl.modules.Caches;
+import me.earth.earthhack.impl.modules.render.crystalchams.CrystalChams;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderEnderCrystal;
 import net.minecraft.entity.Entity;
@@ -11,6 +14,8 @@ public class CrystalRenderEvent extends Event
     private final RenderEnderCrystal render;
     private final Entity entity;
     private final ModelBase model;
+    private static final ModuleCache<CrystalChams> CHAMS =
+            Caches.getModule(CrystalChams.class);
 
     private CrystalRenderEvent(RenderEnderCrystal render,
                                Entity entity,
@@ -57,8 +62,8 @@ public class CrystalRenderEvent extends Event
         {
             super(render, entity, model);
             this.limbSwing       = limbSwing;
-            this.limbSwingAmount = limbSwingAmount;
-            this.ageInTicks      = ageInTicks;
+            this.limbSwingAmount = CHAMS.get().modify.getValue() ? CHAMS.get().spinnerspeed.getValue()*limbSwingAmount : limbSwingAmount;
+            this.ageInTicks      = CHAMS.get().modify.getValue() ? CHAMS.get().bouncespeed.getValue()*ageInTicks : ageInTicks;
             this.netHeadYaw      = netHeadYaw;
             this.headPitch       = headPitch;
             this.scale           = scale;
@@ -116,8 +121,8 @@ public class CrystalRenderEvent extends Event
         {
             super(render, entity, model);
             this.limbSwing       = limbSwing;
-            this.limbSwingAmount = limbSwingAmount;
-            this.ageInTicks      = ageInTicks;
+            this.limbSwingAmount = CHAMS.get().modify.getValue() ? CHAMS.get().spinnerspeed.getValue()*limbSwingAmount : limbSwingAmount;
+            this.ageInTicks      = CHAMS.get().modify.getValue() ? CHAMS.get().bouncespeed.getValue()*ageInTicks : ageInTicks;
             this.netHeadYaw      = netHeadYaw;
             this.headPitch       = headPitch;
             this.scale           = scale;
