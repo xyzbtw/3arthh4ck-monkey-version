@@ -6,7 +6,8 @@ public class CrystalChamsData extends DefaultData<CrystalChams> {
     public CrystalChamsData(CrystalChams module) {
         super(module);
         register(module.modify, "If you want to modify the crystal bounce speed"+
-                "\nAnd spin speed");
+                "\nAnd spin speed"+
+                "\nDoesn't work with texture on.");
         register(module.spinnerspeed, "Crystal spin speed");
         register(module.bouncespeed, "Crystal bounce speed");
     }
