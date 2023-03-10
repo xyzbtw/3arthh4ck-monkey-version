@@ -68,14 +68,22 @@ public class Phase extends BlockESPModule implements CollisionEvent.Listener
         register(new BooleanSetting("SmartClick", false));
     protected final Setting<Boolean> esp =
         register(new BooleanSetting("ESP", false));
-    public final Setting<Boolean> fallPacket = this.register(new BooleanSetting("Fall Packet", true));
-    public final Setting<Boolean> sprintPacket = this.register(new BooleanSetting("Sprint Packet", true));
-    public final Setting<Boolean> antiVoid = this.register(new BooleanSetting("Anti Void", false));
-    public final Setting<Integer> antiVoidHeight = this.register(new NumberSetting<>("Anti Void Height", 5, 1, 100));
-    public final Setting<Double> phaseSpeed = this.register(new NumberSetting<>("Phase Walk Speed", 42.4, 0.1, 70.0));
-    public final Setting<Boolean> downOnShift = this.register(new BooleanSetting("Phase Down When Crouch", true));
-    public final Setting<Boolean> stopMotion = this.register(new BooleanSetting("Attempt Clips", true));
-    public final Setting<Integer> stopMotionDelay = this.register(new NumberSetting<>("Attempt Clips Delay", 5, 0, 20));
+    public final Setting<Boolean> fallPacket =
+            this.register(new BooleanSetting("Fall Packet", true));
+    public final Setting<Boolean> sprintPacket =
+            this.register(new BooleanSetting("Sprint Packet", true));
+    public final Setting<Boolean> antiVoid =
+            this.register(new BooleanSetting("Anti Void", false));
+    public final Setting<Integer> antiVoidHeight =
+            this.register(new NumberSetting<>("Anti Void Height", 5, 1, 100));
+    public final Setting<Double> phaseSpeed =
+            this.register(new NumberSetting<>("Phase Walk Speed", 42.4, 0.1, 70.0));
+    public final Setting<Boolean> downOnShift =
+            this.register(new BooleanSetting("Phase Down When Crouch", true));
+    public final Setting<Boolean> stopMotion =
+            this.register(new BooleanSetting("Attempt Clips", true));
+    public final Setting<Integer> stopMotionDelay =
+            this.register(new NumberSetting<>("Attempt Clips Delay", 5, 0, 20));
 
     protected final ListenerCollision listenerCollision;
     protected final Set<Packet<?>> packets = new ConcurrentSet<>();

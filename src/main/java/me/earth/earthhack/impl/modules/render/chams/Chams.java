@@ -41,6 +41,10 @@ public class Chams extends Module
             register(new BooleanSetting("Self", false));
     protected final Setting<Boolean> players       =
             register(new BooleanSetting("Players", true));
+    protected final Setting<Boolean> disableanimations      =
+            register(new BooleanSetting("AnimationChanger", false));
+    protected final Setting<Float> animation =
+            register(new NumberSetting<>("Animation", 1.0f, 0.0f, 5.0f));
     protected final Setting<Boolean> animals       =
             register(new BooleanSetting("Animals", false));
     protected final Setting<Boolean> monsters      =
@@ -113,6 +117,7 @@ public class Chams extends Module
         this.listeners.add(new ListenerRender(this));
         this.listeners.add(new ListenerRenderEntity(this));
         this.listeners.add(new ListenerRenderLayers(this));
+        this.listeners.add(new ListenerUpdate(this));
         this.setData(new ChamsData(this));
         mc.getTextureManager().loadTexture(Chams.GALAXY_LOCATION, new SimpleTexture(Chams.GALAXY_LOCATION));
         this.customShaderLocation.addObserver(e -> {

@@ -29,8 +29,6 @@ public class CrystalChams extends Module {
         register(new BooleanSetting("Wireframe", false));
     public final Setting<Boolean> wireWalls    =
         register(new BooleanSetting("WireThroughWalls", false));
-    public final Setting<Boolean> texture    =
-        register(new BooleanSetting("Texture", false));
     public final NumberSetting<Float> lineWidth =
         register(new NumberSetting<>("LineWidth" , 1f , 0.1f , 4f));
     public final Setting<Color> color          =
@@ -48,9 +46,8 @@ public class CrystalChams extends Module {
         super("CrystalChams", Category.Render);
         this.setData(new CrystalChamsData(this));
         this.listeners.add(new LambdaListener<>(CrystalRenderEvent.Pre.class, e -> {
-            if (!texture.getValue()) {
-                e.setCancelled(true);
-            }
+            e.setCancelled(true);
+
 
             if (mode.getValue() == ChamsMode.Gradient) {
                 glPushAttrib(GL_ALL_ATTRIB_BITS);
