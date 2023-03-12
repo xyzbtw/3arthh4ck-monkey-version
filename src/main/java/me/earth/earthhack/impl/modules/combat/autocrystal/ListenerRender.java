@@ -56,13 +56,13 @@ final class ListenerRender extends ModuleListener<AutoCrystal, Render3DEvent> {
                 final Color outlineColor = module.outLine.getValue();
                 final float maxBoxAlpha = boxColor.getAlpha();
                 final float maxOutlineAlpha = outlineColor.getAlpha();
+                final float height = module.renderheight.getValue();
                 final float alphaBoxAmount = maxBoxAlpha / module.fadeTime.getValue();
                 final float alphaOutlineAmount = maxOutlineAlpha / module.fadeTime.getValue();
                 final int fadeBoxAlpha = MathHelper.clamp((int) (alphaBoxAmount * (set.getValue() + module.fadeTime.getValue() - System.currentTimeMillis())), 0, (int) maxBoxAlpha);
                 final int fadeOutlineAlpha = MathHelper.clamp((int) (alphaOutlineAmount * (set.getValue() + module.fadeTime.getValue() - System.currentTimeMillis())), 0, (int) maxOutlineAlpha);
-
                 RenderUtil.renderBox(
-                    Interpolation.interpolatePos(set.getKey(), 1.0f),
+                    Interpolation.interpolatePos(set.getKey(), height),
                     new Color(boxColor.getRed(), boxColor.getGreen(), boxColor.getBlue(), fadeBoxAlpha),
                     new Color(outlineColor.getRed(), outlineColor.getGreen(), outlineColor.getBlue(), fadeOutlineAlpha),
                     module.linewidth.getValue());

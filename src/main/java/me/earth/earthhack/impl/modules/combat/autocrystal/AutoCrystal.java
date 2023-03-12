@@ -470,8 +470,12 @@ public class AutoCrystal extends Module
     protected final Setting<Boolean> box =
             register(new BooleanSetting("Draw-Box", true))
                     .setComplexity(Complexity.Medium);
+    protected final Setting<Float> renderheight =
+            register(new NumberSetting<>("R-Height",1.0f, 0.1f, 1.0f ));
     protected final Setting<Color> boxColor =
             register(new ColorSetting("Box", new Color(255, 255, 255, 120)));
+    protected final Setting<Boolean> grow =
+            register(new BooleanSetting("Grow", false));
     protected final Setting<Float> linewidth =
             register(new NumberSetting<>("LineWidth", 1.0f, 0.0f, 5.0f));
     protected final Setting<Color> outLine =
