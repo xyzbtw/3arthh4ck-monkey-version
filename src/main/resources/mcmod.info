@@ -9,7 +9,7 @@
   "updateUrl": "",
   "authorList": ["3arthqu4ke","Gerald","Megyn","Ohare"],
   "credits": "Phobos",
-  "logoFile": "",
+  "logoFile": "/assets/earthhack/textures/client/phobos.png",
   "screenshots": [],
   "dependencies": []
 }

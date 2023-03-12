@@ -10,7 +10,7 @@ public class ListenerUpdate extends ModuleListener<Swing, UpdateEvent> {
 
     @Override
     public void invoke(UpdateEvent event) {
-        /*(if (module.changeMainhand.getValue() && module.mc.entityRenderer.itemRenderer.equippedProgressMainHand != module.mainhandprogress.getValue()) {
+        if (module.changeMainhand.getValue() && module.mc.entityRenderer.itemRenderer.equippedProgressMainHand != module.mainhandprogress.getValue()) {
             module.mc.entityRenderer.itemRenderer.equippedProgressMainHand = module.mainhandprogress.getValue();
             module.mc.entityRenderer.itemRenderer.itemStackMainHand = module.mc.player.getHeldItemMainhand();
         }
@@ -19,6 +19,6 @@ public class ListenerUpdate extends ModuleListener<Swing, UpdateEvent> {
             module.mc.entityRenderer.itemRenderer.itemStackOffHand = module.mc.player.getHeldItemOffhand();
         }
 
-         */
+
     }
 }
