@@ -67,7 +67,7 @@ final class ListenerUpdate extends ModuleListener<Phase, UpdateEvent>
             if (module.antiVoid.getValue() && mc.player.posY <= (double) module.antiVoidHeight.getValue() && ((trace = mc.world.rayTraceBlocks(mc.player.getPositionVector(), new Vec3d(mc.player.posX, 0.0, mc.player.posZ), false, false, false)) == null || trace.typeOfHit != RayTraceResult.Type.BLOCK)) {
                 mc.player.setVelocity(0.0, 0.0, 0.0);
             }
-            if ((mc.gameSettings.keyBindForward.isKeyDown() || mc.gameSettings.keyBindRight.isKeyDown() || mc.gameSettings.keyBindLeft.isKeyDown() || mc.gameSettings.keyBindBack.isKeyDown() || mc.gameSettings.keyBindSneak.isKeyDown()) && (!module.eChestCheck() && module.isPhasing())) {
+            if ((mc.gameSettings.keyBindForward.isKeyDown() || mc.gameSettings.keyBindRight.isKeyDown() || mc.gameSettings.keyBindLeft.isKeyDown() || mc.gameSettings.keyBindBack.isKeyDown() || mc.gameSettings.keyBindSneak.isKeyDown()) && (!module.eChestCheck() && !mc.world.getBlockState(PlayerUtil.getPlayerPos()).getBlock().equals(Blocks.AIR) || !mc.world.getBlockState(PlayerUtil.getPlayerPos().up()).getBlock().equals(Blocks.AIR))) {
                     if (mc.gameSettings.keyBindSneak.isPressed() && mc.player.isSneaking()) {
                         dirSpeed = getMotion(phaseSpeedValue);
                         if (module.downOnShift.getValue() && mc.gameSettings.keyBindSneak.isKeyDown()) {

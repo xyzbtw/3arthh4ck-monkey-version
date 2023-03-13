@@ -25,9 +25,9 @@ public class Swing extends Module {
     public final BooleanSetting changeOffhand =
             register(new BooleanSetting("ChangeOffhand", false));
     protected final NumberSetting<Float> mainhandprogress =
-            register(new NumberSetting<>("MHProgress", 1.0f, 0.0f, 10.0f));
+            register(new NumberSetting<>("MHProgress", 1.0f, -10.0f, 10.0f));
     protected final NumberSetting<Float> offhandprogress =
-            register(new NumberSetting<>("OHProgress", 1.0f, 0.0f, 10.0f));
+            register(new NumberSetting<>("OHProgress", 1.0f, -10.0f, 10.0f));
 
     public Swing() {
         super("Swing", Category.Player);

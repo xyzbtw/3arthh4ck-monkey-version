@@ -12,7 +12,9 @@ import me.earth.earthhack.impl.modules.movement.phase.mode.PhaseMode;
 import me.earth.earthhack.impl.util.helpers.render.BlockESPModule;
 import me.earth.earthhack.impl.util.math.StopWatch;
 import me.earth.earthhack.impl.util.minecraft.MovementUtil;
+import net.minecraft.block.Block;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.init.Blocks;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -174,9 +176,12 @@ public class Phase extends BlockESPModule implements CollisionEvent.Listener
             {
                 for (int z = floor(bb.minZ); z < floor(bb.maxZ) + 1; z++)
                 {
-                    if (mc.world.getBlockState(new BlockPos(x, y, z))
+                    if (    mc.world.getBlockState(new BlockPos(x, y, z))
                                 .getMaterial()
-                                .blocksMovement())
+                                .blocksMovement() &&
+                            mc.world.getBlockState(new BlockPos(x, y, z)).getBlock() != Blocks.CHEST &&
+                            mc.world.getBlockState(new BlockPos(x, y, z)).getBlock() != Blocks.TRAPPED_CHEST
+                    )
                     {
                         if (bb.intersects(
                                new AxisAlignedBB(x, y, z, x + 1, y + 1, z + 1)))
