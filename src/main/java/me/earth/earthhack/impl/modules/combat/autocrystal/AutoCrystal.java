@@ -504,17 +504,17 @@ public class AutoCrystal extends Module
     protected final Setting<Double> slideTime =
             register(new NumberSetting<>("Slide-Time", 250.0, 1.0, 1000.0))
                     .setComplexity(Complexity.Expert);
-    protected final Setting<Boolean> zoom =
-            register(new BooleanSetting("Zoom", false))
+    protected final Setting<Boolean> Grow =
+            register(new BooleanSetting("Grow", false))
                     .setComplexity(Complexity.Medium);
-    protected final Setting<Double> zoomTime =
-            register(new NumberSetting<>("Zoom-Time", 100.0, 1.0, 1000.0))
+    protected final Setting<Double> GrowTime =
+            register(new NumberSetting<>("Grow-Time", 100.0, 1.0, 1000.0))
                     .setComplexity(Complexity.Medium);
-    protected final Setting<Double> zoomOffset =
-            register(new NumberSetting<>("Zoom-Offset", -0.5, -1.0, 1.0))
+    protected final Setting<Double> GrowOffset =
+            register(new NumberSetting<>("Grow-Offset", -0.5, -1.0, 1.0))
                     .setComplexity(Complexity.Medium);
-    protected final Setting<Boolean> multiZoom =
-            register(new BooleanSetting("Multi-Zoom", false))
+    protected final Setting<Boolean> multiGrow =
+            register(new BooleanSetting("Multi-Grow", false))
                     .setComplexity(Complexity.Medium);
     protected final Setting<Boolean> renderExtrapolation =
             register(new BooleanSetting("RenderExtrapolation", false))
@@ -998,7 +998,7 @@ public class AutoCrystal extends Module
     protected final StopWatch liquidTimer = new StopWatch();
     protected final StopWatch shieldTimer = new StopWatch();
     protected final StopWatch slideTimer = new StopWatch();
-    protected final StopWatch zoomTimer = new StopWatch();
+    protected final StopWatch GrowTimer = new StopWatch();
     protected final StopWatch pullTimer = new StopWatch();
     protected final StopWatch PingSyncResolverTimer = new StopWatch();
 
@@ -1285,8 +1285,8 @@ public class AutoCrystal extends Module
             slideTimer.reset();
         }
 
-        if (pos != null && (multiZoom.getValue() || !pos.equals(renderPos))) {
-            zoomTimer.reset();
+        if (pos != null && (multiGrow.getValue() || !pos.equals(renderPos))) {
+            GrowTimer.reset();
         }
 
         this.renderPos = pos;

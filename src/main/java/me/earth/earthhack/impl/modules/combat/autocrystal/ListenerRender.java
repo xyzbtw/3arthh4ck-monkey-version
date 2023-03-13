@@ -99,9 +99,9 @@ final class ListenerRender extends ModuleListener<AutoCrystal, Render3DEvent> {
                         }
                     }
                 } else {
-                    if (module.zoom.getValue()) {
-                        double grow = (module.zoomOffset.getValue() - Math.signum(module.zoomOffset.getValue()) * module.zoomTimer.getTime() / Math.max(1.0, module.zoomTime.getValue())) / 2.0;
-                        if (module.zoomOffset.getValue() <= 0.0 && grow >= 0.0 || module.zoomOffset.getValue() > 0.0 && grow <= 0.0) {
+                    if (module.Grow.getValue()) {
+                        double grow = (module.GrowOffset.getValue() - Math.signum(module.GrowOffset.getValue()) * module.GrowTimer.getTime() / Math.max(1.0, module.GrowTime.getValue())) / 2.0;
+                        if (module.GrowOffset.getValue() <= 0.0 && grow >= 0.0 || module.GrowOffset.getValue() > 0.0 && grow <= 0.0) {
                             renderBoxMutable(pos);
                         } else {
                             bb.setFromBlockPos(pos);

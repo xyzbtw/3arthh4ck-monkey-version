@@ -251,7 +251,7 @@ public class AutoCrystalData extends DefaultData<AutoCrystal>
         register(module.outLine, "Color of the ESP outline.");
         register(module.indicatorColor, "Color of the ESP indicator.");
         register(module.fade, "Fade the rendering box when a new position gets selected.");
-        register(module.fadeComp, "Makes Fade compatible with Zoom and Slide.");
+        register(module.fadeComp, "Makes Fade compatible with Grow and Slide.");
         register(module.fadeTime, "Time to render the Fade ESP for.");
         register(module.renderDamage, "Renders the Damage a position deals.");
 

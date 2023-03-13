@@ -53,7 +53,7 @@ final class ListenerStep extends ModuleListener<Step, StepEvent> {
                 }
             }
         } else if (module.stepping) {
-            double height = event.getBB().minY - module.y;
+            double height = event.getBB().minY - mc.player.posY;
             if (module.mode.getValue() == StepMode.Normal
                 && height > event.getHeight()) {
                 double[] offsets = getOffsets(height);
@@ -69,7 +69,7 @@ final class ListenerStep extends ModuleListener<Step, StepEvent> {
                                 mc.player.posX,
                                 mc.player.posY + offset,
                                 mc.player.posZ,
-                                true));
+                                false));
                     }
                 }
             } else if (module.mode.getValue() == StepMode.Slow
@@ -111,32 +111,86 @@ final class ListenerStep extends ModuleListener<Step, StepEvent> {
         }
     }
 
-    private double[] getOffsets(double height) {
-        double[] offsets;
-        if (height >= 2.0)
-        {
-            offsets = new double[8];
-            offsets[0] = 0.42;
-            offsets[1] = 0.78;
-            offsets[2] = 0.63;
-            offsets[3] = 0.51;
-            offsets[4] = 0.9;
-            offsets[5] = 1.21;
-            offsets[6] = 1.45;
-            offsets[7] = 1.43;
-        } else {
-            offsets = new double[height > 1.0 ? 6 : 2];
-            offsets[0] = 0.42;
-            offsets[1] = height < 1.0 && height > 0.8 ? 0.753 : 0.75;
-            if (height > 1.0) {
-                offsets[2] = 1.0;
-                offsets[3] = 1.16;
-                offsets[4] = 1.23;
-                offsets[5] = 1.2;
-            }
+    public double[] getOffsets(double height) {
+
+        // confirm step height (helps bypass on NCP Updated)
+        // enchantment tables, 0.75 block offset
+        if (height == 0.75) {
+                return new double[] {
+                        0.42,
+                        0.753
+                };
+
         }
 
-        return offsets;
+        // end portal frames, 0.8125 block offset
+        else if (height == 0.8125) {
+                return new double[] {
+                        0.39,
+                        0.7
+                };
+
+        }
+
+        // chests, 0.875 block offset
+        else if (height == 0.875) {
+                return new double[] {
+                        0.39,
+                        0.7
+                };
+        }
+
+        // 1 block offset -> LITERALLY IMPOSSIBLE TO PATCH BECAUSE ITS JUST THE SAME PACKETS AS A JUMP
+        else if (height == 1) {
+                return new double[] {
+                        0.42,
+                        0.753
+                };
+        }
+
+        // 1.5 block offset
+        else if (height == 1.5) {
+            return new double[] {
+                    0.42,
+                    0.75,
+                    1.0,
+                    1.16,
+                    1.23,
+                    1.2
+            };
+        }
+
+        // 2 block offset
+        else if (height == 2) {
+            return new double[] {
+                    0.42,
+                    0.78,
+                    0.63,
+                    0.51,
+                    0.9,
+                    1.21,
+                    1.45,
+                    1.43
+            };
+        }
+
+        // 2.5 block offset
+        else if (height == 2.5) {
+            return new double[] {
+                    0.425,
+                    0.821,
+                    0.699,
+                    0.599,
+                    1.022,
+                    1.372,
+                    1.652,
+                    1.869,
+                    2.019,
+                    1.907
+            };
+        }
+
+        return null;
     }
 
 }
