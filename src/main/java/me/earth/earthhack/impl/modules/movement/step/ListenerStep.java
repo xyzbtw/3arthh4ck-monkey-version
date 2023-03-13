@@ -31,9 +31,9 @@ final class ListenerStep extends ModuleListener<Step, StepEvent> {
         if (event.getStage() == Stage.PRE) {
             if (mc.player.getRidingEntity() != null) {
                 mc.player.getRidingEntity().stepHeight =
-                    module.entityStep.getValue()
-                        ? 256.0f
-                        : 1.0f;
+                        module.entityStep.getValue()
+                                ? 256.0f
+                                : 1.0f;
             }
 
             if (module.mode.getValue() != StepMode.Slow || !module.stepping) {
@@ -55,26 +55,26 @@ final class ListenerStep extends ModuleListener<Step, StepEvent> {
         } else if (module.stepping) {
             double height = event.getBB().minY - mc.player.posY;
             if (module.mode.getValue() == StepMode.Normal
-                && height > event.getHeight()) {
+                    && height > event.getHeight()) {
                 double[] offsets = getOffsets(height);
                 if (PingBypassModule.CACHE.isEnabled()
-                    && !PingBypassModule.CACHE.get().isOld()) {
+                        && !PingBypassModule.CACHE.get().isOld()) {
                     mc.player.connection.sendPacket(
-                        new C2SStepPacket(
-                            offsets, module.x, module.y, module.z));
+                            new C2SStepPacket(
+                                    offsets, module.x, module.y, module.z));
                 } else {
                     for (double offset : offsets) {
                         mc.player.connection.sendPacket(
-                            new CPacketPlayer.Position(
-                                mc.player.posX,
-                                mc.player.posY + offset,
-                                mc.player.posZ,
-                                false));
+                                new CPacketPlayer.Position(
+                                        mc.player.posX,
+                                        mc.player.posY + offset,
+                                        mc.player.posZ,
+                                        false));
                     }
                 }
             } else if (module.mode.getValue() == StepMode.Slow
-                && height > event.getHeight()
-                && module.offsets == null) {
+                    && height > event.getHeight()
+                    && module.offsets == null) {
                 module.offsets = getOffsets(height);
                 module.bb = event.getBB();
                 module.index = 0;
@@ -86,23 +86,23 @@ final class ListenerStep extends ModuleListener<Step, StepEvent> {
             }
 
             if (module.gapple.getValue()
-                && module.stepping
-                && module.mode.getValue() != StepMode.Slow
-                && !module.breakTimer.passed(60)
-                && InventoryUtil.isHolding(ItemPickaxe.class)
-                && !InventoryUtil.isHolding(ItemAppleGold.class)) {
+                    && module.stepping
+                    && module.mode.getValue() != StepMode.Slow
+                    && !module.breakTimer.passed(60)
+                    && InventoryUtil.isHolding(ItemPickaxe.class)
+                    && !InventoryUtil.isHolding(ItemAppleGold.class)) {
                 Entity closest = EntityUtil.getClosestEnemy();
                 if (closest != null && closest.getDistanceSq(mc.player) < 144) {
                     int slot = InventoryUtil.findHotbarItem(Items.GOLDEN_APPLE);
                     if (slot != -1) {
                         Locks.acquire(Locks.PLACE_SWITCH_LOCK,
-                                      () -> InventoryUtil.switchTo(slot));
+                                () -> InventoryUtil.switchTo(slot));
                     }
                 }
             }
 
             if (module.mode.getValue() != StepMode.Slow
-                && height > event.getHeight()) {
+                    && height > event.getHeight()) {
                 module.reset();
                 if (module.autoOff.getValue()) {
                     module.disable();
@@ -111,86 +111,41 @@ final class ListenerStep extends ModuleListener<Step, StepEvent> {
         }
     }
 
-    public double[] getOffsets(double height) {
-
-        // confirm step height (helps bypass on NCP Updated)
-        // enchantment tables, 0.75 block offset
-        if (height == 0.75) {
-                return new double[] {
-                        0.42,
-                        0.753
-                };
-
+    private double[] getOffsets(double height) {
+        double[] offsets = new double[0];
+        if (height >= 2.0)
+        {
+            offsets = new double[8];
+            offsets[0] = 0.42;
+            offsets[1] = 0.78;
+            offsets[2] = 0.63;
+            offsets[3] = 0.51;
+            offsets[4] = 0.9;
+            offsets[5] = 1.21;
+            offsets[6] = 1.45;
+            offsets[7] = 1.43;
+        }  else if(height == 1.875)
+        {
+            offsets = new double[7];
+            offsets[0] = 0.425;
+            offsets[1] = 0.821;
+            offsets[2] = 0.699;
+            offsets[3] = 0.599;
+            offsets[4] = 1.022;
+            offsets[5] = 1.372;
+            offsets[6] = 1.652;
+        } else if (height<1.875) {
+            offsets = new double[height > 1.0 ? 6 : 2];
+            offsets[0] = height < 1.0 && height > 0.8 ? 0.39 : 0.42;
+            offsets[1] = height < 1.0 && height > 0.8 ? 0.7 : 0.753;
+            if (height > 1.0) {
+                offsets[2] = 1.0;
+                offsets[3] = 1.16;
+                offsets[4] = 1.23;
+                offsets[5] = 1.2;
+            }
         }
 
-        // end portal frames, 0.8125 block offset
-        else if (height == 0.8125) {
-                return new double[] {
-                        0.39,
-                        0.7
-                };
-
-        }
-
-        // chests, 0.875 block offset
-        else if (height == 0.875) {
-                return new double[] {
-                        0.39,
-                        0.7
-                };
-        }
-
-        // 1 block offset -> LITERALLY IMPOSSIBLE TO PATCH BECAUSE ITS JUST THE SAME PACKETS AS A JUMP
-        else if (height == 1) {
-                return new double[] {
-                        0.42,
-                        0.753
-                };
-        }
-
-        // 1.5 block offset
-        else if (height == 1.5) {
-            return new double[] {
-                    0.42,
-                    0.75,
-                    1.0,
-                    1.16,
-                    1.23,
-                    1.2
-            };
-        }
-
-        // 2 block offset
-        else if (height == 2) {
-            return new double[] {
-                    0.42,
-                    0.78,
-                    0.63,
-                    0.51,
-                    0.9,
-                    1.21,
-                    1.45,
-                    1.43
-            };
-        }
-
-        // 2.5 block offset
-        else if (height == 2.5) {
-            return new double[] {
-                    0.425,
-                    0.821,
-                    0.699,
-                    0.599,
-                    1.022,
-                    1.372,
-                    1.652,
-                    1.869,
-                    2.019,
-                    1.907
-            };
-        }
-
-        return null;
+        return offsets;
     }
-
 }
