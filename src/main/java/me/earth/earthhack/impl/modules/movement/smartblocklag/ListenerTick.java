@@ -10,6 +10,7 @@ import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import net.minecraft.block.BlockAir;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
 
 
 public class ListenerTick extends ModuleListener<SmartBlockLag, TickEvent> {
@@ -25,17 +26,18 @@ public class ListenerTick extends ModuleListener<SmartBlockLag, TickEvent> {
         if(mc.world == null || mc.player == null){
             return;
         }
+        BlockPos pos = PlayerUtil.getPlayerPos();
         EntityPlayer target = EntityUtil.getClosestEnemy();
-        if ((!(module.holeonly.getValue())
-                || PlayerUtil.isInHole(mc.player))
+        if ((   !(module.holeonly.getValue())
+                    || PlayerUtil.isInHole(mc.player))
                 && !mc.isSingleplayer()
                 && target!=null
                 && !Managers.FRIENDS.contains(target)
                 && mc.player.getDistanceSq(target) < (module.smartRange.getValue() * module.smartRange.getValue())
                 && !PlayerUtil.isInHole(target)
                 && !burrow.isEnabled()
-                && mc.world.getBlockState(PlayerUtil.getPlayerPos().add(0, 2.2, 0)).getBlock() instanceof BlockAir
-                && mc.world.getBlockState(PlayerUtil.getPlayerPos().add(0, 0.2, 0)).getBlock().isReplaceable(mc.world, PlayerUtil.getPlayerPos().add(0, 0.2, 0) )
+                && mc.world.getBlockState(pos.add(0, 2.2, 0)).getBlock() instanceof BlockAir
+                && mc.world.getBlockState(pos.add(0, 0.2, 0)).getBlock().isReplaceable(mc.world, pos.add(0, 0.2, 0) )
                 && !module.isPhasing())
             {
                 if(module.delayTimer.passed(module.delay.getValue())){
