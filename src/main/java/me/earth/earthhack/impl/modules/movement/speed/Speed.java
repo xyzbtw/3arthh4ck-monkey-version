@@ -33,8 +33,6 @@ public class Speed extends Module
             register(new BooleanSetting("InWater", false));
     protected final Setting<Double> strafeSpeed =
             register(new NumberSetting<>("StrafeSpeed", 0.2873, 0.1, 1.0));
-    protected final Setting<Double> portSpeed =
-            register(new NumberSetting<>("Y-PortSpeed", 0.2873, 0.1, 1.0));
     protected final Setting<Double> speedSet =
             register(new NumberSetting<>("Speed", 4.0, 0.1, 10.0));
     protected final Setting<Integer> constTicks    =

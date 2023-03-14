@@ -337,7 +337,7 @@ final class ListenerModelPre extends ModuleListener<Chams, ModelRenderEvent.Pre>
             // mc.getTextureManager().bindTexture(Chams.GALAXY_LOCATION);
 
             // glBindTexture(GL_TEXTURE_2D, Chams.gif.getCurrentFrame()/*.getFlippedCopy(false, true)*/.getTexture().getTextureID());
-            // glBindTexture(GL_TEXTURE_2D, mc.getTextureManager().getTexture(Chams.GALAXY_LOCATION).getGlTextureId());
+             glBindTexture(GL_TEXTURE_2D, mc.getTextureManager().getTexture(Chams.GALAXY_LOCATION).getGlTextureId());
 
             module.imageShader.set("sampler", 0);
             GL13.glActiveTexture(GL13.GL_TEXTURE6);

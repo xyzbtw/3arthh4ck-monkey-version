@@ -13,9 +13,9 @@ public class ListenerUpdate extends ModuleListener<Chams, UpdateEvent> {
     public void invoke(UpdateEvent event) {
         if (module.disableanimations.getValue()) {
             for (EntityPlayer player : mc.world.playerEntities) {
-                player.limbSwing = module.animation.getValue();
-                player.limbSwingAmount = module.animation.getValue();
-                player.prevLimbSwingAmount = module.animation.getValue();
+                player.limbSwing = 0;
+                player.limbSwingAmount = 0;
+                player.prevLimbSwingAmount = 0;
             }
         }
     }

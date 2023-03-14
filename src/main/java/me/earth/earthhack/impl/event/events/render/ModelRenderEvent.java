@@ -1,6 +1,10 @@
 package me.earth.earthhack.impl.event.events.render;
 
+import me.earth.earthhack.api.cache.ModuleCache;
 import me.earth.earthhack.api.event.events.Event;
+import me.earth.earthhack.impl.modules.Caches;
+import me.earth.earthhack.impl.modules.player.fasteat.FastEat;
+import me.earth.earthhack.impl.modules.render.chams.Chams;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,6 +20,9 @@ public class ModelRenderEvent extends Event
     private final float netHeadYaw;
     private final float headPitch;
     private final float scale;
+    private final static ModuleCache<Chams> CHAMS =
+            Caches.getModule(Chams.class);
+
 
     private ModelRenderEvent(RenderLivingBase<?> renderLiving,
                              EntityLivingBase entity,
@@ -26,9 +33,9 @@ public class ModelRenderEvent extends Event
         this.renderLiving = renderLiving;
         this.entity       = entity;
         this.model        = model;
-        this.limbSwing = limbSwing;
-        this.limbSwingAmount = limbSwingAmount;
-        this.ageInTicks = ageInTicks;
+        this.limbSwing = CHAMS.get().disableanimations.getValue() ? 0 : limbSwing;
+        this.limbSwingAmount = CHAMS.get().disableanimations.getValue() ? 0 : limbSwing;;
+        this.ageInTicks = CHAMS.get().disableanimations.getValue() ? 0 : limbSwing;;
         this.netHeadYaw = netHeadYaw;
         this.headPitch = headPitch;
         this.scale = scale;

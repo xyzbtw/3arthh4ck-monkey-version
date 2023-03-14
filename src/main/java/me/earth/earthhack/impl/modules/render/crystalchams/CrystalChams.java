@@ -23,6 +23,8 @@ public class CrystalChams extends Module {
         register(new EnumSetting<>("Mode", ChamsMode.Normal));
     public final Setting<Boolean> chams        =
         register(new BooleanSetting("Chams", false));
+    public final Setting<Boolean> texture        =
+            register(new BooleanSetting("Texture", false));
     public final Setting<Boolean> throughWalls =
         register(new BooleanSetting("ThroughWalls", false));
     public final Setting<Boolean> wireframe    =
@@ -46,8 +48,9 @@ public class CrystalChams extends Module {
         super("CrystalChams", Category.Render);
         this.setData(new CrystalChamsData(this));
         this.listeners.add(new LambdaListener<>(CrystalRenderEvent.Pre.class, e -> {
-            e.setCancelled(true);
-
+            if(!texture.getValue()) {
+                e.setCancelled(true);
+            }
 
             if (mode.getValue() == ChamsMode.Gradient) {
                 glPushAttrib(GL_ALL_ATTRIB_BITS);

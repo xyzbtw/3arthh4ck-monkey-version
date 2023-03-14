@@ -504,26 +504,6 @@ public enum SpeedMode implements Globals
         public void move(MoveEvent event, Speed module) {
             // NOP
         }
-    },
-    YPort{
-        @Override
-        public void move(MoveEvent event, Speed module)
-        {
-            if (mc.player.isElytraFlying()) return;
-            if (module.LONG_JUMP.isEnabled()) return;
-            if (!module.noWaterInstant.getValue()
-                    || (!mc.player.isInWater() && !mc.player.isInLava()))
-            {
-                if (mc.player.onGround) {
-                    Managers.TIMER.setTimer(1.15f);
-                    mc.player.jump();
-                    MovementUtil.setMoveSpeed(MovementUtil.getSpeed()+ module.portSpeed.getValue() / 10.0);
-                } else {
-                    mc.player.motionY = -1.0;
-                    Managers.TIMER.reset();
-                }
-            }
-        }
     };
 
     public abstract void move(MoveEvent event, Speed module);

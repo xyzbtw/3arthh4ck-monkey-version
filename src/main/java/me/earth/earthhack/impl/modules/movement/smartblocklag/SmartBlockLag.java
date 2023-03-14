@@ -8,7 +8,6 @@ import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.util.math.StopWatch;
 import me.earth.earthhack.impl.util.text.ChatIDs;
-import me.earth.earthhack.impl.util.text.ChatUtil;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
@@ -17,7 +16,7 @@ import static net.minecraft.util.math.MathHelper.floor;
 public class SmartBlockLag extends Module {
     public SmartBlockLag() {
         super("SmartBlockLag", Category.Movement);
-        this.listeners.add(new ListenerUpdate(this));
+        this.listeners.add(new ListenerTick(this));
     }
     protected final Setting<Float> smartRange =
             register(new NumberSetting<>("Range", 3.0f, 0.0f, 10.0f));

@@ -33,7 +33,7 @@ public class Notifications extends Module
     protected final Setting<TextColor> watermarbraceskcolor =
             register(new EnumSetting<>("ChatBracesColor", TextColor.None));
     protected final Setting<String> chatwatermark =
-            register(new StringSetting("ChatString", "monkeyon3arth"));
+            register(new StringSetting("ChatString", ""));
     protected final Setting<Boolean> visualRange =
             register(new BooleanSetting("VisualRange", false));
     protected final Setting<Boolean> leave  =

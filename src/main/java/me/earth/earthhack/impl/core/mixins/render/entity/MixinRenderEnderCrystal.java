@@ -1,11 +1,14 @@
 package me.earth.earthhack.impl.core.mixins.render.entity;
 
 import me.earth.earthhack.api.cache.ModuleCache;
+import me.earth.earthhack.api.cache.SettingCache;
 import me.earth.earthhack.api.event.bus.instance.Bus;
+import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.event.events.render.CrystalRenderEvent;
 import me.earth.earthhack.impl.modules.Caches;
+import me.earth.earthhack.impl.modules.client.management.Management;
 import me.earth.earthhack.impl.modules.render.crystalchams.CrystalChams;
 import me.earth.earthhack.impl.modules.render.crystalscale.CrystalScale;
 import me.earth.earthhack.impl.util.animation.TimeAnimation;
@@ -40,6 +43,12 @@ public abstract class MixinRenderEnderCrystal
         Caches.getModule(CrystalScale.class);
     private static final ModuleCache<CrystalChams> CHAMS =
             Caches.getModule(CrystalChams.class);
+    private static final SettingCache<Boolean, BooleanSetting, CrystalChams> modify
+            = Caches.getSetting(CrystalChams.class, BooleanSetting.class, "Modify", false);
+    private static final SettingCache<Float, NumberSetting<Float>, CrystalChams> spinspeed
+            = Caches.getSetting(CrystalChams.class, Setting.class, "SpinSpeed", 1.0f );
+    private static final SettingCache<Float, NumberSetting<Float>, CrystalChams> bouncespeed
+            = Caches.getSetting(CrystalChams.class, Setting.class, "BounceSpeed", 1.0f );
     @Shadow
     @Final
     private ModelBase modelEnderCrystal;
@@ -89,8 +98,8 @@ public abstract class MixinRenderEnderCrystal
         }
 
         float limbSwing = 0.0F;
-        float limbSwingAmount = CHAMS.get().modify.getValue() ? (f * 3.0F * CHAMS.get().spinnerspeed.getValue()) : f * 3.0F;
-        float ageInTicks = CHAMS.get().modify.getValue() ? (f1 * 0.2F * CHAMS.get().bouncespeed.getValue()) : f1 * 0.2F;
+        float limbSwingAmount = modify.getValue() && CHAMS.isEnabled() ? f * 3.0F * spinspeed.getValue() : f * 3.0F;
+        float ageInTicks = modify.getValue() && CHAMS.isEnabled() ? f1 * 0.2F * bouncespeed.getValue() : f1 * 0.2F;
         float netHeadYaw = 0.0F;
         float headPitch = 0.0F;
         float scale = 0.0625F;
@@ -132,8 +141,8 @@ public abstract class MixinRenderEnderCrystal
         float entityYaw, float partialTicks, CallbackInfo ci,
         float f, float f1) {
 
-        float limbSwingAmount = CHAMS.get().modify.getValue() ? (f * 3.0F * CHAMS.get().spinnerspeed.getValue()) : f * 3.0F;
-        float ageInTicks = CHAMS.get().modify.getValue() ? (f1 * 0.2F * CHAMS.get().bouncespeed.getValue()) : f1 * 0.2F;
+        float limbSwingAmount = modify.getValue() && CHAMS.isEnabled() ? f * 3.0F * spinspeed.getValue() : f * 3.0F;
+        float ageInTicks = modify.getValue() && CHAMS.isEnabled() ? f1 * 0.2F * bouncespeed.getValue() : f1 * 0.2F;
         ModelBase modelBase = entity.shouldShowBottom()
             ? modelEnderCrystal : modelEnderCrystalNoBase;
         RenderEnderCrystal renderLiving = RenderEnderCrystal.class.cast(this);
