@@ -34,7 +34,8 @@ public class ListenerTick extends ModuleListener<SmartBlockLag, TickEvent> {
                 && mc.player.getDistanceSq(target) < (module.smartRange.getValue() * module.smartRange.getValue())
                 && !PlayerUtil.isInHole(target)
                 && !burrow.isEnabled()
-                && mc.world.getBlockState(PlayerUtil.getPlayerPos().add(0, 0.2, 0)).getBlock() instanceof BlockAir
+                && mc.world.getBlockState(PlayerUtil.getPlayerPos().add(0, 2.2, 0)).getBlock() instanceof BlockAir
+                && mc.world.getBlockState(PlayerUtil.getPlayerPos().add(0, 0.2, 0)).getBlock().isReplaceable(mc.world, PlayerUtil.getPlayerPos().add(0, 0.2, 0) )
                 && !module.isPhasing())
             {
                 if(module.delayTimer.passed(module.delay.getValue())){
