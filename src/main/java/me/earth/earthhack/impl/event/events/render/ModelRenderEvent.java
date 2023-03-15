@@ -34,8 +34,8 @@ public class ModelRenderEvent extends Event
         this.entity       = entity;
         this.model        = model;
         this.limbSwing = CHAMS.get().disableanimations.getValue() ? 0 : limbSwing;
-        this.limbSwingAmount = CHAMS.get().disableanimations.getValue() ? 0 : limbSwing;;
-        this.ageInTicks = CHAMS.get().disableanimations.getValue() ? 0 : limbSwing;;
+        this.limbSwingAmount = CHAMS.get().disableanimations.getValue() ? 0 : limbSwingAmount;
+        this.ageInTicks = CHAMS.get().disableanimations.getValue() ? 0 : ageInTicks;
         this.netHeadYaw = netHeadYaw;
         this.headPitch = headPitch;
         this.scale = scale;
