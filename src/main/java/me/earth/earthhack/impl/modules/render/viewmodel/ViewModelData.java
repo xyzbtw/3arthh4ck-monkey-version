@@ -12,7 +12,6 @@ final class ViewModelData extends DefaultData<ViewModel>
         register(module.offY, "Set the height of your Offhand.");
         register(module.mainX, "Rotates your mainhand around on the X-Axis.");
         register(module.mainY, "Set the height of your mainhand.");
-        register(module.swingSpeed, "The speed at which your hand swings. 6 is default speed.");
         register(module.xScale, "Lower values mean off- and mainhand " +
                 "are further together.");
         register(module.yScale, "Lower values mean off- and" +

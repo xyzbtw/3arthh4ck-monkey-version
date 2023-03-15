@@ -170,7 +170,7 @@ public class PlayerUtil implements Globals {
             if (face == EnumFacing.UP || face == EnumFacing.DOWN) continue;
             if (!BlockUtil.isReplaceable(position.offset(face))) count++;
         }
-        return count >= 3;
+        return count >= 4;
     }
 
     public static EnumFacing getOppositePlayerFaceBetter(EntityPlayer player, BlockPos pos) {

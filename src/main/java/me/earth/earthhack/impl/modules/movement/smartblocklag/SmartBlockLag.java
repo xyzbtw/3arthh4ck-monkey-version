@@ -16,7 +16,7 @@ import static net.minecraft.util.math.MathHelper.floor;
 public class SmartBlockLag extends Module {
     public SmartBlockLag() {
         super("SmartBlockLag", Category.Movement);
-        this.listeners.add(new ListenerUpdate(this));
+        this.listeners.add(new ListenerTick(this));
     }
     protected final Setting<Float> smartRange =
             register(new NumberSetting<>("Range", 3.0f, 0.0f, 10.0f));

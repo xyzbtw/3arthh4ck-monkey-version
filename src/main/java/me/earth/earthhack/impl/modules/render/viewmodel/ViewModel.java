@@ -42,8 +42,6 @@ public class ViewModel extends Module
             register(new NumberSetting<>("Y-Translate", 1.0f, -10.0f, 10.0f));
     protected final Setting<Float> zTranslate =
             register(new NumberSetting<>("Z-Translate", 1.0f, -10.0f, 10.0f));
-    public final Setting<Integer> swingSpeed =
-            register(new NumberSetting<>("SwingSpeed", 6, 0, 20));
 
     public ViewModel()
     {
