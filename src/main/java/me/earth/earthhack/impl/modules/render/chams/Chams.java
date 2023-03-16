@@ -115,7 +115,6 @@ public class Chams extends Module
         this.listeners.add(new ListenerRender(this));
         this.listeners.add(new ListenerRenderEntity(this));
         this.listeners.add(new ListenerRenderLayers(this));
-        this.listeners.add(new ListenerUpdate(this));
         this.setData(new ChamsData(this));
         mc.getTextureManager().loadTexture(Chams.GALAXY_LOCATION, new SimpleTexture(Chams.GALAXY_LOCATION));
         this.customShaderLocation.addObserver(e -> {

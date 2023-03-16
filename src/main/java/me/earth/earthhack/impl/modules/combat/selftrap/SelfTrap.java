@@ -5,11 +5,22 @@ import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.EnumSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
+import me.earth.earthhack.impl.event.listeners.ReceiveListener;
 import me.earth.earthhack.impl.util.helpers.blocks.ObbyListenerModule;
+import me.earth.earthhack.impl.util.helpers.blocks.ObbyModule;
+import me.earth.earthhack.impl.util.helpers.blocks.ObbyUtil;
+import me.earth.earthhack.impl.util.helpers.blocks.modes.RayTraceMode;
+import me.earth.earthhack.impl.util.math.path.BasePath;
+import me.earth.earthhack.impl.util.math.path.PathFinder;
 import me.earth.earthhack.impl.util.math.position.PositionUtil;
 import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
+import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
+import net.minecraft.block.BlockAir;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.network.play.server.SPacketBlockAction;
+import net.minecraft.network.play.server.SPacketBlockBreakAnim;
 import net.minecraft.util.math.BlockPos;
 
 // Maybe extend?
@@ -33,10 +44,34 @@ public class SelfTrap extends ObbyListenerModule<ListenerSelfTrap>
             register(new BooleanSetting("Prio-Behind", true));
 
     protected BlockPos startPos;
+    protected int slot;
+    protected BlockPos clown = PlayerUtil.getPlayerPos().add(0, 2, 0);
 
     public SelfTrap()
     {
         super("SelfTrap", Category.Combat);
+        this.listeners.add(new ReceiveListener<>(SPacketBlockBreakAnim.class, event -> {
+            if(     event.getPacket().getBreakerId() != mc.player.getEntityId()
+                    && event.getPacket().getPosition() == clown
+                    && mc.world.getBlockState(clown).getBlock().isReplaceable(mc.world, clown.add(0,1,0)))
+            {
+                BasePath path = new BasePath(
+                        RotationUtil.getRotationPlayer(),
+                        clown.add(0,1,0),
+                        1);
+
+                PathFinder.findPath(
+                        path,
+                        6,
+                        mc.world.loadedEntityList,
+                        RayTraceMode.Fast,
+                        HELPER,
+                        Blocks.OBSIDIAN.getDefaultState(),
+                        PathFinder.CHECK);
+                ObbyUtil.place(this, path);
+            }
+
+        }));
     }
 
     @Override

@@ -89,6 +89,7 @@ import me.earth.earthhack.impl.modules.misc.tooltips.ToolTips;
 import me.earth.earthhack.impl.modules.misc.tpssync.TpsSync;
 import me.earth.earthhack.impl.modules.misc.tracker.Tracker;
 import me.earth.earthhack.impl.modules.misc.truedurability.TrueDurability;
+import me.earth.earthhack.impl.modules.misc.undead.Undead;
 import me.earth.earthhack.impl.modules.movement.anchor.Anchor;
 import me.earth.earthhack.impl.modules.movement.antimove.NoMove;
 import me.earth.earthhack.impl.modules.movement.autosprint.AutoSprint;
@@ -264,6 +265,7 @@ public class ModuleManager extends IterationRegister<Module>
         this.forceRegister(new Spammer());
         this.forceRegister(new ToolTips());
         this.forceRegister(new TpsSync());
+        this.forceRegister(new Undead());
         this.forceRegister(new Tracker());
         this.forceRegister(new TrueDurability());
         this.forceRegister(new ChorusControl());

@@ -26,15 +26,15 @@ final class ListenerSpawnObject extends
     public void invoke(PacketEvent.Receive<SPacketSpawnObject> event)
     {
         if (!module.instantAttack.getValue()
-            || event.getPacket().getType() != 51
-            || mc.world == null
-            || Managers.SWITCH.getLastSwitch() > module.cooldown.getValue()
-            || !KeyBoardUtil.isKeyDown(module.getBind()) && !module.isEnabled()
-            || DamageUtil.isWeaknessed()
-            || mc.world.getBlockState(PositionUtil.getPosition(
-                            RotationUtil.getRotationPlayer()).up(2))
-                       .getMaterial()
-                       .blocksMovement())
+                || event.getPacket().getType() != 51
+                || mc.world == null
+                || Managers.SWITCH.getLastSwitch() > module.cooldown.getValue()
+                || !KeyBoardUtil.isKeyDown(module.getBind()) && !module.isEnabled()
+                || DamageUtil.isWeaknessed()
+                || mc.world.getBlockState(PositionUtil.getPosition(
+                        RotationUtil.getRotationPlayer()).up(2))
+                .getMaterial()
+                .blocksMovement())
         {
             return;
         }
@@ -49,15 +49,15 @@ final class ListenerSpawnObject extends
             }
 
             EntityEnderCrystal crystal = new EntityEnderCrystal(mc.world,
-                                                event.getPacket().getX(),
-                                                event.getPacket().getY(),
-                                                event.getPacket().getZ());
+                    event.getPacket().getX(),
+                    event.getPacket().getY(),
+                    event.getPacket().getZ());
             if (crystal.getEntityBoundingBox()
-                       .intersects(new AxisAlignedBB(pos)))
+                    .intersects(new AxisAlignedBB(pos)))
             {
                 float damage = DamageUtil.calculate(crystal);
                 if (module.pop.getValue()
-                              .shouldPop(damage, module.popTime.getValue()))
+                        .shouldPop(damage, module.popTime.getValue()))
                 {
                     PacketUtil.attack(event.getPacket().getEntityID());
                 }

@@ -14,7 +14,7 @@ public class TpsSync extends Module
 {
     public TpsSync()
     {
-        super("TpsSync", Category.Player);
+        super("TpsSync", Category.Misc);
         register(new BooleanSetting("Attack", false));
         register(new BooleanSetting("Mine", false));
         // register(new BooleanSetting("Eat", false)); TODO

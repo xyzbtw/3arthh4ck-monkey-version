@@ -7,13 +7,20 @@ import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.util.math.StopWatch;
+import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
+import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import me.earth.earthhack.impl.util.text.ChatIDs;
+import me.earth.earthhack.impl.util.text.TextColor;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
 import static net.minecraft.util.math.MathHelper.floor;
 
 public class SmartBlockLag extends Module {
+    protected EntityPlayer target;
+    protected BlockPos pos;
+
     public SmartBlockLag() {
         super("SmartBlockLag", Category.Movement);
         this.listeners.add(new ListenerTick(this));
@@ -35,30 +42,24 @@ public class SmartBlockLag extends Module {
             Managers.CHAT.sendDeleteMessage("Not a multiplayer world retard", getName(), ChatIDs.MODULE);
             this.disable();
         }
+        target = null;
     }
-    public boolean isPhasing()
+    @Override
+    public String getDisplayInfo()
     {
-        AxisAlignedBB bb = mc.player.getEntityBoundingBox();
-        for (int x = floor(bb.minX); x < floor(bb.maxX) + 1; x++)
+        if (target != null)
         {
-            for (int y = floor(bb.minY); y < floor(bb.maxY) + 1; y++)
-            {
-                for (int z = floor(bb.minZ); z < floor(bb.maxZ) + 1; z++)
-                {
-                    if (mc.world.getBlockState(new BlockPos(x, y, z))
-                            .getMaterial()
-                            .blocksMovement())
-                    {
-                        if (bb.intersects(
-                                new AxisAlignedBB(x, y, z, x + 1, y + 1, z + 1)))
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
+            return TextColor.RED + target.getName();
         }
 
-        return false;
+        return null;
+    }
+
+    protected boolean isInsideBlock() {
+        double x = mc.player.posX;
+        double y = mc.player.posY + 0.20;
+        double z = mc.player.posZ;
+
+        return mc.world.getBlockState(new BlockPos(x, y, z)).getMaterial().blocksMovement() || !mc.player.collidedVertically;
     }
 }

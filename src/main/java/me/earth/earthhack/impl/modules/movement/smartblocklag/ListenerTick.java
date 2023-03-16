@@ -24,28 +24,27 @@ public class ListenerTick extends ModuleListener<SmartBlockLag, TickEvent> {
 
     @Override
     public void invoke(TickEvent event) {
-
         if(mc.world == null || mc.player == null){
             return;
         }
-
-        EntityPlayer target = EntityUtil.getClosestEnemy();
-        BlockPos pos = PlayerUtil.getPlayerPos();
+        module.target = EntityUtil.getClosestEnemy();
+        module.pos = PlayerUtil.getPlayerPos();
         if (    !(Boolean)module.holeonly.getValue() || PlayerUtil.isInHole(mc.player)
                 && !mc.isSingleplayer()
-                && target != null
-                && !Managers.FRIENDS.contains(target)
-                && mc.player.getDistance(target) <= module.smartRange.getValue()
-                && !PlayerUtil.isInHole(target)
+                && module.target != null
+                && !Managers.FRIENDS.contains(module.target)
+                && mc.player.getDistance(module.target) <= module.smartRange.getValue()
+                && !PlayerUtil.isInHole(module.target)
                 && !burrow.isEnabled()
-                && mc.world.getBlockState(pos.add(0, 0.2, 0)).getBlock() instanceof BlockAir
-                && !module.isPhasing())
+                && mc.world.getBlockState(module.pos.add(0, 0.2, 0)).getBlock() instanceof BlockAir
+                && !module.isInsideBlock())
             {
                 if(!module.delayTimer.passed(module.delay.getValue())){
                     return;
                 }
                 burrow.enable();
                 module.delayTimer.reset();
+                module.target = null;
                 if(module.turnoff.getValue()){
                     module.disable();
                 }
