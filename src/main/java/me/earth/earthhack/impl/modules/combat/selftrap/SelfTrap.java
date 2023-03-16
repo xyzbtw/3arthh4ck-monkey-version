@@ -40,6 +40,8 @@ public class SelfTrap extends ObbyListenerModule<ListenerSelfTrap>
             register(new BooleanSetting("Auto-Off", true));
     protected final Setting<Boolean> smartOff =
             register(new BooleanSetting("Smart-Off", true));
+    protected final Setting<Boolean> topExt =
+            register(new BooleanSetting("Top-Extend", false));
     protected final Setting<Boolean> prioBehind =
             register(new BooleanSetting("Prio-Behind", true));
 
@@ -53,7 +55,8 @@ public class SelfTrap extends ObbyListenerModule<ListenerSelfTrap>
         this.listeners.add(new ReceiveListener<>(SPacketBlockBreakAnim.class, event -> {
             if(     event.getPacket().getBreakerId() != mc.player.getEntityId()
                     && event.getPacket().getPosition() == clown
-                    && mc.world.getBlockState(clown).getBlock().isReplaceable(mc.world, clown.add(0,1,0)))
+                    && mc.world.getBlockState(clown).getBlock().isReplaceable(mc.world, clown.add(0,1,0))
+                    && topExt.getValue())
             {
                 BasePath path = new BasePath(
                         RotationUtil.getRotationPlayer(),
