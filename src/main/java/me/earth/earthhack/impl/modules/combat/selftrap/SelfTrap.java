@@ -40,41 +40,15 @@ public class SelfTrap extends ObbyListenerModule<ListenerSelfTrap>
             register(new BooleanSetting("Auto-Off", true));
     protected final Setting<Boolean> smartOff =
             register(new BooleanSetting("Smart-Off", true));
-    protected final Setting<Boolean> topExt =
-            register(new BooleanSetting("Top-Extend", false));
     protected final Setting<Boolean> prioBehind =
             register(new BooleanSetting("Prio-Behind", true));
 
     protected BlockPos startPos;
     protected int slot;
-    protected BlockPos clown = PlayerUtil.getPlayerPos().add(0, 2, 0);
 
     public SelfTrap()
     {
         super("SelfTrap", Category.Combat);
-        this.listeners.add(new ReceiveListener<>(SPacketBlockBreakAnim.class, event -> {
-            if(     event.getPacket().getBreakerId() != mc.player.getEntityId()
-                    && event.getPacket().getPosition() == clown
-                    && mc.world.getBlockState(clown).getBlock().isReplaceable(mc.world, clown.add(0,1,0))
-                    && topExt.getValue())
-            {
-                BasePath path = new BasePath(
-                        RotationUtil.getRotationPlayer(),
-                        clown.add(0,1,0),
-                        1);
-
-                PathFinder.findPath(
-                        path,
-                        6,
-                        mc.world.loadedEntityList,
-                        RayTraceMode.Fast,
-                        HELPER,
-                        Blocks.OBSIDIAN.getDefaultState(),
-                        PathFinder.CHECK);
-                ObbyUtil.place(this, path);
-            }
-
-        }));
     }
 
     @Override

@@ -57,6 +57,7 @@ public class Managers
     public static final TextRenderer TEXT          = new TextRenderer();
     public static final HoleManager HOLES          = new HoleManager();
     public static final SafetyManager SAFETY       = new SafetyManager();
+    public static final InteractionManager INTERACTION = new InteractionManager();
     public static final ConnectionManager CONNECT  = new ConnectionManager();
     public static final KeyBoardManager KEYBOARD   = new KeyBoardManager();
     public static final ColorManager COLOR         = new ColorManager();
@@ -81,7 +82,7 @@ public class Managers
         subscribe(TIMER, CONNECT, CHAT, COMBAT, POSITION, ROTATION, SERVER,
                 ACTION, SPEED, SWITCH, TPS, HOLES, SAFETY, KEYBOARD, COLOR,
                 WRAP, MACRO, NCP, SET_DEAD, BLOCKS, ENTITIES, HEALTH, TICK,
-                FILES, new NoMotionUpdateService(), new PlayerMotionService(),
+                FILES, INTERACTION, new NoMotionUpdateService(), new PlayerMotionService(),
                 new PotionService());
 
         if (DevEnvironmentAuth.DEV_AUTH) {

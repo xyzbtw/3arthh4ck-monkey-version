@@ -172,6 +172,15 @@ public class PlayerUtil implements Globals {
         }
         return count >= 4;
     }
+    public static boolean isInHoleAll(EntityPlayer player) {
+        BlockPos position = PositionUtil.getPosition(player);
+        int count = 0;
+        for (EnumFacing face : EnumFacing.values()) {
+            if (face == EnumFacing.UP || face == EnumFacing.DOWN) continue;
+            if (!BlockUtil.isReplaceable(position.offset(face))) count++;
+        }
+        return count >= 3;
+    }
 
     public static EnumFacing getOppositePlayerFaceBetter(EntityPlayer player, BlockPos pos) {
         for (EnumFacing face : EnumFacing.HORIZONTALS) {

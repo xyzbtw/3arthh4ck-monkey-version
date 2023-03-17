@@ -8,6 +8,7 @@ import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.movement.packetfly.PacketFly;
 import me.earth.earthhack.impl.modules.player.freecam.Freecam;
 import me.earth.earthhack.impl.util.math.position.PositionUtil;
+import me.earth.earthhack.impl.util.minecraft.KeyBoardUtil;
 import me.earth.earthhack.impl.util.minecraft.MovementUtil;
 import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 
@@ -30,7 +31,9 @@ final class ListenerMotion extends ModuleListener<Speed, MotionUpdateEvent>
         {
             return;
         }
-
+        if(module.mode.getValue() == SpeedMode.Instant ){
+            if (module.stopshift.getValue() && (mc.player.isSneaking() || KeyBoardUtil.isKeyDown(mc.gameSettings.keyBindSneak))) return;
+        }
         if (MovementUtil.noMovementKeys())
         {
             mc.player.motionX = 0.0;

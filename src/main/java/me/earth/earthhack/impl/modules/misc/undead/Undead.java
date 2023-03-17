@@ -3,6 +3,8 @@ package me.earth.earthhack.impl.modules.misc.undead;
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.impl.event.listeners.SendListener;
+import me.earth.earthhack.impl.util.helpers.blocks.ObbyListener;
+import me.earth.earthhack.impl.util.helpers.blocks.ObbyListenerModule;
 import net.minecraft.network.play.client.CPacketPlayer;
 
 public class Undead extends Module {
@@ -22,5 +24,6 @@ public class Undead extends Module {
         }
         explorer = false;
     }
+
 
 }
