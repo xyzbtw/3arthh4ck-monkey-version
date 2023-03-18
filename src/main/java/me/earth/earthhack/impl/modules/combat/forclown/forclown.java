@@ -27,6 +27,8 @@ public class forclown extends Module {
             register(new BooleanSetting("Packet", true));
     protected final Setting<Boolean> holeCheck =
             register(new BooleanSetting("HoleCheck", true));
+    protected final Setting<Boolean> breakEvent =
+            register(new BooleanSetting("BreakEvent", true));
 
     public forclown() {
         super("Blocker", Category.Combat);
