@@ -17,9 +17,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 public class forclown extends Module {
 
     protected final Setting<Boolean> extend =
@@ -28,15 +25,13 @@ public class forclown extends Module {
             register(new BooleanSetting("Face", true));
     protected final Setting<Boolean> packet =
             register(new BooleanSetting("Packet", true));
-
-
+    protected final Setting<Boolean> holeCheck =
+            register(new BooleanSetting("HoleCheck", true));
 
     public forclown() {
         super("Blocker", Category.Combat);
         this.listeners.add(new ListenerReceive(this));
     }
-
-
 
     protected void placeBlock(BlockPos pos){
         if (!mc.world.isAirBlock(pos)) return;
@@ -61,5 +56,4 @@ public class forclown extends Module {
 
         CooldownBypass.None.switchTo(oldSlot);
     }
-
 }
