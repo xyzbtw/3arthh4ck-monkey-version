@@ -1,5 +1,6 @@
 package me.earth.earthhack.impl.modules.combat.forclown;
 
+
 import me.earth.earthhack.impl.event.events.misc.BlockDestroyEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
@@ -14,11 +15,11 @@ public class ListenerBlockDestroy extends ModuleListener<forclown, BlockDestroyE
 
     @Override
     public void invoke(BlockDestroyEvent event) {
-        if(!module.breakEvent.getValue()){
+        if(!module.destroyEvent.getValue()){
             return;
         }
 
-        if(module.holeCheck.getValue() && !PlayerUtil.isInHoleAll(mc.player)){
+        if(module.hole.getValue() && !PlayerUtil.isInHoleAll(mc.player)){
             return;
         }
 
@@ -27,24 +28,36 @@ public class ListenerBlockDestroy extends ModuleListener<forclown, BlockDestroyE
         //???
         if (mc.world.getBlockState(pos).getBlock() == (Blocks.BEDROCK) || mc.world.getBlockState(pos).getBlock() == (Blocks.AIR)) return;
 
-        BlockPos playerPos = mc.player.getPosition();
+        BlockPos playerPos = new BlockPos(mc.player.posX, mc.player.posY, mc.player.posZ);
         BlockPos placePos = null;
 
         if (module.extend.getValue()) {
-            for(EnumFacing face : EnumFacing.values()){
+
+            for(EnumFacing face : EnumFacing.values()) {
                 if (face == EnumFacing.UP || face == EnumFacing.DOWN) continue;
 
-                if (pos.equals(playerPos.offset(face)))
-                    placePos = (playerPos.offset(face).offset(face));
+                if (pos.equals(playerPos.offset(face))){
+                    placePos = ((playerPos.offset(face)).offset(face));
+                }
+
+                if (placePos != null) {
+                    module.placeBlock(placePos);
+                }
             }
         }
 
         if (module.face.getValue()) {
-            for(EnumFacing face : EnumFacing.values()){
+
+            for(EnumFacing face : EnumFacing.values()) {
                 if (face == EnumFacing.UP || face == EnumFacing.DOWN) continue;
 
-                if (pos.equals(playerPos.offset(face)))
-                    placePos = (playerPos.offset(face).add(0, 1, 0));
+                if (pos.equals(playerPos.offset(face))){
+                    placePos = ((playerPos.offset(face)).offset(face));
+                }
+
+                if (placePos != null) {
+                    module.placeBlock(placePos);
+                }
             }
         }
 
@@ -53,3 +66,5 @@ public class ListenerBlockDestroy extends ModuleListener<forclown, BlockDestroyE
         }
     }
 }
+
+

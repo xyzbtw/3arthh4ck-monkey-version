@@ -1,5 +1,6 @@
 package me.earth.earthhack.impl.modules.combat.forclown;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
@@ -16,6 +17,7 @@ import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 
 public class forclown extends Module {
 
@@ -25,15 +27,23 @@ public class forclown extends Module {
             register(new BooleanSetting("Face", true));
     protected final Setting<Boolean> packet =
             register(new BooleanSetting("Packet", true));
-    protected final Setting<Boolean> holeCheck =
+    protected final Setting<Boolean> hole =
             register(new BooleanSetting("HoleCheck", true));
-    protected final Setting<Boolean> breakEvent =
-            register(new BooleanSetting("BreakEvent", true));
+    protected final Setting<Boolean> destroyEvent =
+            register(new BooleanSetting("DestroyEvent", true));
+    protected final Setting<Boolean> debug =
+            register(new BooleanSetting("Debug", false));
+
+
+
 
     public forclown() {
         super("Blocker", Category.Combat);
         this.listeners.add(new ListenerReceive(this));
+        this.listeners.add(new ListenerBlockDestroy(this));
     }
+
+
 
     protected void placeBlock(BlockPos pos){
         if (!mc.world.isAirBlock(pos)) return;
@@ -57,5 +67,9 @@ public class forclown extends Module {
         Managers.INTERACTION.placeBlock(pos, packet.getValue(), true);
 
         CooldownBypass.None.switchTo(oldSlot);
+
+        if(debug.getValue())
+        mc.ingameGUI.getChatGUI().printChatMessage(new TextComponentString(ChatFormatting.AQUA+ "placed at " +String.valueOf(pos)));
     }
+
 }

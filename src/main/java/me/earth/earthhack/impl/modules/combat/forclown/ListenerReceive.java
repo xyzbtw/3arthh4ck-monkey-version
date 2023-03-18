@@ -16,40 +16,49 @@ public class ListenerReceive extends ModuleListener<forclown, PacketEvent.Receiv
 
     @Override
     public void invoke(PacketEvent.Receive<SPacketBlockBreakAnim> event) {
-        if (event.getPacket() != null) {
-            if(module.holeCheck.getValue() && !PlayerUtil.isInHoleAll(mc.player)){
+        if (event.getPacket() != null ) {
+            if(module.hole.getValue() && !PlayerUtil.isInHoleAll(mc.player))
                 return;
-            }
+
 
             BlockPos pos = event.getPacket().getPosition();
 
             //???
             if (mc.world.getBlockState(pos).getBlock() == (Blocks.BEDROCK) || mc.world.getBlockState(pos).getBlock() == (Blocks.AIR)) return;
 
-            BlockPos playerPos = mc.player.getPosition();
+            BlockPos playerPos = new BlockPos(mc.player.posX, mc.player.posY, mc.player.posZ);
             BlockPos placePos = null;
 
             if (module.extend.getValue()) {
-                for(EnumFacing face : EnumFacing.values()){
+
+                for(EnumFacing face : EnumFacing.values()) {
                     if (face == EnumFacing.UP || face == EnumFacing.DOWN) continue;
 
-                    if (pos.equals(playerPos.offset(face)))
-                        placePos = (playerPos.offset(face).offset(face));
+                    if (pos.equals(playerPos.offset(face))){
+                        placePos = ((playerPos.offset(face)).offset(face));
+                    }
+
+                    if (placePos != null) {
+                        module.placeBlock(placePos);
+                    }
                 }
             }
 
             if (module.face.getValue()) {
-                for(EnumFacing face : EnumFacing.values()){
+                for(EnumFacing face : EnumFacing.values()) {
                     if (face == EnumFacing.UP || face == EnumFacing.DOWN) continue;
 
-                    if (pos.equals(playerPos.offset(face)))
-                        placePos = (playerPos.offset(face).add(0, 1, 0));
+                    if (pos.equals(playerPos.offset(face))){
+                        placePos = ((playerPos.offset(face)).add(0,1,0));
+                    }
+
+                    if (placePos != null) {
+                        module.placeBlock(placePos);
+                    }
                 }
             }
 
-            if (placePos != null) {
-                module.placeBlock(placePos);
-            }
+
         }
 
     }
