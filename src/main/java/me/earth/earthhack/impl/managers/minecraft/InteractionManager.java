@@ -30,7 +30,6 @@ import java.util.Optional;
 import static me.earth.earthhack.api.util.interfaces.Globals.mc;
 
 public class InteractionManager {
-    private final StopWatch attackTimer = new StopWatch();
 
     //Block placements
 

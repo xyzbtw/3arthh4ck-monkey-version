@@ -31,9 +31,6 @@ final class ListenerMotion extends ModuleListener<Speed, MotionUpdateEvent>
         {
             return;
         }
-        if(module.mode.getValue() == SpeedMode.Instant ){
-            if (module.stopshift.getValue() && (mc.player.isSneaking() || KeyBoardUtil.isKeyDown(mc.gameSettings.keyBindSneak))) return;
-        }
         if (MovementUtil.noMovementKeys())
         {
             mc.player.motionX = 0.0;

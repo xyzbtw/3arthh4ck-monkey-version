@@ -57,14 +57,7 @@ public class forclown extends Module {
 
         CooldownBypass.None.switchTo(obbySlot == -1 ? eChestSlot : obbySlot);
 
-        mc.playerController.updateController();
-
         Managers.INTERACTION.placeBlock(pos, packet.getValue(), true);
-
-        if (mc.player.inventory.currentItem != oldSlot) {
-            CooldownBypass.None.switchTo(oldSlot);
-            mc.playerController.updateController();
-        }
 
         CooldownBypass.None.switchTo(oldSlot);
     }
