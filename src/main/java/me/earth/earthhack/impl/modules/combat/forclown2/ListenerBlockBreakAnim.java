@@ -6,9 +6,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.network.play.server.SPacketBlockBreakAnim;
 import net.minecraft.util.math.BlockPos;
 
-public class ListenerReceive extends ModuleListener<forclown2, PacketEvent.Receive<SPacketBlockBreakAnim>> {
+public class ListenerBlockBreakAnim extends ModuleListener<forclown2, PacketEvent.Receive<SPacketBlockBreakAnim>> {
 
-    public ListenerReceive(forclown2 module) {
+    public ListenerBlockBreakAnim(forclown2 module) {
         super(module, PacketEvent.Receive.class);
     }
 

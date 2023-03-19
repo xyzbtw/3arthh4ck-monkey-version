@@ -16,7 +16,6 @@ import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 
 public class forclown2 extends Module {
     protected final Setting<Boolean> packet =
@@ -25,7 +24,7 @@ public class forclown2 extends Module {
 
     public forclown2() {
         super("AntiCev", Category.Combat);
-        this.listeners.add(new ListenerReceive(this));
+        this.listeners.add(new ListenerBlockBreakAnim(this));
     }
 
     protected void placeBlock(BlockPos pos){

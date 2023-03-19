@@ -1,6 +1,7 @@
 package me.earth.earthhack.impl.modules.combat.forclown;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import jdk.nashorn.internal.ir.Block;
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
@@ -8,15 +9,18 @@ import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.util.minecraft.CooldownBypass;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
+import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 import me.earth.earthhack.impl.util.network.NetworkUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.network.play.client.CPacketUseEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.TextComponentString;
 
 public class forclown extends Module {
@@ -29,23 +33,34 @@ public class forclown extends Module {
             register(new BooleanSetting("Packet", true));
     protected final Setting<Boolean> hole =
             register(new BooleanSetting("HoleCheck", true));
-    protected final Setting<Boolean> destroyEvent =
-            register(new BooleanSetting("DestroyEvent", true));
     protected final Setting<Boolean> debug =
             register(new BooleanSetting("Debug", false));
-
-
-
+    protected final Setting<Boolean> fullExtend =
+            register(new BooleanSetting("FullExtend", true));
+    
 
     public forclown() {
         super("Blocker", Category.Combat);
-        this.listeners.add(new ListenerReceive(this));
-        this.listeners.add(new ListenerBlockDestroy(this));
+        this.listeners.add(new ListenerBlockBreakAnim(this));
+        this.listeners.add(new ListenerBlockChange(this));
+        this.listeners.add(new ListenerUpdate(this));
     }
 
+    Vec3i[] replaceList= new Vec3i[]{
+            new Vec3i(1,0,0), //surround checks
+            new Vec3i(-1,0,0),
+            new Vec3i(0,0,1),
+            new Vec3i(0,0,-1),
 
+            new Vec3i(1,1,0), //diag cev checks
+            new Vec3i(-1,1,0),
+            new Vec3i(0,1,1),
+            new Vec3i(0,1,-1)
+    };
 
     protected void placeBlock(BlockPos pos){
+        if (pos == null) return;
+
         if (!mc.world.isAirBlock(pos)) return;
 
         int oldSlot = InventoryUtil.getServerItem();
@@ -72,4 +87,55 @@ public class forclown extends Module {
         mc.ingameGUI.getChatGUI().printChatMessage(new TextComponentString(ChatFormatting.AQUA+ "placed at " +String.valueOf(pos)));
     }
 
+    protected void scanAndPlace(BlockPos pos, boolean replace){
+        if(hole.getValue() && !PlayerUtil.isInHoleAll(mc.player))
+            return;
+
+        BlockPos playerPos = PlayerUtil.getPlayerPos();
+
+        //checking if we should care about the block in question
+        for(Vec3i offset : replaceList){
+            if(playerPos.add(offset).equals(pos)){
+                break;
+            }
+
+            //if we are at our last element in the iterator and none of the elements suited us, abort the method
+            if(offset.equals(replaceList[replaceList.length-1])){
+                return;
+            }
+        }
+
+        //if the block was broken, it should create a supporting block for extend to be placed at
+        if(replace){
+            ListenerUpdate.scheduledPlacements.add(pos);
+        }
+
+
+        for(EnumFacing face : EnumFacing.values()) {
+            if(pos.offset(face).equals(playerPos)) continue;
+
+            if(mc.world.isAirBlock(pos.offset(EnumFacing.DOWN))){
+                ListenerUpdate.scheduledPlacements.add(pos.offset(EnumFacing.DOWN));
+            }
+
+            if(fullExtend.getValue()){
+                if(pos.getY()==playerPos.getY()){
+                    ListenerUpdate.scheduledPlacements.add(pos.offset(face));
+                }else {
+                    ListenerUpdate.scheduledPlacements.add(pos.add(0,1,0));
+                }
+            }else {
+                if(playerPos.offset(face).equals(pos)){
+                    if(this.extend.getValue()){
+                        ListenerUpdate.scheduledPlacements.add(playerPos.offset(face).offset(face));
+                    }
+
+                    if(this.face.getValue()){
+                        ListenerUpdate.scheduledPlacements.add(playerPos.offset(face).add(0,1,0));
+                    }
+                }
+            }
+        }
+
+    }
 }
