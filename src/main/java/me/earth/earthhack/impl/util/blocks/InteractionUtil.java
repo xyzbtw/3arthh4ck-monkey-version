@@ -1,11 +1,8 @@
-package me.earth.earthhack.impl.managers.minecraft;
+package me.earth.earthhack.impl.util.blocks;
 
-import me.earth.earthhack.impl.managers.Managers;
-import me.earth.earthhack.impl.util.math.StopWatch;
-import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
+
 import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
 import me.earth.earthhack.impl.util.network.NetworkUtil;
-import me.earth.earthhack.impl.util.network.ServerUtil;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -17,7 +14,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
-import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -29,17 +25,15 @@ import java.util.Optional;
 
 import static me.earth.earthhack.api.util.interfaces.Globals.mc;
 
-public class InteractionManager {
+public class InteractionUtil {
 
     //Block placements
 
-    public void placeBlock(BlockPos pos, boolean packet, boolean attackCrystal, boolean ignoreEntities) {
+    public static void placeBlock(BlockPos pos, boolean packet, boolean attackCrystal, boolean ignoreEntities) {
 
         if (mc.world == null || mc.player == null) return;
 
         if (BlockUtil.isReplaceable(pos)) {
-
-
 
             Optional<ClickLocation> posCL = getClickLocation(pos, ignoreEntities, false, attackCrystal);
 
@@ -82,7 +76,7 @@ public class InteractionManager {
         }
     }
 
-    public void placeBlock(BlockPos pos, boolean packet, boolean attackCrystal) {
+    public static void placeBlock(BlockPos pos, boolean packet, boolean attackCrystal) {
         placeBlock(pos, packet, attackCrystal, false);
     }
 
@@ -98,7 +92,7 @@ public class InteractionManager {
         }
     }
 
-    public Optional<ClickLocation> getClickLocation(BlockPos pos, boolean ignoreEntities, boolean noPistons, boolean onlyCrystals) {
+    public static Optional<ClickLocation> getClickLocation(BlockPos pos, boolean ignoreEntities, boolean noPistons, boolean onlyCrystals) {
         Block block = mc.world.getBlockState(pos).getBlock();
 
         if (!(block instanceof BlockAir) && !(block instanceof BlockLiquid)) {
@@ -143,7 +137,7 @@ public class InteractionManager {
         return Optional.of(new ClickLocation(neighbour, opposite));
     }
 
-    public boolean shouldShiftClick(BlockPos pos) {
+    public static boolean shouldShiftClick(BlockPos pos) {
         Block block = mc.world.getBlockState(pos).getBlock();
 
         TileEntity tileEntity = null;

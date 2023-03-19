@@ -4,7 +4,7 @@ import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
-import me.earth.earthhack.impl.managers.Managers;
+import me.earth.earthhack.impl.util.blocks.InteractionUtil;
 import me.earth.earthhack.impl.util.minecraft.CooldownBypass;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import me.earth.earthhack.impl.util.network.NetworkUtil;
@@ -46,15 +46,9 @@ public class forclown2 extends Module {
 
         CooldownBypass.None.switchTo(obbySlot == -1 ? eChestSlot : obbySlot);
 
-        mc.playerController.updateController();
-
-        Managers.INTERACTION.placeBlock(pos, packet.getValue(), true);
-
-        if (mc.player.inventory.currentItem != oldSlot) {
-            CooldownBypass.None.switchTo(oldSlot);
-            mc.playerController.updateController();
-        }
+        InteractionUtil.placeBlock(pos, packet.getValue(), true);
 
         CooldownBypass.None.switchTo(oldSlot);
+
     }
 }

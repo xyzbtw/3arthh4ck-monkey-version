@@ -3,6 +3,8 @@ package me.earth.earthhack.impl.modules.movement.phase;
 import me.earth.earthhack.impl.event.events.misc.CollisionEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.util.math.position.PositionUtil;
+import me.earth.earthhack.impl.util.minecraft.PhaseUtil;
+import me.earth.earthhack.impl.util.minecraft.PushMode;
 import net.minecraft.init.Blocks;
 
 final class ListenerCollision extends ModuleListener<Phase, CollisionEvent>
@@ -82,7 +84,7 @@ final class ListenerCollision extends ModuleListener<Phase, CollisionEvent>
                 break;
             case Wall:
                 if (module.onlyBlock.getValue()
-                        && !module.isPhasing())
+                        && !PhaseUtil.isPhasing(mc.player, PushMode.MP))
                 {
                     return;
                 }
