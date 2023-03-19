@@ -28,7 +28,7 @@ public class ListenerBlockDestroy extends ModuleListener<forclown, BlockDestroyE
         //???  checks if the block that is getting hit is bedrock or not (people might hit them on accident)
         if (mc.world.getBlockState(pos).getBlock() == (Blocks.BEDROCK) || mc.world.getBlockState(pos).getBlock() == (Blocks.AIR)) return;
 
-        BlockPos playerPos = new BlockPos(mc.player.posX, mc.player.posY, mc.player.posZ);
+        BlockPos playerPos = PlayerUtil.getPlayerPos();
         BlockPos placePos = null;
 
         if (module.extend.getValue()) {
