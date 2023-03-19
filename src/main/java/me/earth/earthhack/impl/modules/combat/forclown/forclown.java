@@ -39,6 +39,8 @@ public class forclown extends Module {
             register(new BooleanSetting("Debug", false));
     protected final Setting<Boolean> fullExtend =
             register(new BooleanSetting("FullExtend", true));
+    protected final Setting<Boolean> extendxyz =
+            register(new BooleanSetting("Extend-diag", false));
     
 
     public forclown() {
@@ -133,6 +135,10 @@ public class forclown extends Module {
 
                     if(this.face.getValue()){
                         ListenerUpdate.scheduledPlacements.add(playerPos.offset(face).add(0,1,0));
+                    }
+                    if(this.extendxyz.getValue()){
+                        ListenerUpdate.scheduledPlacements.add(playerPos.offset(face).offset(face.rotateYCCW()));
+                        ListenerUpdate.scheduledPlacements.add(playerPos.offset(face).offset(face.rotateY()));
                     }
                 }
             }
