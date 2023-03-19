@@ -3,20 +3,20 @@ package me.earth.earthhack.impl.modules.combat.forclown2;
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import net.minecraft.init.Blocks;
-import net.minecraft.network.play.server.SPacketBlockBreakAnim;
+import net.minecraft.network.play.server.SPacketBlockChange;
 import net.minecraft.util.math.BlockPos;
 
-public class ListenerBlockBreakAnim extends ModuleListener<forclown2, PacketEvent.Receive<SPacketBlockBreakAnim>> {
+public class ListenerBlockChange extends ModuleListener<forclown2, PacketEvent.Receive<SPacketBlockChange>> {
 
-    public ListenerBlockBreakAnim(forclown2 module) {
+    public ListenerBlockChange(forclown2 module) {
         super(module, PacketEvent.Receive.class);
     }
 
     @Override
-    public void invoke(PacketEvent.Receive<SPacketBlockBreakAnim> event) {
+    public void invoke(PacketEvent.Receive<SPacketBlockChange> event) {
         //hole check was redundant
         if(event.getPacket() != null){
-            BlockPos pos = event.getPacket().getPosition();
+            BlockPos pos = event.getPacket().getBlockPosition();
 
             //???
             if (mc.world.getBlockState(pos).getBlock() == (Blocks.BEDROCK) || mc.world.getBlockState(pos).getBlock() == (Blocks.AIR)) return;
@@ -29,7 +29,7 @@ public class ListenerBlockBreakAnim extends ModuleListener<forclown2, PacketEven
             }
 
             if (placePos != null) {
-                module.placeBlock(placePos);
+                ListenerUpdate.scheduledPlacements.add(placePos);
             }
         }
     }

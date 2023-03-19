@@ -11,6 +11,7 @@ import me.earth.earthhack.impl.util.minecraft.CooldownBypass;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 import me.earth.earthhack.impl.util.network.NetworkUtil;
+import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.init.Blocks;
@@ -65,6 +66,10 @@ public class forclown extends Module {
     protected void placeBlock(BlockPos pos){
         if (pos == null) return;
 
+        if(mc.world==null)return;
+        if(mc.player==null)return;
+        if(mc.currentScreen instanceof GuiConnecting)return;
+
         if (!mc.world.isAirBlock(pos)) return;
 
         int oldSlot = InventoryUtil.getServerItem();
@@ -91,6 +96,9 @@ public class forclown extends Module {
     }
 
     protected void scanAndPlace(BlockPos pos, boolean replace){
+        if(mc.world==null)return;
+        if(mc.player==null)return;
+        if(mc.currentScreen instanceof GuiConnecting)return;
         if(hole.getValue() && !PlayerUtil.isInHoleAll(mc.player))
             return;
 

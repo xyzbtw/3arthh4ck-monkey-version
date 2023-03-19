@@ -24,7 +24,8 @@ public class forclown2 extends Module {
 
     public forclown2() {
         super("AntiCev", Category.Combat);
-        this.listeners.add(new ListenerBlockBreakAnim(this));
+        this.listeners.add(new ListenerBlockChange(this));
+        this.listeners.add(new ListenerUpdate(this));
     }
 
     protected void placeBlock(BlockPos pos){

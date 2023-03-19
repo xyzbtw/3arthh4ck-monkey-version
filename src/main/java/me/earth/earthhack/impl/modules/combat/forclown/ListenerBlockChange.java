@@ -3,6 +3,7 @@ package me.earth.earthhack.impl.modules.combat.forclown;
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import net.minecraft.block.BlockAir;
+import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.network.play.server.SPacketBlockChange;
 import net.minecraft.util.math.BlockPos;
 
@@ -14,8 +15,10 @@ public class ListenerBlockChange extends ModuleListener<forclown, PacketEvent.Re
 
     @Override
     public void invoke(PacketEvent.Receive<SPacketBlockChange> event) {
+        if(mc.world==null)return;
+        if(mc.player==null)return;
         if (event.getPacket() == null ) return;
-
+        if(mc.currentScreen instanceof GuiConnecting)return;
 
         if (event.getPacket().getBlockState().getBlock() instanceof BlockAir) {
             final BlockPos blockPosition = event.getPacket().getBlockPosition();

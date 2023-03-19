@@ -1,4 +1,4 @@
-package me.earth.earthhack.impl.modules.combat.forclown;
+package me.earth.earthhack.impl.modules.combat.forclown2;
 
 import me.earth.earthhack.impl.event.events.misc.UpdateEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
@@ -7,9 +7,8 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
 
-public class ListenerUpdate extends ModuleListener<forclown, UpdateEvent> {
-
-    public ListenerUpdate(forclown module)
+public class ListenerUpdate extends ModuleListener<forclown2, UpdateEvent> {
+    public ListenerUpdate(forclown2 module)
     {
         super(module, UpdateEvent.class, 1);
     }
