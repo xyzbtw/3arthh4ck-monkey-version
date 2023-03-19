@@ -5,7 +5,7 @@ import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
-import me.earth.earthhack.impl.managers.Managers;
+import me.earth.earthhack.impl.util.blocks.InteractionUtil;
 import me.earth.earthhack.impl.util.minecraft.CooldownBypass;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import me.earth.earthhack.impl.util.network.NetworkUtil;
@@ -27,6 +27,8 @@ public class forclown extends Module {
             register(new BooleanSetting("Face", true));
     protected final Setting<Boolean> packet =
             register(new BooleanSetting("Packet", true));
+    //protected final Setting<Boolean> swing =
+            //register(new BooleanSetting("Swing", false));
     protected final Setting<Boolean> hole =
             register(new BooleanSetting("HoleCheck", true));
     protected final Setting<Boolean> destroyEvent =
@@ -64,12 +66,11 @@ public class forclown extends Module {
 
         CooldownBypass.None.switchTo(obbySlot == -1 ? eChestSlot : obbySlot);
 
-        Managers.INTERACTION.placeBlock(pos, packet.getValue(), true);
+        InteractionUtil.placeBlock(pos, packet.getValue(), true);
 
         CooldownBypass.None.switchTo(oldSlot);
 
-        if(debug.getValue())
-        mc.ingameGUI.getChatGUI().printChatMessage(new TextComponentString(ChatFormatting.AQUA+ "placed at " +String.valueOf(pos)));
+        if(debug.getValue()) mc.ingameGUI.getChatGUI().printChatMessage(new TextComponentString(ChatFormatting.AQUA+ "placed at " + pos));
     }
 
 }

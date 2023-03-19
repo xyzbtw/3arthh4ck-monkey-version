@@ -11,7 +11,7 @@ import net.minecraft.util.math.BlockPos;
 public class ListenerReceive extends ModuleListener<forclown, PacketEvent.Receive<SPacketBlockBreakAnim>>{
 
     public ListenerReceive(forclown module) {
-        super(module, PacketEvent.Receive.class);
+        super(module, PacketEvent.Receive.class, SPacketBlockBreakAnim.class);
     }
 
     @Override
@@ -19,7 +19,6 @@ public class ListenerReceive extends ModuleListener<forclown, PacketEvent.Receiv
         if (event.getPacket() != null ) {
             if(module.hole.getValue() && !PlayerUtil.isInHoleAll(mc.player))
                 return;
-
 
             BlockPos pos = event.getPacket().getPosition();
 

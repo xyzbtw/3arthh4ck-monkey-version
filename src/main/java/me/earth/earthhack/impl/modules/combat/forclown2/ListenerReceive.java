@@ -9,7 +9,7 @@ import net.minecraft.util.math.BlockPos;
 public class ListenerReceive extends ModuleListener<forclown2, PacketEvent.Receive<SPacketBlockBreakAnim>> {
 
     public ListenerReceive(forclown2 module) {
-        super(module, PacketEvent.Receive.class);
+        super(module, PacketEvent.Receive.class, SPacketBlockBreakAnim.class);
     }
 
     @Override
