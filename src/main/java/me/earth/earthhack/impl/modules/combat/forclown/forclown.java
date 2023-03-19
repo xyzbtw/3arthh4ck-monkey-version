@@ -51,6 +51,7 @@ public class forclown extends Module {
             register(new BooleanSetting("Extend-diag", false));
     protected final Setting<Float> range =
             register(new NumberSetting<>("Range", 6.0f, 0.0f, 10.0f));
+    protected EntityPlayer target;
 
     protected final ModuleCache<Speedmine> speedmine = Caches.getModule(Speedmine.class);
     public forclown() {
@@ -75,12 +76,12 @@ public class forclown extends Module {
 
     protected void placeBlock(BlockPos pos){
         if (pos == null) return;
-        EntityPlayer target = EntityUtil.getClosestEnemy();
         if(mc.world==null)return;
         if(mc.player==null)return;
         if(mc.currentScreen instanceof GuiConnecting)return;
+        target = EntityUtil.getClosestEnemy();
         if (pos == this.speedmine.get().getPos()) return;
-        if(pos.getDistance(target.getPosition().getX(), target.getPosition().getY(), target.getPosition().getZ()) >= this.range.getValue()) return;
+        if(target == null ||pos.getDistance(target.getPosition().getX(), target.getPosition().getY(), target.getPosition().getZ()) >= this.range.getValue()) return;
 
         if (!mc.world.isAirBlock(pos)) return;
 
