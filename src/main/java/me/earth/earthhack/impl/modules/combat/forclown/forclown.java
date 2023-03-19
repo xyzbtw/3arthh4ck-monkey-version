@@ -112,6 +112,10 @@ public class forclown extends Module {
         if(mc.world==null)return;
         if(mc.player==null)return;
         if(mc.currentScreen instanceof GuiConnecting)return;
+        target = EntityUtil.getClosestEnemy();
+        if (pos == this.speedmine.get().getPos()) return;
+        if(target == null ||pos.getDistance(target.getPosition().getX(), target.getPosition().getY(), target.getPosition().getZ()) >= this.range.getValue()) return;
+
         if(hole.getValue() && !PlayerUtil.isInHoleAll(mc.player))
             return;
 
