@@ -110,8 +110,7 @@ final class ListenerStep extends ModuleListener<Step, StepEvent> {
 
     private double[] getOffsets(double height) {
         double[] offsets = new double[0];
-        if (height >= 2.0)
-        {
+        if (height > 2.0){
             offsets = new double[9];
             offsets[0] = 0.42;
             offsets[1] = 0.78;
@@ -122,6 +121,18 @@ final class ListenerStep extends ModuleListener<Step, StepEvent> {
             offsets[6] = 1.45;
             offsets[7] = 1.43;
             offsets[8] = 2.125;
+        }
+        else if (height == 2.0)
+        {
+            offsets = new double[8];
+            offsets[0] = 0.42;
+            offsets[1] = 0.78;
+            offsets[2] = 0.63;
+            offsets[3] = 0.51;
+            offsets[4] = 0.9;
+            offsets[5] = 1.21;
+            offsets[6] = 1.45;
+            offsets[7] = 1.43;
         }
         else if(height == 1.875)
         {

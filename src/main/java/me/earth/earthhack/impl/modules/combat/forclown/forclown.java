@@ -2,18 +2,24 @@ package me.earth.earthhack.impl.modules.combat.forclown;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import jdk.nashorn.internal.ir.Block;
+import me.earth.earthhack.api.cache.ModuleCache;
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
+import me.earth.earthhack.api.setting.settings.NumberSetting;
+import me.earth.earthhack.impl.modules.Caches;
+import me.earth.earthhack.impl.modules.player.speedmine.Speedmine;
 import me.earth.earthhack.impl.util.blocks.InteractionUtil;
 import me.earth.earthhack.impl.util.minecraft.CooldownBypass;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
+import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import me.earth.earthhack.impl.util.network.NetworkUtil;
 import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.network.play.client.CPacketUseEntity;
@@ -23,6 +29,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.TextComponentString;
+import org.apache.commons.codec.language.Nysiis;
 
 public class forclown extends Module {
 
@@ -42,13 +49,16 @@ public class forclown extends Module {
             register(new BooleanSetting("FullExtend", true));
     protected final Setting<Boolean> extendxyz =
             register(new BooleanSetting("Extend-diag", false));
-    
+    protected final Setting<Float> range =
+            register(new NumberSetting<>("Range", 6.0f, 0.0f, 10.0f));
 
+    protected final ModuleCache<Speedmine> speedmine = Caches.getModule(Speedmine.class);
     public forclown() {
         super("Blocker", Category.Combat);
         this.listeners.add(new ListenerBlockBreakAnim(this));
         this.listeners.add(new ListenerBlockChange(this));
         this.listeners.add(new ListenerUpdate(this));
+        this.setData(new BlockerData(this));
     }
 
     Vec3i[] replaceList= new Vec3i[]{
@@ -65,10 +75,12 @@ public class forclown extends Module {
 
     protected void placeBlock(BlockPos pos){
         if (pos == null) return;
-
+        EntityPlayer target = EntityUtil.getClosestEnemy();
         if(mc.world==null)return;
         if(mc.player==null)return;
         if(mc.currentScreen instanceof GuiConnecting)return;
+        if (pos == this.speedmine.get().getPos()) return;
+        if(pos.getDistance(target.getPosition().getX(), target.getPosition().getY(), target.getPosition().getZ()) >= this.range.getValue()) return;
 
         if (!mc.world.isAirBlock(pos)) return;
 
