@@ -41,6 +41,7 @@ public class forclown2 extends ObbyListenerModule<ListenerObsidian> {
         super("AntiCev", Category.Combat);
         this.listeners.add(new ListenerBlockChange(this));
         this.listeners.add(new ListenerUpdate(this));
+        this.setData(new AntiCevData(this));
     }
 
 
