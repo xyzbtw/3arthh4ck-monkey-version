@@ -35,12 +35,17 @@ public class forclown2 extends ObbyListenerModule<ListenerObsidian> {
             register(new BooleanSetting("Helping", false));
     protected final Setting<Float> range =
             register(new NumberSetting<>("Range", 6.0f, 0.0f, 10.0f));
+    protected final Setting<Boolean> blockanim =
+            register(new BooleanSetting("SBreakAnim", true));
+    protected final Setting<Boolean> blockchange =
+            register(new BooleanSetting("BlockChange", true));
 
 
     public forclown2() {
         super("AntiCev", Category.Combat);
         this.listeners.add(new ListenerBlockChange(this));
         this.listeners.add(new ListenerUpdate(this));
+        this.listeners.add(new ListenerBlockBreakAnim(this));
         this.setData(new AntiCevData(this));
     }
 
