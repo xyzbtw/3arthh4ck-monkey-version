@@ -43,6 +43,8 @@ public class Chams extends Module
             register(new BooleanSetting("Players", true));
     public final Setting<Boolean> disableanimations      =
             register(new BooleanSetting("AnimationDisable", false));
+    public final Setting<Boolean> animationsneak =
+            register(new BooleanSetting("SneakAnim", false));
     protected final Setting<Boolean> animals       =
             register(new BooleanSetting("Animals", false));
     protected final Setting<Boolean> monsters      =

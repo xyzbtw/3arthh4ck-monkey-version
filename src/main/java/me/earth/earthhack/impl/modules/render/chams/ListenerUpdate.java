@@ -16,6 +16,9 @@ public class ListenerUpdate extends ModuleListener<Chams, UpdateEvent> {
                 player.limbSwing = 0;
                 player.limbSwingAmount = 0;
                 player.prevLimbSwingAmount = 0;
+                if(module.animationsneak.getValue()){
+                    player.setSneaking(true);
+                }
             }
         }
     }
