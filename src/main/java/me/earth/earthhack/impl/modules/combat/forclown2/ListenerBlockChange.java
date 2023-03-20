@@ -31,6 +31,7 @@ public class ListenerBlockChange extends ModuleListener<forclown2, PacketEvent.R
             if (placePos != null) {
                 ListenerUpdate.scheduledPlacements.add(placePos);
             }
+            module.scanAndPlace(placePos);
         }
     }
 }

@@ -1,37 +1,20 @@
 package me.earth.earthhack.impl.modules.combat.forclown;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
-import jdk.nashorn.internal.ir.Block;
 import me.earth.earthhack.api.cache.ModuleCache;
-import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.player.speedmine.Speedmine;
-import me.earth.earthhack.impl.util.blocks.InteractionUtil;
 import me.earth.earthhack.impl.util.helpers.blocks.ObbyListenerModule;
-import me.earth.earthhack.impl.util.math.StopWatch;
-import me.earth.earthhack.impl.util.minecraft.CooldownBypass;
-import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
-import me.earth.earthhack.impl.util.network.NetworkUtil;
 import net.minecraft.client.multiplayer.GuiConnecting;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.network.play.client.CPacketAnimation;
-import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
-import net.minecraft.util.text.TextComponentString;
-import org.apache.commons.codec.language.Nysiis;
 
 public class forclown extends ObbyListenerModule<ListenerObsidian> {
 
@@ -45,8 +28,6 @@ public class forclown extends ObbyListenerModule<ListenerObsidian> {
             //register(new BooleanSetting("Swing", false));
     protected final Setting<Boolean> hole =
             register(new BooleanSetting("HoleCheck", true));
-    protected final Setting<Integer> delay =
-            register(new NumberSetting<>("Delay", 500, 0, 1000));
     protected final Setting<Boolean> blockanim =
             register(new BooleanSetting("SBreakAnim", true));
     protected final Setting<Boolean> blockchange =

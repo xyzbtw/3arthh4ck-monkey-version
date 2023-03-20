@@ -1,8 +1,9 @@
 package me.earth.earthhack.impl.modules.combat.forclown;
 
-import me.earth.earthhack.api.module.data.DefaultData;
 
-public class BlockerData extends DefaultData<forclown> {
+import me.earth.earthhack.impl.util.helpers.blocks.data.BlockPlacingData;
+
+public class BlockerData extends BlockPlacingData<forclown> {
     public BlockerData(forclown module) {
         super(module);
         register(module.range, "Range from position mined to closest enemy");
