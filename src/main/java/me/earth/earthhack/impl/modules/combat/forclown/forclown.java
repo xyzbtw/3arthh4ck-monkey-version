@@ -11,6 +11,7 @@ import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.player.speedmine.Speedmine;
 import me.earth.earthhack.impl.util.blocks.InteractionUtil;
+import me.earth.earthhack.impl.util.helpers.blocks.ObbyListenerModule;
 import me.earth.earthhack.impl.util.math.StopWatch;
 import me.earth.earthhack.impl.util.minecraft.CooldownBypass;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
@@ -32,7 +33,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.TextComponentString;
 import org.apache.commons.codec.language.Nysiis;
 
-public class forclown extends Module {
+public class forclown extends ObbyListenerModule<ListenerObsidian> {
 
     protected final Setting<Boolean> extend =
             register(new BooleanSetting("Extend", true));
@@ -56,8 +57,12 @@ public class forclown extends Module {
             register(new BooleanSetting("FullExtend", true));
     protected final Setting<Boolean> extendxyz =
             register(new BooleanSetting("Extend-diag", false));
+    protected final Setting<Boolean> helping =
+            register(new BooleanSetting("HelpingBlocks", false));
     protected final Setting<Float> range =
             register(new NumberSetting<>("Range", 6.0f, 0.0f, 10.0f));
+    protected final Setting<Float> attackrange =
+            register(new NumberSetting<>("AttackRange", 6.0f, 0.0f, 10.0f));
     protected EntityPlayer target;
 
     protected final ModuleCache<Speedmine> speedmine = Caches.getModule(Speedmine.class);
@@ -82,7 +87,13 @@ public class forclown extends Module {
             new Vec3i(0,1,-1)
     };
 
-    protected void placeBlock(BlockPos pos){
+    @Override
+    public double getRange()
+    {
+        return attackrange.getValue();
+    }
+
+    /*protected void placeBlock(BlockPos pos){
         if (pos == null) return;
         if(mc.world==null)return;
         if(mc.player==null)return;
@@ -114,6 +125,14 @@ public class forclown extends Module {
         CooldownBypass.None.switchTo(oldSlot);
 
         if(debug.getValue()) mc.ingameGUI.getChatGUI().printChatMessage(new TextComponentString(ChatFormatting.AQUA+ "placed at " + pos));
+    }
+
+     */
+    @Override
+    protected boolean shouldHelp(EnumFacing facing, BlockPos pos)
+    {
+        return super.shouldHelp(facing, pos) // ??????
+                && helping.getValue();
     }
 
     protected void scanAndPlace(BlockPos pos, boolean replace){
@@ -177,5 +196,15 @@ public class forclown extends Module {
             }
         }
 
+    }
+    @Override
+    public boolean execute()
+    {
+        return super.execute();
+    }
+
+    @Override
+    protected ListenerObsidian createListener() {
+        return new ListenerObsidian(this);
     }
 }

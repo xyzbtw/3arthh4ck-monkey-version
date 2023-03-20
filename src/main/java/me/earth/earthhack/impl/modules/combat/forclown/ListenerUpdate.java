@@ -29,10 +29,12 @@ public class ListenerUpdate extends ModuleListener<forclown, UpdateEvent> {
             scheduledPlacements.clear();
         }
 
-        for(BlockPos pos : copy){
+        /*for(BlockPos pos : copy){
             if(!delay.passed(module.delay.getValue())) return;
             module.placeBlock(pos);
             delay.reset();
         }
+
+         */
     }
 }
