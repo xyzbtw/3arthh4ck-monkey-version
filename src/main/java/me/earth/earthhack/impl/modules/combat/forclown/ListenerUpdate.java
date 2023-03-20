@@ -2,6 +2,7 @@ package me.earth.earthhack.impl.modules.combat.forclown;
 
 import me.earth.earthhack.impl.event.events.misc.UpdateEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
+import me.earth.earthhack.impl.util.math.StopWatch;
 import me.earth.earthhack.impl.util.math.Timer;
 import net.minecraft.util.math.BlockPos;
 
@@ -16,7 +17,8 @@ public class ListenerUpdate extends ModuleListener<forclown, UpdateEvent> {
 
     protected static ArrayList<BlockPos> scheduledPlacements = new ArrayList<>();
 
-    Timer timer = new Timer();
+    StopWatch timer = new StopWatch();
+    StopWatch delay = new StopWatch();
 
     @Override
     public void invoke(UpdateEvent event) {
@@ -26,8 +28,11 @@ public class ListenerUpdate extends ModuleListener<forclown, UpdateEvent> {
 
             scheduledPlacements.clear();
         }
+
         for(BlockPos pos : copy){
+            if(!delay.passed(module.delay.getValue())) return;
             module.placeBlock(pos);
+            delay.reset();
         }
     }
 }

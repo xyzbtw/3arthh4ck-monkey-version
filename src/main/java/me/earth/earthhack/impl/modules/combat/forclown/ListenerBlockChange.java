@@ -15,6 +15,7 @@ public class ListenerBlockChange extends ModuleListener<forclown, PacketEvent.Re
 
     @Override
     public void invoke(PacketEvent.Receive<SPacketBlockChange> event) {
+        if(!module.blockchange.getValue()) return;
         if(mc.world==null)return;
         if(mc.player==null)return;
         if (event.getPacket() == null ) return;

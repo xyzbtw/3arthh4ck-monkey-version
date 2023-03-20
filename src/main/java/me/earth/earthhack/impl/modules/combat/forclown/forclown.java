@@ -11,6 +11,7 @@ import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.player.speedmine.Speedmine;
 import me.earth.earthhack.impl.util.blocks.InteractionUtil;
+import me.earth.earthhack.impl.util.math.StopWatch;
 import me.earth.earthhack.impl.util.minecraft.CooldownBypass;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
@@ -43,6 +44,12 @@ public class forclown extends Module {
             //register(new BooleanSetting("Swing", false));
     protected final Setting<Boolean> hole =
             register(new BooleanSetting("HoleCheck", true));
+    protected final Setting<Integer> delay =
+            register(new NumberSetting<>("Delay", 500, 0, 1000));
+    protected final Setting<Boolean> blockanim =
+            register(new BooleanSetting("SBreakAnim", true));
+    protected final Setting<Boolean> blockchange =
+            register(new BooleanSetting("BlockChange", true));
     protected final Setting<Boolean> debug =
             register(new BooleanSetting("Debug", false));
     protected final Setting<Boolean> fullExtend =
@@ -54,6 +61,7 @@ public class forclown extends Module {
     protected EntityPlayer target;
 
     protected final ModuleCache<Speedmine> speedmine = Caches.getModule(Speedmine.class);
+
     public forclown() {
         super("Blocker", Category.Combat);
         this.listeners.add(new ListenerBlockBreakAnim(this));

@@ -19,6 +19,7 @@ public class ListenerBlockBreakAnim extends ModuleListener<forclown, PacketEvent
 
     @Override
     public void invoke(PacketEvent.Receive<SPacketBlockBreakAnim> event) {
+        if(!module.blockanim.getValue()) return;
         if (event.getPacket() == null ) return;
         if(mc.world==null)return;
         if(mc.player==null)return;
