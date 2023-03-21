@@ -11,7 +11,7 @@ import net.minecraft.util.math.BlockPos;
 public class ListenerBlockChange extends ModuleListener<forclown, PacketEvent.Receive<SPacketBlockChange>> {
 
     public ListenerBlockChange(forclown module) {
-        super(module, PacketEvent.Receive.class);
+        super(module, PacketEvent.Receive.class, SPacketBlockChange.class);
     }
 
     @Override
@@ -23,8 +23,10 @@ public class ListenerBlockChange extends ModuleListener<forclown, PacketEvent.Re
         if(mc.currentScreen instanceof GuiConnecting)return;
         if(event.getPacket().getBlockPosition().getDistance(PlayerUtil.getPlayerPos().getX(), PlayerUtil.getPlayerPos().getY(), PlayerUtil.getPlayerPos().getZ()) > 10) return;
 
+
         if (event.getPacket().getBlockState().getBlock() instanceof BlockAir) {
             final BlockPos blockPosition = event.getPacket().getBlockPosition();
+
             module.scanAndPlace(blockPosition, true);
         }
     }

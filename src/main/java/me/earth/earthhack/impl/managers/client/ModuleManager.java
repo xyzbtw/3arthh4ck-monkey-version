@@ -44,7 +44,6 @@ import me.earth.earthhack.impl.modules.combat.bowspam.BowSpam;
 import me.earth.earthhack.impl.modules.combat.cevbreaker.CevBreaker;
 import me.earth.earthhack.impl.modules.combat.criticals.Criticals;
 import me.earth.earthhack.impl.modules.combat.forclown.forclown;
-import me.earth.earthhack.impl.modules.combat.forclown2.forclown2;
 import me.earth.earthhack.impl.modules.combat.holefiller.HoleFiller;
 import me.earth.earthhack.impl.modules.combat.killaura.KillAura;
 import me.earth.earthhack.impl.modules.combat.legswitch.LegSwitch;
@@ -230,7 +229,6 @@ public class ModuleManager extends IterationRegister<Module>
         this.forceRegister(new Criticals());
         this.forceRegister(new HoleFiller());
         this.forceRegister(new KillAura());
-        this.forceRegister(new forclown2());
         this.forceRegister(new LegSwitch());
         this.forceRegister(new Offhand());
         this.forceRegister(new PistonAura());

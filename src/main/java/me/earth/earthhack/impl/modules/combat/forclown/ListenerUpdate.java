@@ -18,23 +18,12 @@ public class ListenerUpdate extends ModuleListener<forclown, UpdateEvent> {
     protected static ArrayList<BlockPos> scheduledPlacements = new ArrayList<>();
 
     StopWatch timer = new StopWatch();
-    StopWatch delay = new StopWatch();
 
     @Override
     public void invoke(UpdateEvent event) {
-        ArrayList<BlockPos> copy = (ArrayList<BlockPos>) scheduledPlacements.clone(); //избавляемся от ConcurrentModificationException
-        if(timer.passed(700)){
+        if(timer.passed(module.surroundDelay.getValue())){
             timer.reset();
-
             scheduledPlacements.clear();
         }
-
-        /*for(BlockPos pos : copy){
-            if(!delay.passed(module.delay.getValue())) return;
-            module.placeBlock(pos);
-            delay.reset();
-        }
-
-         */
     }
 }

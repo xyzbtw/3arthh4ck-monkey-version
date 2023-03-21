@@ -17,23 +17,19 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 
 public class forclown extends ObbyListenerModule<ListenerObsidian> {
-
+    protected final Setting<Boolean> anticev =
+            register(new BooleanSetting("AntiCev", false));
     protected final Setting<Boolean> extend =
             register(new BooleanSetting("Extend", true));
     protected final Setting<Boolean> face =
             register(new BooleanSetting("Face", true));
-    protected final Setting<Boolean> packet =
-            register(new BooleanSetting("Packet", true));
-    //protected final Setting<Boolean> swing =
-            //register(new BooleanSetting("Swing", false));
     protected final Setting<Boolean> hole =
             register(new BooleanSetting("HoleCheck", true));
-    protected final Setting<Boolean> blockanim =
-            register(new BooleanSetting("SBreakAnim", true));
     protected final Setting<Boolean> blockchange =
             register(new BooleanSetting("BlockChange", true));
     protected final Setting<Boolean> debug =
             register(new BooleanSetting("Debug", false));
+
     protected final Setting<Boolean> fullExtend =
             register(new BooleanSetting("FullExtend", true));
     protected final Setting<Boolean> extendxyz =
@@ -42,10 +38,10 @@ public class forclown extends ObbyListenerModule<ListenerObsidian> {
             register(new BooleanSetting("HelpingBlocks", false));
     protected final Setting<Float> range =
             register(new NumberSetting<>("Range", 6.0f, 0.0f, 10.0f));
-    protected final Setting<Float> attackrange =
-            register(new NumberSetting<>("AttackRange", 6.0f, 0.0f, 10.0f));
-    protected EntityPlayer target;
+    protected final Setting<Integer> surroundDelay =
+            register(new NumberSetting<>("SurroundDelay", 500, 0, 1000));
 
+    protected EntityPlayer target;
     protected final ModuleCache<Speedmine> speedmine = Caches.getModule(Speedmine.class);
 
     public forclown() {
@@ -57,6 +53,9 @@ public class forclown extends ObbyListenerModule<ListenerObsidian> {
     }
 
     Vec3i[] replaceList= new Vec3i[]{
+            new Vec3i(0,3,0), //anticev check
+
+
             new Vec3i(1,0,0), //surround checks
             new Vec3i(-1,0,0),
             new Vec3i(0,0,1),
@@ -66,49 +65,13 @@ public class forclown extends ObbyListenerModule<ListenerObsidian> {
             new Vec3i(-1,1,0),
             new Vec3i(0,1,1),
             new Vec3i(0,1,-1)
+
+
     };
 
-    @Override
-    public double getRange()
-    {
-        return attackrange.getValue();
-    }
 
-    /*protected void placeBlock(BlockPos pos){
-        if (pos == null) return;
-        if(mc.world==null)return;
-        if(mc.player==null)return;
-        if(mc.currentScreen instanceof GuiConnecting)return;
-        target = EntityUtil.getClosestEnemy();
-        if (pos == this.speedmine.get().getPos()) return;
-        if(target == null ||pos.getDistance(target.getPosition().getX(), target.getPosition().getY(), target.getPosition().getZ()) >= this.range.getValue()) return;
 
-        if (!mc.world.isAirBlock(pos)) return;
 
-        int oldSlot = InventoryUtil.getServerItem();
-
-        int obbySlot = InventoryUtil.findHotbarBlock(Blocks.OBSIDIAN);
-        int eChestSlot = InventoryUtil.findHotbarBlock(Blocks.ENDER_CHEST);
-
-        if (obbySlot == -1 && eChestSlot == 1) return;
-
-        for (Entity entity : mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos))) {
-            if (entity instanceof EntityEnderCrystal) {
-                NetworkUtil.send(new CPacketUseEntity(entity));
-                NetworkUtil.send(new CPacketAnimation(EnumHand.MAIN_HAND));
-            }
-        }
-
-        CooldownBypass.None.switchTo(obbySlot == -1 ? eChestSlot : obbySlot);
-
-        InteractionUtil.placeBlock(pos, packet.getValue(), true);
-
-        CooldownBypass.None.switchTo(oldSlot);
-
-        if(debug.getValue()) mc.ingameGUI.getChatGUI().printChatMessage(new TextComponentString(ChatFormatting.AQUA+ "placed at " + pos));
-    }
-
-     */
     @Override
     protected boolean shouldHelp(EnumFacing facing, BlockPos pos)
     {
@@ -122,7 +85,7 @@ public class forclown extends ObbyListenerModule<ListenerObsidian> {
         if(mc.currentScreen instanceof GuiConnecting)return;
         target = EntityUtil.getClosestEnemy();
         if (pos == this.speedmine.get().getPos()) return;
-        if(target == null ||pos.getDistance(target.getPosition().getX(), target.getPosition().getY(), target.getPosition().getZ()) >= this.range.getValue()) return;
+        if(target == null || pos.getDistance(target.getPosition().getX(), target.getPosition().getY(), target.getPosition().getZ()) >= this.range.getValue()) return;
 
         if(hole.getValue() && !PlayerUtil.isInHoleAll(mc.player))
             return;
@@ -139,6 +102,11 @@ public class forclown extends ObbyListenerModule<ListenerObsidian> {
             if(offset.equals(replaceList[replaceList.length-1])){
                 return;
             }
+        }
+
+        if(pos == playerPos.add(0,3,0)){
+            ListenerUpdate.scheduledPlacements.add(pos);
+            return;
         }
 
         //if the block was broken, it should create a supporting block for extend to be placed at
