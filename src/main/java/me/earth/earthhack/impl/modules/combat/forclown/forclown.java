@@ -1,12 +1,16 @@
 package me.earth.earthhack.impl.modules.combat.forclown;
 
+import jdk.nashorn.internal.ir.Block;
 import me.earth.earthhack.api.cache.ModuleCache;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
+import me.earth.earthhack.api.setting.settings.EnumSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
+import me.earth.earthhack.impl.gui.visibility.PageBuilder;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.player.speedmine.Speedmine;
+import me.earth.earthhack.impl.modules.render.itemchams.ItemChamsPage;
 import me.earth.earthhack.impl.util.helpers.blocks.ObbyListenerModule;
 import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
@@ -17,6 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 
 public class forclown extends ObbyListenerModule<ListenerObsidian> {
+
     protected final Setting<Boolean> anticev =
             register(new BooleanSetting("AntiCev", false));
     protected final Setting<Boolean> extend =
@@ -39,7 +44,7 @@ public class forclown extends ObbyListenerModule<ListenerObsidian> {
     protected final Setting<Float> range =
             register(new NumberSetting<>("Range", 6.0f, 0.0f, 10.0f));
     protected final Setting<Integer> surroundDelay =
-            register(new NumberSetting<>("SurroundDelay", 500, 0, 1000));
+            register(new NumberSetting<>("SurroundDelay", 500, 0, 3000));
 
     protected EntityPlayer target;
     protected final ModuleCache<Speedmine> speedmine = Caches.getModule(Speedmine.class);
@@ -50,6 +55,7 @@ public class forclown extends ObbyListenerModule<ListenerObsidian> {
         this.listeners.add(new ListenerBlockChange(this));
         this.listeners.add(new ListenerUpdate(this));
         this.setData(new BlockerData(this));
+
     }
 
     Vec3i[] replaceList= new Vec3i[]{
