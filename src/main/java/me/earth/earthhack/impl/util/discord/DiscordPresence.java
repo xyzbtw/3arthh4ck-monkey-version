@@ -10,6 +10,7 @@ import me.earth.earthhack.impl.util.math.StopWatch;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class DiscordPresence implements Globals
@@ -90,7 +91,9 @@ public class DiscordPresence implements Globals
     private String getDetails()
     {
         return module.customDetails.getValue()
-            ? module.details.getValue()
+            ?   module.showIP.getValue()
+                    ? Objects.requireNonNull(mc.getCurrentServerData().serverIP.toString())
+                    : module.details.getValue()
             : mc.player == null
                 ? "Not ingame"
                 : mc.isIntegratedServerRunning()
