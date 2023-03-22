@@ -10,12 +10,17 @@ import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.combat.autoarmor.AutoArmor;
 import me.earth.earthhack.impl.util.math.Timer;
+import me.earth.earthhack.impl.util.minecraft.DamageUtil;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import me.earth.earthhack.impl.util.text.ChatUtil;
 import net.minecraft.init.Items;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemExpBottle;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.CombatRules;
+import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -32,6 +37,10 @@ public class salhackautomend extends Module
             register(new NumberSetting<>("DelayXP", 150.0f, 0.0f, 1000.0f));
     public final Setting<Float>  Pct =
             register(new NumberSetting<>("Percent", 90.0f, 0.0f, 100.0f));
+    public final Setting<Float>  range =
+            register(new NumberSetting<>("Range", 6.0f, 0.0f, 12.0f));
+    public final Setting<Float>  maxdmg =
+            register(new NumberSetting<>("Max-Dmg", 6.0f, 0.0f, 36.0f));
     public final Setting<Boolean> GhostHand =
             register(new BooleanSetting("GhostHand", false));
     private static final ModuleCache<AutoArmor> AutoArmor =
@@ -175,6 +184,42 @@ public class salhackautomend extends Module
     protected float GetArmorPct(ItemStack p_Stack)
     {
         return ((float)(p_Stack.getMaxDamage()-p_Stack.getItemDamage()) /  (float)p_Stack.getMaxDamage())*100.0f;
+    }
+    protected double getDamageNoArmor(double x, double y, double z)
+    {
+        double distance = mc.player.getDistance(x, y, z) / 12.0;
+        if (distance > 1.0)
+        {
+            return 0.0f;
+        }
+        else
+        {
+            double density = DamageUtil.getBlockDensity(
+                    new Vec3d(x, y, z),
+                    mc.player.getEntityBoundingBox(),
+                    mc.world,
+                    true,
+                    true,
+                    false,
+                    false);
+
+            double densityDistance = distance = (1.0 - distance) * density;
+            float damage = DamageUtil.getDifficultyMultiplier((float)
+                    ((densityDistance * densityDistance + distance)
+                            / 2.0 * 7.0 * 12.0 + 1.0));
+
+            damage = CombatRules.getDamageAfterAbsorb(damage, 3, 2.0f);
+
+            PotionEffect resistance =
+                    mc.player.getActivePotionEffect(MobEffects.RESISTANCE);
+            if (resistance != null)
+            {
+                damage =
+                        damage * (25 - (resistance.getAmplifier() + 1) * 5) / 25.0f;
+            }
+
+            return Math.max(damage, 0.0f);
+        }
     }
 
     protected static class MendState

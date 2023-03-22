@@ -3,20 +3,19 @@ package me.earth.earthhack.impl.modules.combat.salhackautomend;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.earth.earthhack.impl.event.events.network.MotionUpdateEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
-import me.earth.earthhack.impl.util.minecraft.DamageUtil;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
+import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import me.earth.earthhack.impl.util.network.NetworkUtil;
 import me.earth.earthhack.impl.util.text.ChatUtil;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.item.ItemExpBottle;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketPlayer;
-import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 
-import java.util.Iterator;
 
 public class ListenerMotion extends ModuleListener<salhackautomend, MotionUpdateEvent> {
     public ListenerMotion(salhackautomend module) {
@@ -26,6 +25,13 @@ public class ListenerMotion extends ModuleListener<salhackautomend, MotionUpdate
     @Override
     public void invoke(MotionUpdateEvent event) {
         {
+            if(mc.world == null || mc.player == null) return;
+
+            EntityPlayer enemy = EntityUtil.getClosestEnemy();
+            if(mc.player.getDistance(enemy) <= module.range.getValue()) return;
+            double damage = module.getDamageNoArmor(enemy.posX, enemy.posY, enemy.posZ);
+            if (damage > EntityUtil.getHealth(mc.player) + 1.0 || damage > module.maxdmg.getValue()) {return;}
+
             float l_Pitch = 90f;
             float l_Yaw = mc.player.rotationYaw;
 
