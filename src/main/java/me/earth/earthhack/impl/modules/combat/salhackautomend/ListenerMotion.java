@@ -1,4 +1,4 @@
-package me.earth.earthhack.impl.modules.combat.salhackautoarmor;
+package me.earth.earthhack.impl.modules.combat.salhackautomend;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.earth.earthhack.impl.event.events.network.MotionUpdateEvent;
@@ -234,7 +234,9 @@ public class ListenerMotion extends ModuleListener<salhackautomend, MotionUpdate
                 }
                 else
                 {
-                    mc.playerController.processRightClick(mc.player, mc.world, EnumHand.MAIN_HAND);
+                    if(module.xpTimer.passed(module.xpDelay.getValue())) {
+                        mc.playerController.processRightClick(mc.player, mc.world, EnumHand.MAIN_HAND);
+                    }
 
                     if (l_CurrSlot != -1 && module.GhostHand.getValue())
                     {

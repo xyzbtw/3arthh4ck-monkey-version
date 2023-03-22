@@ -49,7 +49,7 @@ import me.earth.earthhack.impl.modules.combat.killaura.KillAura;
 import me.earth.earthhack.impl.modules.combat.legswitch.LegSwitch;
 import me.earth.earthhack.impl.modules.combat.offhand.Offhand;
 import me.earth.earthhack.impl.modules.combat.pistonaura.PistonAura;
-import me.earth.earthhack.impl.modules.combat.salhackautoarmor.salhackautomend;
+import me.earth.earthhack.impl.modules.combat.salhackautomend.salhackautomend;
 import me.earth.earthhack.impl.modules.combat.selftrap.SelfTrap;
 import me.earth.earthhack.impl.modules.combat.snowballer.Snowballer;
 import me.earth.earthhack.impl.modules.combat.surround.Surround;

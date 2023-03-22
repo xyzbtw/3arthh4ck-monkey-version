@@ -1,4 +1,4 @@
-package me.earth.earthhack.impl.modules.combat.salhackautoarmor;
+package me.earth.earthhack.impl.modules.combat.salhackautomend;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.earth.earthhack.api.cache.ModuleCache;
@@ -28,6 +28,8 @@ public class salhackautomend extends Module
 
     public final Setting<Float> Delay =
             register(new NumberSetting<>("DelayMend", 150.0f, 0.0f, 1000.0f));
+    public final Setting<Float> xpDelay =
+            register(new NumberSetting<>("DelayMend", 150.0f, 0.0f, 1000.0f));
     public final Setting<Float>  Pct =
             register(new NumberSetting<>("Percent", 90.0f, 0.0f, 100.0f));
     public final Setting<Boolean> GhostHand =
@@ -42,6 +44,7 @@ public class salhackautomend extends Module
     }
 
     protected Timer timer = new Timer();
+    protected Timer xpTimer = new Timer();
     protected Timer internalTimer = new Timer();
     protected boolean ReadyToMend = false;
     protected boolean AllDone = false;
