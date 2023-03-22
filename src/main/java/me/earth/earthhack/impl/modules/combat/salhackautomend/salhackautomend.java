@@ -125,7 +125,7 @@ public class salhackautomend extends Module
             if (l_I == 0 || l_I == 5 || l_I == 6 || l_I == 7 || l_I == 8)
                 continue;
 
-            ItemStack l_Stack = mc.player.inventoryContainer.getInventory().get(l_I);
+            ItemStack l_Stack = InventoryUtil.get(l_I);
 
             /// Slot must be empty or air
             if (!l_Stack.isEmpty() && l_Stack.getItem() != Items.AIR)
