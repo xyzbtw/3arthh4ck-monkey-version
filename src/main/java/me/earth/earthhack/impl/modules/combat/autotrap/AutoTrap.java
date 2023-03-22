@@ -90,7 +90,9 @@ protected final Setting<Boolean> top               =
            register(new BooleanSetting("TrapLogouts", false));
 
      */
-    // maybe help bombing?
+
+
+
 
 
     /** Players in range mapped to their speed */
@@ -191,21 +193,6 @@ protected final Setting<Boolean> top               =
         {
             newTrapping = getPositions(newTarget);
         }
-
-        /*if(     logoutTrap.getValue()
-                && LOGOUTSPOTS.isEnabled())
-        {
-            EntityPlayer logged = loggedOutPlayer.get(LOGOUTSPOTS).getModel().getPlayer();
-            cached.put(logged, getPositions(logged));
-            if(!Managers.FRIENDS.contains(logged))
-            {
-                newTrapping = cached.get(logged);
-            }
-        }
-
-         */
-
-
 
         return result.setTargets(newTrapping);
     }

@@ -1,16 +1,12 @@
-package me.earth.earthhack.impl.modules.combat.forclown;
+package me.earth.earthhack.impl.modules.combat.blocker;
 
-import jdk.nashorn.internal.ir.Block;
 import me.earth.earthhack.api.cache.ModuleCache;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
-import me.earth.earthhack.api.setting.settings.EnumSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
-import me.earth.earthhack.impl.gui.visibility.PageBuilder;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.player.speedmine.Speedmine;
-import me.earth.earthhack.impl.modules.render.itemchams.ItemChamsPage;
 import me.earth.earthhack.impl.util.helpers.blocks.ObbyListenerModule;
 import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
@@ -20,7 +16,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 
-public class forclown extends ObbyListenerModule<ListenerObsidian> {
+public class Blocker extends ObbyListenerModule<ListenerObsidian> {
 
     protected final Setting<Boolean> anticev =
             register(new BooleanSetting("AntiCev", false));
@@ -49,7 +45,7 @@ public class forclown extends ObbyListenerModule<ListenerObsidian> {
     protected EntityPlayer target;
     protected final ModuleCache<Speedmine> speedmine = Caches.getModule(Speedmine.class);
 
-    public forclown() {
+    public Blocker() {
         super("Blocker", Category.Combat);
         this.listeners.add(new ListenerBlockBreakAnim(this));
         this.listeners.add(new ListenerBlockChange(this));

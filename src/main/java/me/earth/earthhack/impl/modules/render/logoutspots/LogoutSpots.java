@@ -21,7 +21,6 @@ import java.util.concurrent.ConcurrentHashMap;
 //TODO: rename into waypoints and add waypoints!
 public class LogoutSpots extends BlockESPModule
 {
-    public static final ModuleCache<LogoutSpots> LOGOUT_SPOTS = Caches.getModule(LogoutSpots.class);
     protected final Setting<Color> fill          =
             register(new ColorSetting("Fill", new Color(255, 0, 0, 155)));
     protected final Setting<MessageMode> message =
@@ -48,7 +47,7 @@ public class LogoutSpots extends BlockESPModule
             register(new NumberSetting<>("Scale", 3f, 0.01f, 10f))
                     .setComplexity(Complexity.Expert);
 
-    protected final Map<UUID, LogoutSpot> spots = new ConcurrentHashMap<>();
+    protected static final Map<UUID, LogoutSpot> spots = new ConcurrentHashMap<>();
 
     public LogoutSpots()
     {
@@ -65,6 +64,9 @@ public class LogoutSpots extends BlockESPModule
     }
 
     public Boolean clearDuel = clearDuelSetting.getValue();
+    public static final Map getSpots(){
+        return spots;
+    }
 
     @Override
     protected void onDisable()

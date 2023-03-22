@@ -1,4 +1,4 @@
-package me.earth.earthhack.impl.modules.combat.forclown;
+package me.earth.earthhack.impl.modules.combat.blocker;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
@@ -8,9 +8,9 @@ import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.network.play.server.SPacketBlockChange;
 import net.minecraft.util.math.BlockPos;
 
-public class ListenerBlockChange extends ModuleListener<forclown, PacketEvent.Receive<SPacketBlockChange>> {
+public class ListenerBlockChange extends ModuleListener<Blocker, PacketEvent.Receive<SPacketBlockChange>> {
 
-    public ListenerBlockChange(forclown module) {
+    public ListenerBlockChange(Blocker module) {
         super(module, PacketEvent.Receive.class, SPacketBlockChange.class);
     }
 

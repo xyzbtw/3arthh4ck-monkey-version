@@ -1,18 +1,15 @@
-package me.earth.earthhack.impl.modules.combat.forclown;
+package me.earth.earthhack.impl.modules.combat.blocker;
 
-import me.earth.earthhack.api.cache.ModuleCache;
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
-import me.earth.earthhack.impl.modules.Caches;
-import me.earth.earthhack.impl.modules.player.speedmine.Speedmine;
 import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.network.play.server.SPacketBlockBreakAnim;
 import net.minecraft.util.math.BlockPos;
 
-public class ListenerBlockBreakAnim extends ModuleListener<forclown, PacketEvent.Receive<SPacketBlockBreakAnim>>{
+public class ListenerBlockBreakAnim extends ModuleListener<Blocker, PacketEvent.Receive<SPacketBlockBreakAnim>>{
 
-    public ListenerBlockBreakAnim(forclown module) {
+    public ListenerBlockBreakAnim(Blocker module) {
         super(module, PacketEvent.Receive.class, SPacketBlockBreakAnim.class);
     }
 

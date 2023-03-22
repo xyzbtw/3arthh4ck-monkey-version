@@ -43,12 +43,13 @@ import me.earth.earthhack.impl.modules.combat.bowkill.BowKiller;
 import me.earth.earthhack.impl.modules.combat.bowspam.BowSpam;
 import me.earth.earthhack.impl.modules.combat.cevbreaker.CevBreaker;
 import me.earth.earthhack.impl.modules.combat.criticals.Criticals;
-import me.earth.earthhack.impl.modules.combat.forclown.forclown;
+import me.earth.earthhack.impl.modules.combat.blocker.Blocker;
 import me.earth.earthhack.impl.modules.combat.holefiller.HoleFiller;
 import me.earth.earthhack.impl.modules.combat.killaura.KillAura;
 import me.earth.earthhack.impl.modules.combat.legswitch.LegSwitch;
 import me.earth.earthhack.impl.modules.combat.offhand.Offhand;
 import me.earth.earthhack.impl.modules.combat.pistonaura.PistonAura;
+import me.earth.earthhack.impl.modules.combat.salhackautoarmor.salhackautomend;
 import me.earth.earthhack.impl.modules.combat.selftrap.SelfTrap;
 import me.earth.earthhack.impl.modules.combat.snowballer.Snowballer;
 import me.earth.earthhack.impl.modules.combat.surround.Surround;
@@ -225,7 +226,7 @@ public class ModuleManager extends IterationRegister<Module>
         this.forceRegister(new BedBomb());
         this.forceRegister(new BowSpam());
         this.forceRegister(new BowKiller());
-        this.forceRegister(new forclown());
+        this.forceRegister(new Blocker());
         this.forceRegister(new Criticals());
         this.forceRegister(new HoleFiller());
         this.forceRegister(new KillAura());
@@ -234,6 +235,7 @@ public class ModuleManager extends IterationRegister<Module>
         this.forceRegister(new PistonAura());
         this.forceRegister(new Surround());
         this.forceRegister(new Snowballer());
+        this.forceRegister(new salhackautomend());
         this.forceRegister(new SelfTrap());
         this.forceRegister(new WebAura());
 
