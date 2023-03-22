@@ -29,7 +29,7 @@ public class salhackautomend extends Module
     public final Setting<Float> Delay =
             register(new NumberSetting<>("DelayMend", 150.0f, 0.0f, 1000.0f));
     public final Setting<Float> xpDelay =
-            register(new NumberSetting<>("DelayMend", 150.0f, 0.0f, 1000.0f));
+            register(new NumberSetting<>("DelayXP", 150.0f, 0.0f, 1000.0f));
     public final Setting<Float>  Pct =
             register(new NumberSetting<>("Percent", 90.0f, 0.0f, 100.0f));
     public final Setting<Boolean> GhostHand =
