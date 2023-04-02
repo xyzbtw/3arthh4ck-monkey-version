@@ -9,10 +9,13 @@ import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.combat.autoarmor.AutoArmor;
+import me.earth.earthhack.impl.modules.player.exptweaks.ExpTweaks;
 import me.earth.earthhack.impl.util.math.Timer;
 import me.earth.earthhack.impl.util.minecraft.DamageUtil;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
+import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import me.earth.earthhack.impl.util.text.ChatUtil;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemArmor;
@@ -37,14 +40,12 @@ public class salhackautomend extends Module
             register(new NumberSetting<>("DelayXP", 150.0f, 0.0f, 1000.0f));
     public final Setting<Float>  Pct =
             register(new NumberSetting<>("Percent", 90.0f, 0.0f, 100.0f));
-    public final Setting<Float>  range =
-            register(new NumberSetting<>("Range", 6.0f, 0.0f, 12.0f));
     public final Setting<Float>  maxdmg =
             register(new NumberSetting<>("Max-Dmg", 6.0f, 0.0f, 36.0f));
-    public final Setting<Boolean> GhostHand =
-            register(new BooleanSetting("GhostHand", false));
     private static final ModuleCache<AutoArmor> AutoArmor =
             Caches.getModule(AutoArmor.class);
+    private static final ModuleCache<ExpTweaks> xptweaks =
+            Caches.getModule(ExpTweaks.class);
 
     public salhackautomend()
     {
@@ -58,7 +59,8 @@ public class salhackautomend extends Module
     protected boolean ReadyToMend = false;
     protected boolean AllDone = false;
     protected LinkedList<MendState> SlotsToMoveTo = new LinkedList<MendState>();
-    protected boolean wasEnabledAM;
+    protected boolean wasEnabledAM, wasEnabledXP;
+    protected EntityPlayer enemy;
 
     @Override
     public void onDisable(){
@@ -66,7 +68,11 @@ public class salhackautomend extends Module
         if(wasEnabledAM){
             AutoArmor.enable();
         }
+        if(wasEnabledXP){
+            xptweaks.enable();
+        }
         wasEnabledAM=false;
+        wasEnabledXP=false;
     }
     @Override
     public void onEnable()
@@ -75,6 +81,10 @@ public class salhackautomend extends Module
         if(AutoArmor.isEnabled()){
             wasEnabledAM = true;
             AutoArmor.disable();
+        }
+        if(xptweaks.isEnabled()){
+            wasEnabledXP = true;
+            xptweaks.disable();
         }
         ArrayList<ItemStack> ArmorsToMend = new ArrayList<ItemStack>();
         SlotsToMoveTo.clear();
@@ -219,6 +229,14 @@ public class salhackautomend extends Module
             }
 
             return Math.max(damage, 0.0f);
+        }
+    }
+    protected boolean willtakedmg(){
+        enemy = EntityUtil.getClosestEnemy();
+        if(enemy == null) return false;
+        else {
+            double damage = getDamageNoArmor(enemy.posX, enemy.posY, enemy.posZ);
+            return damage > EntityUtil.getHealth(mc.player) + 1.0 || damage > maxdmg.getValue();
         }
     }
 

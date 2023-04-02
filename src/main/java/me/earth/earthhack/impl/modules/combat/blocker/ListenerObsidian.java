@@ -15,7 +15,7 @@ public class ListenerObsidian extends ObbyListener<Blocker> {
 
     @Override
     protected TargetResult getTargets(TargetResult result) {
-        ArrayList<BlockPos> copy = (ArrayList<BlockPos>) ListenerUpdate.scheduledPlacements.clone();
+        ArrayList<BlockPos> copy = (ArrayList<BlockPos>) module.scheduledPlacements.clone();
         result.setTargets(copy);
         return result;
     }

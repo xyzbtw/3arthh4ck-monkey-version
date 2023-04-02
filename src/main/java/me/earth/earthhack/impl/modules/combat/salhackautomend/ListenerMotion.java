@@ -4,10 +4,8 @@ import com.mojang.realmsclient.gui.ChatFormatting;
 import me.earth.earthhack.impl.event.events.network.MotionUpdateEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
-import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import me.earth.earthhack.impl.util.network.NetworkUtil;
 import me.earth.earthhack.impl.util.text.ChatUtil;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.item.ItemExpBottle;
@@ -27,10 +25,7 @@ public class ListenerMotion extends ModuleListener<salhackautomend, MotionUpdate
         {
             if(mc.world == null || mc.player == null) return;
 
-            EntityPlayer enemy = EntityUtil.getClosestEnemy();
-            if(mc.player.getDistance(enemy) <= module.range.getValue()) return;
-            double damage = module.getDamageNoArmor(enemy.posX, enemy.posY, enemy.posZ);
-            if (damage > EntityUtil.getHealth(mc.player) + 1.0 || damage > module.maxdmg.getValue()) {return;}
+            if(module.willtakedmg()) return;
 
             float l_Pitch = 90f;
             float l_Yaw = mc.player.rotationYaw;
@@ -146,14 +141,12 @@ public class ListenerMotion extends ModuleListener<salhackautomend, MotionUpdate
         {
             ItemStack l_CurrItem = mc.player.getHeldItemMainhand();
 
-            int l_CurrSlot = -1;
             if (l_CurrItem.isEmpty() || l_CurrItem.getItem() != Items.EXPERIENCE_BOTTLE)
             {
                 int l_Slot = InventoryUtil.findInHotbar(item -> item.getItem() instanceof ItemExpBottle);
 
                 if (l_Slot != -1)
                 {
-                    l_CurrSlot = InventoryUtil.getServerItem();
                     InventoryUtil.switchTo(l_Slot);
                 }
                 else
@@ -234,9 +227,6 @@ public class ListenerMotion extends ModuleListener<salhackautomend, MotionUpdate
                         module.xpTimer.reset();
                     }
 
-                    if (l_CurrSlot != -1 && module.GhostHand.getValue()) {
-                        InventoryUtil.switchTo(l_CurrSlot);
-                    }
 
                     break;
                 }

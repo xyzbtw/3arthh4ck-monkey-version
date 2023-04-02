@@ -16,6 +16,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 
+import java.util.ArrayList;
+
 public class Blocker extends ObbyListenerModule<ListenerObsidian> {
 
     protected final Setting<Boolean> anticev =
@@ -37,10 +39,10 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
             register(new BooleanSetting("Extend-diag", false));
     protected final Setting<Boolean> helping =
             register(new BooleanSetting("HelpingBlocks", false));
-    protected final Setting<Float> range =
-            register(new NumberSetting<>("Range", 6.0f, 0.0f, 10.0f));
-    protected final Setting<Integer> surroundDelay =
-            register(new NumberSetting<>("SurroundDelay", 500, 0, 3000));
+    protected final Setting<Float> enemyrange =
+            register(new NumberSetting<>("EnemyRange", 6.0f, 0.0f, 10.0f));
+    protected final Setting<Integer> clearDelay =
+            register(new NumberSetting<>("ClearDelay", 500, 0, 3000));
 
     protected EntityPlayer target;
     protected final ModuleCache<Speedmine> speedmine = Caches.getModule(Speedmine.class);
@@ -53,7 +55,7 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
         this.setData(new BlockerData(this));
 
     }
-
+    protected ArrayList<BlockPos> scheduledPlacements = new ArrayList<>();
     Vec3i[] replaceList= new Vec3i[]{
             new Vec3i(0,3,0), //anticev check
 
@@ -87,7 +89,7 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
         if(mc.currentScreen instanceof GuiConnecting)return;
         target = EntityUtil.getClosestEnemy();
         if (pos == this.speedmine.get().getPos()) return;
-        if(target == null || pos.getDistance(target.getPosition().getX(), target.getPosition().getY(), target.getPosition().getZ()) >= this.range.getValue()) return;
+        if(target == null || pos.getDistance(target.getPosition().getX(), target.getPosition().getY(), target.getPosition().getZ()) >= this.enemyrange.getValue()) return;
 
         if(hole.getValue() && !PlayerUtil.isInHoleAll(mc.player))
             return;
@@ -107,13 +109,13 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
         }
 
         if(pos == playerPos.add(0,3,0)){
-            ListenerUpdate.scheduledPlacements.add(pos);
+            scheduledPlacements.add(pos);
             return;
         }
 
         //if the block was broken, it should create a supporting block for extend to be placed at
         if(replace){
-            ListenerUpdate.scheduledPlacements.add(pos);
+           scheduledPlacements.add(pos);
         }
 
 
@@ -121,27 +123,27 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
             if(pos.offset(face).equals(playerPos)) continue;
 
             if(mc.world.isAirBlock(pos.offset(EnumFacing.DOWN))){
-                ListenerUpdate.scheduledPlacements.add(pos.offset(EnumFacing.DOWN));
+                scheduledPlacements.add(pos.offset(EnumFacing.DOWN));
             }
 
             if(fullExtend.getValue()){
                 if(pos.getY()==playerPos.getY()){
-                    ListenerUpdate.scheduledPlacements.add(pos.offset(face));
+                    scheduledPlacements.add(pos.offset(face));
                 }else {
-                    ListenerUpdate.scheduledPlacements.add(pos.add(0,1,0));
+                    scheduledPlacements.add(pos.add(0,1,0));
                 }
             }else {
                 if(playerPos.offset(face).equals(pos)){
                     if(this.extend.getValue()){
-                        ListenerUpdate.scheduledPlacements.add(playerPos.offset(face).offset(face));
+                       scheduledPlacements.add(playerPos.offset(face).offset(face));
                     }
 
                     if(this.face.getValue()){
-                        ListenerUpdate.scheduledPlacements.add(playerPos.offset(face).add(0,1,0));
+                       scheduledPlacements.add(playerPos.offset(face).add(0,1,0));
                     }
                     if(this.extendxyz.getValue()){
-                        ListenerUpdate.scheduledPlacements.add(playerPos.offset(face).offset(face.rotateYCCW()));
-                        ListenerUpdate.scheduledPlacements.add(playerPos.offset(face).offset(face.rotateY()));
+                        scheduledPlacements.add(playerPos.offset(face).offset(face.rotateYCCW()));
+                        scheduledPlacements.add(playerPos.offset(face).offset(face.rotateY()));
                     }
                 }
             }

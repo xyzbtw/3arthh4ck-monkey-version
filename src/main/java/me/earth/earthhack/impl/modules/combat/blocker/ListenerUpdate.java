@@ -14,15 +14,15 @@ public class ListenerUpdate extends ModuleListener<Blocker, UpdateEvent> {
         super(module, UpdateEvent.class, 1);
     }
 
-    protected static ArrayList<BlockPos> scheduledPlacements = new ArrayList<>();
+
 
     StopWatch timer = new StopWatch();
 
     @Override
     public void invoke(UpdateEvent event) {
-        if(timer.passed(module.surroundDelay.getValue())){
+        if(timer.passed(module.clearDelay.getValue())){
             timer.reset();
-            scheduledPlacements.clear();
+            module.scheduledPlacements.clear();
         }
     }
 }
