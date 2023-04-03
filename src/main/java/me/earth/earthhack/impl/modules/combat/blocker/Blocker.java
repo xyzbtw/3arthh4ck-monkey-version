@@ -28,10 +28,6 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
             register(new BooleanSetting("Face", true));
     protected final Setting<Boolean> hole =
             register(new BooleanSetting("HoleCheck", true));
-    protected final Setting<Boolean> blockchange =
-            register(new BooleanSetting("BlockChange", true));
-    protected final Setting<Boolean> debug =
-            register(new BooleanSetting("Debug", false));
 
     protected final Setting<Boolean> fullExtend =
             register(new BooleanSetting("FullExtend", true));
@@ -43,6 +39,12 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
             register(new NumberSetting<>("EnemyRange", 6.0f, 0.0f, 10.0f));
     protected final Setting<Integer> clearDelay =
             register(new NumberSetting<>("ClearDelay", 500, 0, 3000));
+    protected final Setting<Boolean> onanim =
+            register(new BooleanSetting("OnAnim", false));
+    protected final Setting<Boolean> blockchange =
+            register(new BooleanSetting("OnChange", true));
+    protected final Setting<Integer> progress =
+            register(new NumberSetting<>("Progress", 3, 0, 9));
 
     protected EntityPlayer target;
     protected final ModuleCache<Speedmine> speedmine = Caches.getModule(Speedmine.class);
@@ -57,7 +59,7 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
     }
     protected ArrayList<BlockPos> scheduledPlacements = new ArrayList<>();
     Vec3i[] replaceList= new Vec3i[]{
-            new Vec3i(0,3,0), //anticev check
+            new Vec3i(0,2,0), //anticev check
 
 
             new Vec3i(1,0,0), //surround checks
@@ -108,8 +110,8 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
             }
         }
 
-        if(pos == playerPos.add(0,3,0)){
-            scheduledPlacements.add(pos);
+        if(pos == playerPos.add(0,2,0)){
+            scheduledPlacements.add(pos.add(0,1,0));
             return;
         }
 
