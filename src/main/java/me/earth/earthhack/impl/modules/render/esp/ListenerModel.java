@@ -2,6 +2,7 @@ package me.earth.earthhack.impl.modules.render.esp;
 
 import me.earth.earthhack.impl.event.events.render.ModelRenderEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
+import me.earth.earthhack.impl.modules.render.chams.Chams;
 import me.earth.earthhack.impl.modules.render.esp.mode.EspMode;
 import net.minecraft.client.renderer.GlStateManager;
 

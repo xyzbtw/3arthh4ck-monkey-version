@@ -4,9 +4,13 @@ public class StopWatch implements Passable
 {
     private volatile long time;
 
+
     public boolean passed(double ms)
     {
         return System.currentTimeMillis() - time >= ms;
+    }
+    public boolean isPassed() {
+        return System.currentTimeMillis() - this.time >= this.getTime();
     }
 
     @Override
@@ -15,8 +19,10 @@ public class StopWatch implements Passable
         return System.currentTimeMillis() - time >= ms;
     }
 
+
     public StopWatch reset()
     {
+
         time = System.currentTimeMillis();
         return this;
     }

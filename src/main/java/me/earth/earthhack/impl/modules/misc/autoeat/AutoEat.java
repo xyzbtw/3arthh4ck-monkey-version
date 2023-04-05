@@ -26,6 +26,8 @@ public class AutoEat extends Module
         register(new BooleanSetting("CalcWithAbsorption", true));
     protected final Setting<Boolean> absorption =
         register(new BooleanSetting("Absorption", false));
+    protected final Setting<Boolean> offhand =
+            register(new BooleanSetting("Offhand", false));
     protected final Setting<Float> absorptionAmount =
         register(new NumberSetting<>("AbsorptionAmount", 0.0f, 0.0f, 16.0f));
     protected final Setting<Boolean> always =

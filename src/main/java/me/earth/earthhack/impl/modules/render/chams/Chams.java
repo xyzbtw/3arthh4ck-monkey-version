@@ -1,8 +1,10 @@
 package me.earth.earthhack.impl.modules.render.chams;
 
+import me.earth.earthhack.api.cache.SettingCache;
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
+import me.earth.earthhack.api.setting.SettingContainer;
 import me.earth.earthhack.api.setting.settings.*;
 import me.earth.earthhack.impl.event.events.render.ModelRenderEvent;
 import me.earth.earthhack.impl.managers.Managers;
@@ -33,6 +35,7 @@ public class Chams extends Module
 {
     public static final ResourceLocation GALAXY_LOCATION = new ResourceLocation("earthhack:textures/client/galaxy.jpg");
 
+
     protected int texID = -1;
 
     public final Setting<ChamsMode> mode        =
@@ -43,14 +46,16 @@ public class Chams extends Module
             register(new BooleanSetting("Players", true));
     public final Setting<Boolean> disableanimations      =
             register(new BooleanSetting("AnimationDisable", false));
-    public final Setting<Boolean> animationsneak =
-            register(new BooleanSetting("SneakAnim", false));
     protected final Setting<Boolean> animals       =
             register(new BooleanSetting("Animals", false));
     protected final Setting<Boolean> monsters      =
             register(new BooleanSetting("Monsters", false));
     protected final Setting<Boolean> texture       =
             register(new BooleanSetting("Texture", false));
+    protected final Setting<Float> scale =
+            register(new NumberSetting<>("ChildScale", 1.0f, 0.0f, 10.0f));
+    protected final Setting<Boolean> child =
+            register(new BooleanSetting("ChildMode", false));
     protected final Setting<Boolean> xqz           =
             register(new BooleanSetting("XQZ", true));
     protected final Setting<Boolean> armor         =
@@ -171,7 +176,7 @@ public class Chams extends Module
                   wireColor.getBlue() / 255.0f,
                   wireColor.getAlpha() / 255.0f);
         event.getModel().render(event.getEntity(), event.getLimbSwing(), event.getLimbSwingAmount(),
-                                event.getAgeInTicks(), event.getNetHeadYaw(), event.getHeadPitch(), event.getScale());
+                                event.getAgeInTicks(), event.getNetHeadYaw(), event.getHeadPitch(),  child.getValue() ? scale.getValue() : event.getScale());
         glPopAttrib();
     }
 

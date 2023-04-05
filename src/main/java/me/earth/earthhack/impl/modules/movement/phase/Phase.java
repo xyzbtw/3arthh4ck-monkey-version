@@ -11,11 +11,13 @@ import me.earth.earthhack.impl.event.events.network.PacketEvent;
 import me.earth.earthhack.impl.modules.movement.phase.mode.PhaseMode;
 import me.earth.earthhack.impl.util.helpers.render.BlockESPModule;
 import me.earth.earthhack.impl.util.math.StopWatch;
+import me.earth.earthhack.impl.util.math.Timer;
 import me.earth.earthhack.impl.util.minecraft.MovementUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.Packet;
+import net.minecraft.network.play.client.CPacketConfirmTeleport;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -70,6 +72,8 @@ public class Phase extends BlockESPModule implements CollisionEvent.Listener
         register(new BooleanSetting("SmartClick", false));
     protected final Setting<Boolean> esp =
         register(new BooleanSetting("ESP", false));
+    protected final Setting<Boolean> edgeEnable =
+            register(new BooleanSetting("EdgeEnable", false));
     public final Setting<Boolean> fallPacket =
             this.register(new BooleanSetting("Fall Packet", true));
     public final Setting<Boolean> sprintPacket =
@@ -91,8 +95,12 @@ public class Phase extends BlockESPModule implements CollisionEvent.Listener
     protected final Set<Packet<?>> packets = new ConcurrentSet<>();
     protected final StopWatch clickTimer = new StopWatch();
     protected final StopWatch timer = new StopWatch();
+
     protected BlockPos pos;
     protected int delay;
+    protected boolean cancelwall = false;
+
+    int teleportID = 0;
 
     public Phase()
     {
@@ -248,5 +256,21 @@ public class Phase extends BlockESPModule implements CollisionEvent.Listener
         String deciaml = loc.split("\\.")[1];
         return deciaml.equals("875");
     }
+    double getSpeed() {
+        return this.speed.getValue() / 100.0;
+    }
 
+    boolean shouldPacket() {
+        return !this.edgeEnable.getValue() || mc.player.collidedHorizontally;
+    }
+    public void sendPackets(final double d, final double d2, final double d3) {
+        this.cancelwall = false;
+        mc.getConnection().sendPacket(new CPacketPlayer.Position(d, d2, d3, mc.player.onGround));
+        mc.getConnection().sendPacket(new CPacketPlayer.Position(0.0, 1337.0, 0.0, mc.player.onGround));
+        this.cancelwall = true;
+    }
+
+    double getUpMovement() {
+        return (mc.gameSettings.keyBindJump.isKeyDown() ? 1 : (mc.gameSettings.keyBindSneak.isKeyDown() ? -1 : 0)) * this.getSpeed();
+    }
 }

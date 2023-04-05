@@ -17,8 +17,8 @@ final class ListenerRender2D extends ModuleListener<ToolTips, Render2DEvent>
     @Override
     public void invoke(Render2DEvent event)
     {
-        int x = 1;
-        int y = Managers.TEXT.getStringHeightI() + 4;
+        int x = 1 + module.x.getValue();
+        int y = Managers.TEXT.getStringHeightI() + 4 + module.y.getValue();
 
         for (EntityPlayer player : mc.world.playerEntities)
         {
@@ -40,7 +40,7 @@ final class ListenerRender2D extends ModuleListener<ToolTips, Render2DEvent>
                     }
                     else
                     {
-                        y += 79;
+                        y += 79 + module.y.getValue();
                     }
                 }
             }

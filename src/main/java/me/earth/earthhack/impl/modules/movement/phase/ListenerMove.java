@@ -4,6 +4,8 @@ import me.earth.earthhack.impl.event.events.movement.MoveEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.modules.movement.phase.mode.PhaseMode;
 import me.earth.earthhack.impl.util.minecraft.MovementUtil;
+import me.earth.earthhack.impl.util.minecraft.PhaseUtil;
+import me.earth.earthhack.impl.util.minecraft.PushMode;
 
 final class ListenerMove
         extends ModuleListener<Phase, MoveEvent>

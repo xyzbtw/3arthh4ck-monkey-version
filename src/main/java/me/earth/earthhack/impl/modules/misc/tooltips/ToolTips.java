@@ -5,6 +5,7 @@ import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BindSetting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
+import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.api.util.bind.Bind;
 import me.earth.earthhack.impl.core.ducks.entity.ITileEntityShulkerBox;
 import me.earth.earthhack.impl.core.mixins.block.ITileEntity;
@@ -39,6 +40,10 @@ public class ToolTips extends Module
             register(new BooleanSetting("Maps", true));
     protected final Setting<Boolean> shulkerSpy =
             register(new BooleanSetting("ShulkerSpy", true));
+    protected final Setting<Integer> x =
+            register(new NumberSetting<>("X", 100, -1000 , 1000));
+    protected final Setting<Integer> y =
+            register(new NumberSetting<>("Y", 100, -1000 , 1000));
     protected final Setting<Boolean> own        =
             register(new BooleanSetting("Own", true));
     protected final Setting<Bind> peekBind      =

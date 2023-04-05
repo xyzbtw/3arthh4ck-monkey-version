@@ -21,12 +21,17 @@ public class ListenerBlockChange extends ModuleListener<Blocker, PacketEvent.Rec
         if(mc.player==null)return;
         if (event.getPacket() == null ) return;
         if(mc.currentScreen instanceof GuiConnecting)return;
-        if(event.getPacket().getBlockPosition().getDistance(PlayerUtil.getPlayerPos().getX(), PlayerUtil.getPlayerPos().getY(), PlayerUtil.getPlayerPos().getZ()) > 10) return;
+        if(event.getPacket().getBlockPosition().getDistance(PlayerUtil.getPlayerPos().getX(),
+                                                            PlayerUtil.getPlayerPos().getY(),
+                                                            PlayerUtil.getPlayerPos().getZ()) > 10) return;
 
 
         if (event.getPacket().getBlockState().getBlock() instanceof BlockAir) {
             final BlockPos blockPosition = event.getPacket().getBlockPosition();
-
+            if(Blocker.speedminecache.contains(blockPosition)){
+                Blocker.speedminecache.clear();
+                return;
+            }
             module.scanAndPlace(blockPosition, true);
         }
     }

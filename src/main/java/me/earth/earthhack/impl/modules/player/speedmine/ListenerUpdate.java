@@ -12,6 +12,7 @@ import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.combat.anvilaura.AnvilAura;
 import me.earth.earthhack.impl.modules.combat.autocrystal.AutoCrystal;
 import me.earth.earthhack.impl.modules.combat.autocrystal.util.CrystalTimeStamp;
+import me.earth.earthhack.impl.modules.combat.blocker.Blocker;
 import me.earth.earthhack.impl.modules.misc.nuker.Nuker;
 import me.earth.earthhack.impl.modules.player.speedmine.mode.ESPMode;
 import me.earth.earthhack.impl.modules.player.speedmine.mode.MineMode;
@@ -117,6 +118,7 @@ final class ListenerUpdate extends ModuleListener<Speedmine, UpdateEvent>
 
         if (module.pos != null)
         {
+            Blocker.speedminecache.add(module.pos);
             if ((module.mode.getValue() == MineMode.Smart
                         || module.mode.getValue() == MineMode.Fast
                         || module.mode.getValue() == MineMode.Instant
@@ -142,6 +144,7 @@ final class ListenerUpdate extends ModuleListener<Speedmine, UpdateEvent>
                 ArmUtil.swingPacket(EnumHand.MAIN_HAND);
                 module.sendStopDestroy(module.pos, module.facing, false);
             }
+
 
             module.updateDamages();
             if (module.normal.getValue())

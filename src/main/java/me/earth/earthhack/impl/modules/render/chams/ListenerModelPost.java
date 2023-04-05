@@ -10,6 +10,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
+import static me.earth.earthhack.impl.gui.chat.factory.ComponentFactory.register;
 import static org.lwjgl.opengl.GL11.*;
 
 final class ListenerModelPost extends ModuleListener<Chams, ModelRenderEvent.Post> {
@@ -64,7 +65,7 @@ final class ListenerModelPost extends ModuleListener<Chams, ModelRenderEvent.Pos
                 event.getAgeInTicks(),
                 event.getNetHeadYaw(),
                 event.getHeadPitch(),
-                event.getScale());
+                module.child.getValue() ? module.scale.getValue() : event.getScale());
     }
 
 }

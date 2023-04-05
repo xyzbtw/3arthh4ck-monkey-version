@@ -58,6 +58,7 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
 
     }
     protected ArrayList<BlockPos> scheduledPlacements = new ArrayList<>();
+    public static ArrayList<BlockPos> speedminecache = new ArrayList<>();
     Vec3i[] replaceList= new Vec3i[]{
             new Vec3i(0,2,0), //anticev check
 
