@@ -157,6 +157,7 @@ public class Click extends GuiScreen {
         getFrames().forEach(frame -> frame.keyTyped(character,keyCode));
     }
 
+
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY, mouseButton);

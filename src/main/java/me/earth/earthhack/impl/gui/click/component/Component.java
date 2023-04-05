@@ -55,6 +55,8 @@ public class Component {
 
     public void keyTyped(char character, int keyCode) {
     }
+    public void mouseBind(int keyCode) {
+    }
 
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
     }

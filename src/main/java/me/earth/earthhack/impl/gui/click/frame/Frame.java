@@ -63,6 +63,9 @@ public class Frame {
     public void keyTyped(char character, int keyCode)  {
         if (isExtended()) getComponents().forEach(component -> component.keyTyped(character, keyCode));
     }
+    public void mouseBind(int keyCode){
+        if(isExtended()) getComponents().forEach(component -> component.mouseBind(keyCode));
+    }
 
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         final boolean hovered = RenderUtil.mouseWithinBounds(mouseX, mouseY, getPosX(),getPosY(),getWidth(),getHeight());

@@ -17,6 +17,7 @@ public class Mouse {
         return org.lwjgl.input.Mouse.isButtonDown(button);
     }
 
+
     public static void setButtonDown(int button, boolean down) {
         STATES.put(button, down);
     }

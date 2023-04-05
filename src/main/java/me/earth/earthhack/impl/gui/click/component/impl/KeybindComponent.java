@@ -40,6 +40,18 @@ public class KeybindComponent extends SettingComponent<Bind, BindSetting> {
             setBinding(false);
         }
     }
+    @Override
+    public void mouseBind(int keyCode){
+        super.mouseBind(keyCode);
+        if(isBinding()){
+            if(keyCode == 3){
+                getBindSetting().setValue(Bind.fromKey(org.lwjgl.input.Keyboard.KEY_NUMPAD1));
+            }
+            else if (keyCode == 4){
+                getBindSetting().setValue(Bind.fromKey(org.lwjgl.input.Keyboard.KEY_NUMPAD0));
+            }
+        }
+    }
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
