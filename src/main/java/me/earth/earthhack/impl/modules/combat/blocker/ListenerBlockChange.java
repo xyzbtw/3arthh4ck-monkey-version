@@ -32,7 +32,8 @@ public class ListenerBlockChange extends ModuleListener<Blocker, PacketEvent.Rec
                 Blocker.speedminecache.clear();
                 return;
             }
-            module.scanAndPlace(blockPosition, true);
+            if(blockPosition == PlayerUtil.getPlayerPos().add(0,2,0) && !module.anticev.getValue()){return;}
+            module.scanAndPlace(blockPosition);
         }
     }
 

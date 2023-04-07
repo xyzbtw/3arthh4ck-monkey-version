@@ -56,6 +56,7 @@ public abstract class MixinRenderEnderCrystal
     @Final
     private ModelBase modelEnderCrystalNoBase;
     private float scale;
+
     @Final
     @Shadow
     private static ResourceLocation ENDER_CRYSTAL_TEXTURES;

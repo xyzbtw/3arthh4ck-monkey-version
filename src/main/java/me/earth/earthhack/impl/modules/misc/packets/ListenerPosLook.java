@@ -7,6 +7,7 @@ import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.combat.surround.Surround;
 import me.earth.earthhack.impl.modules.movement.packetfly.PacketFly;
+import me.earth.earthhack.impl.modules.movement.smartblocklag.SmartBlockLag;
 import me.earth.earthhack.impl.modules.player.freecam.Freecam;
 import me.earth.earthhack.impl.util.network.PacketUtil;
 import net.minecraft.network.play.client.CPacketConfirmTeleport;
@@ -23,6 +24,8 @@ final class ListenerPosLook extends
             Caches.getModule(Freecam.class);
     private static final ModuleCache<Surround> SURROUND =
             Caches.getModule(Surround.class);
+    private static final ModuleCache<SmartBlockLag> SMARTBURROW =
+            Caches.getModule(SmartBlockLag.class);
 
     public ListenerPosLook(Packets module)
     {
@@ -67,12 +70,14 @@ final class ListenerPosLook extends
         try
         {
             SURROUND.computeIfPresent(s -> s.blockTeleporting = true);
+            SMARTBURROW.computeIfPresent(smartBlockLag -> smartBlockLag.blockTeleporting = true);
             mc.player.connection.sendPacket(
                 new CPacketConfirmTeleport(packet.getTeleportId()));
         }
         finally
         {
             SURROUND.computeIfPresent(s -> s.blockTeleporting = false);
+            SMARTBURROW.computeIfPresent(smartBlockLag -> smartBlockLag.blockTeleporting = false);
         }
 
         Managers.ROTATION.setBlocking(true);

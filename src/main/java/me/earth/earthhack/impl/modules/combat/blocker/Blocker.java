@@ -68,7 +68,7 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
             new Vec3i(0,0,1),
             new Vec3i(0,0,-1),
 
-            new Vec3i(1,1,0), //diag cev checks
+            new Vec3i(1,1,0), //side cev checks
             new Vec3i(-1,1,0),
             new Vec3i(0,1,1),
             new Vec3i(0,1,-1)
@@ -82,11 +82,11 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
     @Override
     protected boolean shouldHelp(EnumFacing facing, BlockPos pos)
     {
-        return super.shouldHelp(facing, pos) // ??????
+        return super.shouldHelp(facing, pos) // ?????? //shut up monkey :heart:
                 && helping.getValue();
     }
 
-    protected void scanAndPlace(BlockPos pos, boolean replace){
+    protected void scanAndPlace(BlockPos pos){
         if(mc.world==null)return;
         if(mc.player==null)return;
         if(mc.currentScreen instanceof GuiConnecting)return;
@@ -116,10 +116,12 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
             return;
         }
 
-        //if the block was broken, it should create a supporting block for extend to be placed at
-        if(replace){
+        //if the block was broken, it should create a supporting block for extend to be placed at // not needed anymore because of default earth helper
+        /*if(replace){
            scheduledPlacements.add(pos);
         }
+
+         */
 
 
         for(EnumFacing face : EnumFacing.values()) {

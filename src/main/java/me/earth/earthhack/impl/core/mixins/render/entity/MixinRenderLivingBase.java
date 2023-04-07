@@ -129,6 +129,9 @@ public abstract class MixinRenderLivingBase {
             GL11.glEnable(GL11.GL_POLYGON_OFFSET_FILL);
             GL11.glPolygonOffset(1.0f, -1100000.0f);
         }
+        if(ESP_MODULE.get().sneak.getValue() && ESP_MODULE.isEnabled()){
+            entity.setSneaking(true);
+        }
     }
 
     @Inject(method = "doRender", at = @At("RETURN"))
@@ -144,6 +147,9 @@ public abstract class MixinRenderLivingBase {
                                   false)) {
             GL11.glDisable(GL11.GL_POLYGON_OFFSET_FILL);
             GL11.glPolygonOffset(1.0f, 1100000.0f);
+        }
+        if(ESP_MODULE.get().sneak.getValue() && ESP_MODULE.isEnabled()){
+            entity.setSneaking(true);
         }
     }
 
@@ -176,6 +182,9 @@ public abstract class MixinRenderLivingBase {
             }
 
             ci.cancel();
+            if(ESP_MODULE.get().sneak.getValue() && ESP_MODULE.isEnabled()){
+                entitylivingbaseIn.setSneaking(true);
+            }
         }
     }
 
@@ -190,6 +199,10 @@ public abstract class MixinRenderLivingBase {
                                                      limbSwing, limbSwingAmount,
                                                      ageInTicks, netHeadYaw,
                                                      headPitch, scaleFactor));
+        if(ESP_MODULE.get().sneak.getValue() && ESP_MODULE.isEnabled()){
+            entity.setSneaking(true);
+        }
     }
+
 
 }

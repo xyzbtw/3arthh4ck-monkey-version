@@ -24,6 +24,7 @@ public class SmartBlockLag extends Module {
     public SmartBlockLag() {
         super("SmartBlockLag", Category.Movement);
         this.listeners.add(new ListenerTick(this));
+        this.listeners.add(new ListenerTeleport(this));
     }
     protected final Setting<Float> smartRange =
             register(new NumberSetting<>("Range", 3.0f, 0.0f, 10.0f));
@@ -31,11 +32,15 @@ public class SmartBlockLag extends Module {
             register(new BooleanSetting("AutoOff", false));
     protected  final Setting<Boolean> holeonly =
             register(new BooleanSetting("OnlyInHole", false));
+    protected  final Setting<Boolean> teleport =
+            register(new BooleanSetting("OnTeleport", false));
+    protected  final Setting<Boolean> chorusdisable =
+            register(new BooleanSetting("OnTPDisable", false));
     protected final Setting<Integer> delay =
             register(new NumberSetting<>("Delay", 100, 0, 1000));
 
     protected final StopWatch delayTimer = new StopWatch();
-
+    public boolean blockTeleporting;
     public void onEnable(){
         delayTimer.setTime(0);
         if(mc.isSingleplayer()){

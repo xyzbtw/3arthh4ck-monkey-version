@@ -54,6 +54,8 @@ public class ESP extends Module {
             register(new BooleanSetting("Items", false));
     protected final Setting<Boolean> storage =
             register(new BooleanSetting("Storage", false));
+    public final Setting<Boolean> sneak =
+            register(new BooleanSetting("Sneak", false));
     protected final Setting<Float> storageRange =
             register(new NumberSetting<>("Storage-Range", 1000.0f, 0.0f, 1000.0f));
     protected final Setting<Float> lineWidth =

@@ -22,7 +22,7 @@ public class ListenerTick extends ModuleListener<SmartBlockLag, TickEvent> {
     public ListenerTick(SmartBlockLag module) {
         super(module, TickEvent.class);
     }
-    private static final ModuleCache<BlockLag> burrow =
+    public static final ModuleCache<BlockLag> burrow =
             Caches.getModule(BlockLag.class);
 
 
