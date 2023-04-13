@@ -7,6 +7,7 @@ import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.player.speedmine.Speedmine;
+import me.earth.earthhack.impl.util.client.ModuleUtil;
 import me.earth.earthhack.impl.util.helpers.blocks.ObbyListenerModule;
 import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
@@ -28,7 +29,6 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
             register(new BooleanSetting("Face", true));
     protected final Setting<Boolean> hole =
             register(new BooleanSetting("HoleCheck", true));
-
     protected final Setting<Boolean> fullExtend =
             register(new BooleanSetting("FullExtend", true));
     protected final Setting<Boolean> extendxyz =
@@ -39,15 +39,20 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
             register(new NumberSetting<>("EnemyRange", 6.0f, 0.0f, 10.0f));
     protected final Setting<Integer> clearDelay =
             register(new NumberSetting<>("ClearDelay", 500, 0, 3000));
+    protected final Setting<Boolean> antidrew =
+            register(new BooleanSetting("UnderSurround", false));
     protected final Setting<Boolean> onanim =
             register(new BooleanSetting("OnAnim", false));
     protected final Setting<Boolean> blockchange =
             register(new BooleanSetting("OnChange", true));
     protected final Setting<Integer> progress =
             register(new NumberSetting<>("Progress", 3, 0, 9));
+    protected final Setting<Boolean> debug =
+            register(new BooleanSetting("Debug", true));
 
     protected EntityPlayer target;
     protected final ModuleCache<Speedmine> speedmine = Caches.getModule(Speedmine.class);
+    protected BlockPos niglet;
 
     public Blocker() {
         super("Blocker", Category.Combat);
@@ -61,7 +66,7 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
     public static ArrayList<BlockPos> speedminecache = new ArrayList<>();
     Vec3i[] replaceList= new Vec3i[]{
             new Vec3i(0,2,0), //anticev check
-
+            new Vec3i(0,-1,0), //block underneath you
 
             new Vec3i(1,0,0), //surround checks
             new Vec3i(-1,0,0),
@@ -73,6 +78,13 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
             new Vec3i(0,1,1),
             new Vec3i(0,1,-1)
 
+    };
+
+    Vec3i[] forxyz = new Vec3i[]{
+            new Vec3i(1,-1,0),
+            new Vec3i(-1,-1,0),
+            new Vec3i(0,-1,1),
+            new Vec3i(0,-1,-1)
 
     };
 
@@ -94,34 +106,48 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
         if (pos == this.speedmine.get().getPos()) return;
         if(target == null || pos.getDistance(target.getPosition().getX(), target.getPosition().getY(), target.getPosition().getZ()) >= this.enemyrange.getValue()) return;
 
-        if(hole.getValue() && !PlayerUtil.isInHoleAll(mc.player))
-            return;
 
         BlockPos playerPos = PlayerUtil.getPlayerPos();
 
         //checking if we should care about the block in question
-        for(Vec3i offset : replaceList){
-            if(playerPos.add(offset).equals(pos)){
+        for(Vec3i offset : replaceList) {
+            if (playerPos.add(offset).equals(pos)) {
+                if (debug.getValue()) {
+                    ModuleUtil.sendMessageWithAquaModule(this, "Accepted the pos: " + pos, "");
+                }
                 break;
             }
 
             //if we are at our last element in the iterator and none of the elements suited us, abort the method
-            if(offset.equals(replaceList[replaceList.length-1])){
+            if (offset.equals(replaceList[replaceList.length - 1])) {
+                if (debug.getValue()) {
+                    ModuleUtil.sendMessageWithAquaModule(this, "Not found in replacelist, aborting", "");
+                }
                 return;
             }
         }
+
+        if(antidrew.getValue() && pos == niglet.add(0,-1,0)) {
+            if(debug.getValue()){
+                ModuleUtil.sendMessageWithAquaModule(this, "Antidrew starting to activate for " + pos, "");
+            }
+            scheduledPlacements.add(pos.offset(EnumFacing.NORTH));
+            scheduledPlacements.add(pos.offset(EnumFacing.SOUTH));
+            scheduledPlacements.add(pos.offset(EnumFacing.EAST));
+            scheduledPlacements.add(pos.offset(EnumFacing.WEST));
+            niglet = null;
+        }
+
+
+        if(hole.getValue() && !PlayerUtil.isInHoleAll(mc.player))
+            return;
+
 
         if(pos == playerPos.add(0,2,0)){
             scheduledPlacements.add(pos.add(0,1,0));
             return;
         }
 
-        //if the block was broken, it should create a supporting block for extend to be placed at // not needed anymore because of default earth helper
-        /*if(replace){
-           scheduledPlacements.add(pos);
-        }
-
-         */
 
 
         for(EnumFacing face : EnumFacing.values()) {

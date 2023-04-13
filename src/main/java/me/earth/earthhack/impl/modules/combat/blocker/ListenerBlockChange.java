@@ -2,6 +2,7 @@ package me.earth.earthhack.impl.modules.combat.blocker;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
+import me.earth.earthhack.impl.util.client.ModuleUtil;
 import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 import net.minecraft.block.BlockAir;
 import net.minecraft.client.multiplayer.GuiConnecting;
@@ -32,7 +33,12 @@ public class ListenerBlockChange extends ModuleListener<Blocker, PacketEvent.Rec
                 Blocker.speedminecache.clear();
                 return;
             }
-            if(blockPosition == PlayerUtil.getPlayerPos().add(0,2,0) && !module.anticev.getValue()){return;}
+            if(blockPosition == PlayerUtil.getPlayerPos().add(0,2,0) && !module.anticev.getValue()) return;
+            if(blockPosition == PlayerUtil.getPlayerPos().down() && !module.antidrew.getValue()) return;
+            if(module.debug.getValue()){
+                ModuleUtil.sendMessageWithAquaModule(module, "Received at " + blockPosition.toString(), "" );
+            }
+
             module.scanAndPlace(blockPosition);
         }
     }

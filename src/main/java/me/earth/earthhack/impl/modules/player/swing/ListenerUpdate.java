@@ -2,11 +2,14 @@ package me.earth.earthhack.impl.modules.player.swing;
 
 import me.earth.earthhack.impl.event.events.misc.UpdateEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
 public class ListenerUpdate extends ModuleListener<Swing, UpdateEvent> {
     public ListenerUpdate(Swing module) {
         super(module, UpdateEvent.class);
     }
+
+
 
     @Override
     public void invoke(UpdateEvent event) {

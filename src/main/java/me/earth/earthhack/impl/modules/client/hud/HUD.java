@@ -201,7 +201,7 @@ public class HUD extends Module {
 
     protected void renderLogo() {
         if (logo.getValue()) {
-            renderText(logoText.getValue() + " - " + Earthhack.VERSION, 2, 2);
+            renderText(logoText.getValue(), 2, 2);
         }
     }
 

@@ -88,7 +88,9 @@ final class ListenerRender extends ModuleListener<Nametags, Render3DEvent>
                                double z,
                                Vec3d mcPlayerInterpolation)
     {
-        double yOffset = y + (player.isSneaking() ? 0.5D : 0.7D);
+        double yOffset = y + (player.isSneaking() ? 0.5D : 0.7D) + (module.ESP.get().child.getValue()
+                                                                    ? module.yoffset.getValue()
+                                                                    : 0.0d);
         double xDist = mcPlayerInterpolation.x - x;
         double yDist = mcPlayerInterpolation.y - y;
         double zDist = mcPlayerInterpolation.z - z;

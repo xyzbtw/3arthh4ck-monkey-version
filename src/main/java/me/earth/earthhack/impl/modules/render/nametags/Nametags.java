@@ -1,5 +1,6 @@
 package me.earth.earthhack.impl.modules.render.nametags;
 
+import me.earth.earthhack.api.cache.ModuleCache;
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Complexity;
@@ -9,6 +10,8 @@ import me.earth.earthhack.api.setting.settings.ColorSetting;
 import me.earth.earthhack.api.setting.settings.EnumSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.managers.Managers;
+import me.earth.earthhack.impl.modules.Caches;
+import me.earth.earthhack.impl.modules.render.esp.ESP;
 import me.earth.earthhack.impl.util.math.StopWatch;
 import me.earth.earthhack.impl.util.minecraft.PushMode;
 import me.earth.earthhack.impl.util.thread.SafeRunnable;
@@ -44,6 +47,8 @@ public class Nametags extends Module
             register(new BooleanSetting("Fov", true));
     protected final Setting<Float> scale        =
             register(new NumberSetting<>("Scale", 3f, 1f, 10f));
+    protected final Setting<Double> yoffset        =
+            register(new NumberSetting<>("ChildOffset", 0.0d, -10.0d, 10.0d));
     protected final Setting<Integer> delay      =
             register(new NumberSetting<>("Delay", 16, 0, 100));
     protected final Setting<Boolean> debug      =
@@ -76,7 +81,8 @@ public class Nametags extends Module
 
     protected List<Nametag> nametags = new ArrayList<>();
     protected final StopWatch timer = new StopWatch();
-
+    protected final ModuleCache<ESP> ESP =
+            Caches.getModule(me.earth.earthhack.impl.modules.render.esp.ESP.class);
     public Nametags()
     {
         super("Nametags", Category.Render);
@@ -84,6 +90,7 @@ public class Nametags extends Module
         this.listeners.add(new ListenerRender2D(this));
         this.setData(new NametagsData(this));
     }
+
 
     protected void updateNametags()
     {

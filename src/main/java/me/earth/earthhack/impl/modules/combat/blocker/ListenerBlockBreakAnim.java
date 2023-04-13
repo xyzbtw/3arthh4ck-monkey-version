@@ -1,8 +1,10 @@
 package me.earth.earthhack.impl.modules.combat.blocker;
 
+import me.earth.earthhack.api.util.TextUtil;
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.managers.Managers;
+import me.earth.earthhack.impl.util.client.ModuleUtil;
 import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 import net.minecraft.block.BlockAir;
 import net.minecraft.client.multiplayer.GuiConnecting;
@@ -32,10 +34,20 @@ public class ListenerBlockBreakAnim extends ModuleListener<Blocker, PacketEvent.
         BlockPos blockPosition = event.getPacket().getPosition();
 
         if(mc.world.getBlockState(blockPosition).getBlock() == (Blocks.BEDROCK)) return;
+
         if(blockPosition.equals(PlayerUtil.getPlayerPos().add(0, 2,0)) && !module.anticev.getValue()) return;
 
-        if (event.getPacket().getProgress() > module.progress.getValue() || module.progress.getValue() == 0) {
-            module.scanAndPlace(blockPosition);
+
+        if ((event.getPacket().getProgress() > module.progress.getValue() || module.progress.getValue() == 0)) {
+            if(module.antidrew.getValue() && blockPosition == PlayerUtil.getPlayerPos().down()) {
+                module.niglet = PlayerUtil.getPlayerPos();
+                module.scanAndPlace(blockPosition);
+            }else if (!module.antidrew.getValue() && blockPosition != PlayerUtil.getPlayerPos().down()){
+                module.scanAndPlace(blockPosition);
+            }
+            if(module.debug.getValue()){
+                ModuleUtil.sendMessageWithAquaModule(module, "Anim received at " + blockPosition.toString(), "" );
+            }
         }
 
     }

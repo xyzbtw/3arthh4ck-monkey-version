@@ -29,7 +29,8 @@ final class ListenerPickBlock
             && !(event instanceof ClickMiddleEvent
                     && ((ClickMiddleEvent) event).isModuleCancelled()
                 || event.isCancelled())
-            && !module.isWasting())
+            && !module.isWasting()
+        && mc.currentScreen == null)
         {
             int slot = InventoryUtil.findHotbarItem(Items.EXPERIENCE_BOTTLE);
             if (slot != -1

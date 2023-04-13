@@ -2,6 +2,7 @@ package me.earth.earthhack.impl.core.mixins.entity.living;
 
 import me.earth.earthhack.api.cache.ModuleCache;
 import me.earth.earthhack.impl.modules.player.swing.Swing;
+import me.earth.earthhack.impl.modules.render.esp.ESP;
 import me.earth.earthhack.impl.modules.render.viewmodel.ViewModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.MobEffects;
@@ -44,7 +45,6 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.gen.Accessor;
-import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -70,6 +70,8 @@ public abstract class MixinEntityLivingBase extends MixinEntity
             Caches.getModule(NoRender.class);
     private static final ModuleCache<ViewModel> VIEW_MODEL =
             Caches.getModule(ViewModel.class);
+    private static final ModuleCache<me.earth.earthhack.impl.modules.render.esp.ESP> ESP =
+            Caches.getModule(ESP.class);
 
     @Shadow
     @Final
@@ -82,6 +84,8 @@ public abstract class MixinEntityLivingBase extends MixinEntity
     protected int activeItemStackUseCount;
     @Shadow
     protected ItemStack activeItemStack;
+    @Shadow
+    public abstract boolean isChild();
 
     @Shadow
     public abstract boolean isPotionActive(Potion var1);
@@ -430,6 +434,15 @@ public abstract class MixinEntityLivingBase extends MixinEntity
         }
     }
 
+
+    @Inject(method = "isChild", at = @At("HEAD"), cancellable = true)
+    public void isChild(CallbackInfoReturnable<Boolean> child) {
+        boolean isChild = ESP.isEnabled() ? ESP.get().child.getValue() : false;
+        child.setReturnValue(isChild);
+    }
+
+
+
     @Inject(method = "swingArm", at = @At("HEAD"))
     public void swingArmHook(EnumHand hand, CallbackInfo ci)
     {
@@ -443,6 +456,7 @@ public abstract class MixinEntityLivingBase extends MixinEntity
             }
         }
     }
+
 
     @Inject(method = "getArmSwingAnimationEnd", at = @At("HEAD"), cancellable = true)
     public void getArmSwingAnimationEndHook(CallbackInfoReturnable<Integer> cir) {

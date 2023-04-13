@@ -31,6 +31,7 @@ import me.earth.earthhack.impl.modules.client.safety.Safety;
 import me.earth.earthhack.impl.modules.client.server.ServerModule;
 import me.earth.earthhack.impl.modules.client.settings.SettingsModule;
 import me.earth.earthhack.impl.modules.client.tab.TabModule;
+import me.earth.earthhack.impl.modules.combat.aimbot.AimBot;
 import me.earth.earthhack.impl.modules.combat.antisurround.AntiSurround;
 import me.earth.earthhack.impl.modules.combat.antitrap.AntiTrap;
 import me.earth.earthhack.impl.modules.combat.anvilaura.AnvilAura;
@@ -234,6 +235,7 @@ public class ModuleManager extends IterationRegister<Module>
         this.forceRegister(new Offhand());
         this.forceRegister(new PistonAura());
         this.forceRegister(new Surround());
+        this.forceRegister(new AimBot());
         this.forceRegister(new Snowballer());
         this.forceRegister(new salhackautomend());
         this.forceRegister(new SelfTrap());

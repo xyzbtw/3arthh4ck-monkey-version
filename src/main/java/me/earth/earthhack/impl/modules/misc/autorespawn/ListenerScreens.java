@@ -40,8 +40,8 @@ final class ListenerScreens extends
             if(module.respawndelay.passed(module.delay.getValue() * 1000)) {
                 mc.player.respawnPlayer();
                 module.respawndelay.reset();
+                event.setCancelled(true);
             }
-            event.setCancelled(true);
         }
     }
 

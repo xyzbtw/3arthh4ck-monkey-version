@@ -24,7 +24,7 @@ final class ListenerMotion extends ModuleListener<ExpTweaks, MotionUpdateEvent>
             if (module.feetExp.getValue()
                     && (InventoryUtil.isHolding(Items.EXPERIENCE_BOTTLE)
                             && Mouse.isButtonDown(1)
-                        || module.isMiddleClick()))
+                        || (module.isMiddleClick() && mc.currentScreen == null)))
             {
                 // maybe look a bit into movement direction?
                 event.setPitch(90.0f);
@@ -34,7 +34,8 @@ final class ListenerMotion extends ModuleListener<ExpTweaks, MotionUpdateEvent>
                 && !(module.wasteStop.getValue() && module.isWasting())
                 && (module.whileEating.getValue()
                     || !(mc.player.getActiveItemStack().getItem()
-                                                instanceof ItemFood)))
+                                                instanceof ItemFood))
+                && mc.currentScreen == null)
         {
             int slot = InventoryUtil.findHotbarItem(Items.EXPERIENCE_BOTTLE);
             if (slot != -1)

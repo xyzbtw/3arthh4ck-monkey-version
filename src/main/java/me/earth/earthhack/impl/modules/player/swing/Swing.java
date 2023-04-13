@@ -10,6 +10,7 @@ import me.earth.earthhack.impl.event.events.network.PacketEvent;
 import me.earth.earthhack.impl.event.listeners.LambdaListener;
 import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.util.EnumHand;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
 public class Swing extends Module {
     public final NumberSetting<Integer> swingSpeed =
