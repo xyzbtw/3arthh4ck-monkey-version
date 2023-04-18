@@ -50,7 +50,7 @@ import me.earth.earthhack.impl.modules.combat.killaura.KillAura;
 import me.earth.earthhack.impl.modules.combat.legswitch.LegSwitch;
 import me.earth.earthhack.impl.modules.combat.offhand.Offhand;
 import me.earth.earthhack.impl.modules.combat.pistonaura.PistonAura;
-import me.earth.earthhack.impl.modules.combat.salhackautomend.salhackautomend;
+import me.earth.earthhack.impl.modules.combat.automend.automend;
 import me.earth.earthhack.impl.modules.combat.selftrap.SelfTrap;
 import me.earth.earthhack.impl.modules.combat.snowballer.Snowballer;
 import me.earth.earthhack.impl.modules.combat.surround.Surround;
@@ -237,7 +237,7 @@ public class ModuleManager extends IterationRegister<Module>
         this.forceRegister(new Surround());
         this.forceRegister(new AimBot());
         this.forceRegister(new Snowballer());
-        this.forceRegister(new salhackautomend());
+        this.forceRegister(new automend());
         this.forceRegister(new SelfTrap());
         this.forceRegister(new WebAura());
 

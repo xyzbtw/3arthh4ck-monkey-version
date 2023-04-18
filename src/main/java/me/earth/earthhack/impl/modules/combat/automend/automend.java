@@ -1,11 +1,10 @@
-package me.earth.earthhack.impl.modules.combat.salhackautomend;
+package me.earth.earthhack.impl.modules.combat.automend;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.earth.earthhack.api.cache.ModuleCache;
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
-import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.combat.autoarmor.AutoArmor;
@@ -31,7 +30,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 
-public class salhackautomend extends Module
+public class automend extends Module
 {
 
     public final Setting<Float> Delay =
@@ -47,9 +46,9 @@ public class salhackautomend extends Module
     private static final ModuleCache<ExpTweaks> xptweaks =
             Caches.getModule(ExpTweaks.class);
 
-    public salhackautomend()
+    public automend()
     {
-        super("SalAutoMend", Category.Combat);
+        super("BetterAutoMend", Category.Combat);
         this.listeners.add(new ListenerMotion(this));
     }
 

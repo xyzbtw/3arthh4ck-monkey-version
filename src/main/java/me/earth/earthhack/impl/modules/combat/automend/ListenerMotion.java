@@ -1,4 +1,4 @@
-package me.earth.earthhack.impl.modules.combat.salhackautomend;
+package me.earth.earthhack.impl.modules.combat.automend;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.earth.earthhack.impl.event.events.network.MotionUpdateEvent;
@@ -15,8 +15,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 
 
-public class ListenerMotion extends ModuleListener<salhackautomend, MotionUpdateEvent> {
-    public ListenerMotion(salhackautomend module) {
+public class ListenerMotion extends ModuleListener<automend, MotionUpdateEvent> {
+    public ListenerMotion(automend module) {
         super(module, MotionUpdateEvent.class);
     }
 
@@ -89,7 +89,7 @@ public class ListenerMotion extends ModuleListener<salhackautomend, MotionUpdate
 
             boolean l_NeedBreak = false;
 
-            for (salhackautomend.MendState l_State : module.SlotsToMoveTo)
+            for (automend.MendState l_State : module.SlotsToMoveTo)
             {
                 if (l_State.MovedToInv)
                     continue;
@@ -178,7 +178,7 @@ public class ListenerMotion extends ModuleListener<salhackautomend, MotionUpdate
 
                 if (l_ArmorPct >= module.Pct.getValue()) {
                     if (!module.SlotsToMoveTo.isEmpty()) {
-                        salhackautomend.MendState l_State = module.SlotsToMoveTo.get(0);
+                        automend.MendState l_State = module.SlotsToMoveTo.get(0);
 
                         if (l_State.DoneMending) {
                             module.SlotsToMoveTo.forEach(p_State ->
@@ -201,7 +201,7 @@ public class ListenerMotion extends ModuleListener<salhackautomend, MotionUpdate
                         module.SlotsToMoveTo.remove(0);
                         module.SlotsToMoveTo.add(l_State);
 
-                        salhackautomend.MendState l_NewState = module.SlotsToMoveTo.get(0);
+                        automend.MendState l_NewState = module.SlotsToMoveTo.get(0);
 
                         if (l_NewState.DoneMending || !l_NewState.NeedMend) {
                             module.SlotsToMoveTo.forEach(p_State ->

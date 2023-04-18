@@ -24,4 +24,29 @@ public class ListenerObsidian extends ObbyListener<Blocker> {
     {
         super.onModuleToggle();
     }
+
+    @Override
+    public boolean update(){
+        {
+            if (updatePlaced())
+            {
+                return false;
+            }
+
+            module.slot = getSlot();
+            if (module.slot == -1)
+            {
+                return false;
+            }
+
+            if (hasTimerNotPassed())
+            {
+                return false;
+            }
+
+            TargetResult result = getTargets(new TargetResult());
+            targets = result.getTargets();
+            return result.isValid();
+        }
+    }
 }

@@ -16,12 +16,10 @@ import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import me.earth.earthhack.impl.util.text.TextColor;
 import me.earth.earthhack.impl.util.thread.Locks;
+import net.minecraft.block.BlockPlanks;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemAppleGold;
-import net.minecraft.item.ItemFishFood;
-import net.minecraft.item.ItemFood;
+import net.minecraft.item.*;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumHand;
@@ -35,6 +33,7 @@ final class ListenerTick extends ModuleListener<AutoEat, TickEvent>
         super(module, TickEvent.class, 11);
     }
     public static final ModuleCache<Offhand> offhand = Caches.getModule(Offhand.class);
+    OffhandMode mode;
     @Override
     public void invoke(TickEvent event)
     {
@@ -46,7 +45,6 @@ final class ListenerTick extends ModuleListener<AutoEat, TickEvent>
             module.server   = false;
             return;
         }
-
         module.force = module.always.getValue() || module.server;
         if (mc.player.getFoodStats().getFoodLevel() > module.hunger.getValue()
             && (!module.health.getValue()
@@ -66,11 +64,12 @@ final class ListenerTick extends ModuleListener<AutoEat, TickEvent>
         {
             if (module.isEating)
             {
-                if(module.offhand.getValue()){
-                    Locks.acquire(Locks.PLACE_SWITCH_LOCK, () -> offhand.get().forceMode(OffhandMode.GAPPLE));
+                if(module.offhand.getValue() && InventoryUtil.isHolding(ItemSword.class)){
+                    mode = offhand.get().getMode();
+                    offhand.get().forceMode(OffhandMode.GAPPLE);
                     module.reset();
                 }
-                else {
+                else if (!module.offhand.getValue()){
                     Locks.acquire(Locks.PLACE_SWITCH_LOCK,
                             () -> InventoryUtil.switchTo(module.lastSlot));
                     module.reset();
@@ -97,9 +96,10 @@ final class ListenerTick extends ModuleListener<AutoEat, TickEvent>
                 module.lastSlot = mc.player.inventory.currentItem;
             }
 
-
             Locks.acquire(Locks.PLACE_SWITCH_LOCK,
                     () -> InventoryUtil.switchTo(slot));
+
+
         }
         // SPacketEntityMetadata
         // TODO: mode packets???

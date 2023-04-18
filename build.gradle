@@ -66,7 +66,6 @@ minecraft {
 
 repositories {
     mavenCentral()
-    google()
     maven {
         name = 'spongepowered-repo'
         url = 'https://repo.spongepowered.org/maven'
