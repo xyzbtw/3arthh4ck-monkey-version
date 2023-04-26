@@ -13,6 +13,11 @@ buildscript {
             name = 'jitpack.io'
             url = 'https://jitpack.io'
         }
+        maven {
+            name "opencollabRepositoryMavenReleases"
+            url "https://repo.opencollab.dev/maven-releases"
+        }
+
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'

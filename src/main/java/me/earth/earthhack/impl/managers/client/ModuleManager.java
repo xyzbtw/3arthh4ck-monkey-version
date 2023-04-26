@@ -50,7 +50,7 @@ import me.earth.earthhack.impl.modules.combat.killaura.KillAura;
 import me.earth.earthhack.impl.modules.combat.legswitch.LegSwitch;
 import me.earth.earthhack.impl.modules.combat.offhand.Offhand;
 import me.earth.earthhack.impl.modules.combat.pistonaura.PistonAura;
-import me.earth.earthhack.impl.modules.combat.automend.automend;
+import me.earth.earthhack.impl.modules.combat.automend.AutoMend;
 import me.earth.earthhack.impl.modules.combat.selftrap.SelfTrap;
 import me.earth.earthhack.impl.modules.combat.snowballer.Snowballer;
 import me.earth.earthhack.impl.modules.combat.surround.Surround;
@@ -70,6 +70,7 @@ import me.earth.earthhack.impl.modules.misc.autorespawn.AutoRespawn;
 import me.earth.earthhack.impl.modules.misc.buildheight.BuildHeight;
 import me.earth.earthhack.impl.modules.misc.chat.Chat;
 import me.earth.earthhack.impl.modules.misc.choruscontrol.ChorusControl;
+import me.earth.earthhack.impl.modules.misc.coordannouncer.CoordAnnouncer;
 import me.earth.earthhack.impl.modules.misc.extratab.ExtraTab;
 import me.earth.earthhack.impl.modules.misc.logger.Logger;
 import me.earth.earthhack.impl.modules.misc.mcf.MCF;
@@ -237,7 +238,7 @@ public class ModuleManager extends IterationRegister<Module>
         this.forceRegister(new Surround());
         this.forceRegister(new AimBot());
         this.forceRegister(new Snowballer());
-        this.forceRegister(new automend());
+        this.forceRegister(new AutoMend());
         this.forceRegister(new SelfTrap());
         this.forceRegister(new WebAura());
 
@@ -253,6 +254,7 @@ public class ModuleManager extends IterationRegister<Module>
         this.forceRegister(new AutoRespawn());
         this.forceRegister(new BuildHeight());
         this.forceRegister(new Chat());
+        this.forceRegister(new CoordAnnouncer());
         this.forceRegister(new ExtraTab());
         this.forceRegister(new Logger());
         this.forceRegister(new MCF());

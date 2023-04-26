@@ -2,6 +2,7 @@ package me.earth.earthhack.impl.modules.movement.phase;
 
 import me.earth.earthhack.impl.event.events.render.Render3DEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
+import me.earth.earthhack.impl.util.helpers.render.BlockESPModule;
 
 final class ListenerRender extends ModuleListener<Phase, Render3DEvent>
 {

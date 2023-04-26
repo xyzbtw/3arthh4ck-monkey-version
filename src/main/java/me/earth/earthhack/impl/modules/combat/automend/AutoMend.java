@@ -5,6 +5,7 @@ import me.earth.earthhack.api.cache.ModuleCache;
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
+import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.combat.autoarmor.AutoArmor;
@@ -22,34 +23,38 @@ import net.minecraft.item.ItemExpBottle;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.CombatRules;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 
 
-public class automend extends Module
+public class AutoMend extends Module
 {
 
-    public final Setting<Float> Delay =
+    protected final Setting<Float> Delay =
             register(new NumberSetting<>("DelayMend", 150.0f, 0.0f, 1000.0f));
-    public final Setting<Float> xpDelay =
+    protected final Setting<Float> xpDelay =
             register(new NumberSetting<>("DelayXP", 150.0f, 0.0f, 1000.0f));
-    public final Setting<Float>  Pct =
+    protected final Setting<Float>  Pct =
             register(new NumberSetting<>("Percent", 90.0f, 0.0f, 100.0f));
-    public final Setting<Float>  maxdmg =
+    protected final Setting<Float>  maxdmg =
             register(new NumberSetting<>("Max-Dmg", 6.0f, 0.0f, 36.0f));
+    protected final Setting<Boolean> blocks =
+            register(new BooleanSetting("Block", false));
+
     private static final ModuleCache<AutoArmor> AutoArmor =
             Caches.getModule(AutoArmor.class);
     private static final ModuleCache<ExpTweaks> xptweaks =
             Caches.getModule(ExpTweaks.class);
 
-    public automend()
+
+    public AutoMend()
     {
         super("BetterAutoMend", Category.Combat);
         this.listeners.add(new ListenerMotion(this));
+        this.setData(new AutoMendData(this));
     }
 
     protected Timer timer = new Timer();
@@ -73,10 +78,20 @@ public class automend extends Module
         wasEnabledAM=false;
         wasEnabledXP=false;
     }
+
+    protected Vec3i[] blocking = new Vec3i[]{
+            new Vec3i(1,1,0),
+            new Vec3i(-1,1,0),
+            new Vec3i(0,1,1),
+            new Vec3i(0,1,-1)
+    };
+
     @Override
     public void onEnable()
     {
         super.onEnable();
+
+
         if(AutoArmor.isEnabled()){
             wasEnabledAM = true;
             AutoArmor.disable();

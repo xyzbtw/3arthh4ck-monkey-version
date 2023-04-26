@@ -20,6 +20,7 @@ public class AutoRespawn extends Module
     {
         super("AutoRespawn", Category.Misc);
         this.listeners.add(new ListenerScreens(this));
+        this.listeners.add(new ListenerUpdate(this));
         this.setData(new AutoRespawnData(this));
     }
 

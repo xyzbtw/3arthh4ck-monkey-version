@@ -169,6 +169,7 @@ public class AntiSurround extends ObbyListenerModule<ListenerObby>
         this.attackAny.addObserver(e -> e.setCancelled(true));
         this.pop.setValue(Pop.Time);
         this.cooldown.setValue(0);
+        this.setData(new AntiSurroundData(this));
 
         this.esp = new BlockESPBuilder()
                         .withColor(color)

@@ -2,24 +2,31 @@ package me.earth.earthhack.impl.modules.combat.blocker;
 
 import me.earth.earthhack.api.cache.ModuleCache;
 import me.earth.earthhack.api.module.util.Category;
+import me.earth.earthhack.api.setting.Complexity;
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
+import me.earth.earthhack.api.setting.settings.ColorSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.player.speedmine.Speedmine;
 import me.earth.earthhack.impl.util.client.ModuleUtil;
 import me.earth.earthhack.impl.util.helpers.blocks.ObbyListenerModule;
+import me.earth.earthhack.impl.util.helpers.render.BlockESPBuilder;
+import me.earth.earthhack.impl.util.helpers.render.BlockESPModule;
+import me.earth.earthhack.impl.util.helpers.render.IAxisESP;
 import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
+import me.earth.earthhack.impl.util.render.Interpolation;
 import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 
+import java.awt.*;
 import java.util.ArrayList;
 
-public class Blocker extends ObbyListenerModule<ListenerObsidian> {
+public class Blocker extends ObbyListenerModule<ListenerObsidian>{
 
     protected final Setting<Boolean> anticev =
             register(new BooleanSetting("AntiCev", false));
@@ -47,8 +54,18 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
             register(new BooleanSetting("OnChange", true));
     protected final Setting<Integer> progress =
             register(new NumberSetting<>("Progress", 3, 0, 9));
+    protected final Setting<Boolean> render =
+            register(new BooleanSetting("Render", false));
+    protected final Setting<Color> boxColor =
+            register(new ColorSetting("Box", new Color(255, 255, 255, 120)));
+    protected final Setting<Color> outLine =
+            register(new ColorSetting("Outline", new Color(255, 255, 255, 240)));
+    protected final Setting<Float> linewidth =
+            register(new NumberSetting<>("LineWidth", 1.0f, 0.0f, 5.0f));
+    protected final Setting<Float> renderheight =
+            register(new NumberSetting<>("Height", 1.0f, -1.0f, 1.0f));
     protected final Setting<Boolean> debug =
-            register(new BooleanSetting("Debug", true));
+            register(new BooleanSetting("Debug", false));
 
     protected EntityPlayer target;
     protected final ModuleCache<Speedmine> speedmine = Caches.getModule(Speedmine.class);
@@ -59,6 +76,7 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
         this.listeners.add(new ListenerBlockBreakAnim(this));
         this.listeners.add(new ListenerBlockChange(this));
         this.listeners.add(new ListenerUpdate(this));
+        this.listeners.add(new ListenerRender(this));
         this.setData(new BlockerData(this));
 
     }
@@ -80,15 +98,15 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
 
     };
 
-    Vec3i[] forxyz = new Vec3i[]{
-            new Vec3i(1,-1,0),
-            new Vec3i(-1,-1,0),
-            new Vec3i(0,-1,1),
-            new Vec3i(0,-1,-1)
-
-    };
-
-
+    protected IAxisESP esp = new BlockESPBuilder()
+            .withColor(boxColor)
+            .withOutlineColor(outLine)
+            .withLineWidth(linewidth)
+            .build();
+    public void renderPos(BlockPos pos)
+    {
+        esp.render(Interpolation.interpolatePos(pos, renderheight.getValue()));
+    }
 
 
     @Override

@@ -187,9 +187,11 @@ public class Speedmine extends Module
                     .setComplexity(Complexity.Expert);
     public final NumberSetting<Float> lineWidth =
             register(new NumberSetting<>("LineWidth" , 1.5f , 0.1f , 5f));
-    protected final Setting<Boolean> down =
+    /*protected final Setting<Boolean> down =
             register(new BooleanSetting("Down", false))
                 .setComplexity(Complexity.Expert);
+
+     */
     protected final Setting<Boolean> tpsSync =
             register(new BooleanSetting("TpsSync", false))
                 .setComplexity(Complexity.Medium);
@@ -316,7 +318,7 @@ public class Speedmine extends Module
             || mode.getValue() == MineMode.Fast))
         {
             return (maxDamage >= limit.getValue()
-                    ? TextColor.GREEN + MathUtil.round(limit.getValue(), 1)
+                    ? TextColor.GREEN + "Done" //MathUtil.round(limit.getValue(), 1)
                     : "" + MathUtil.round(maxDamage, 1));
         }
 

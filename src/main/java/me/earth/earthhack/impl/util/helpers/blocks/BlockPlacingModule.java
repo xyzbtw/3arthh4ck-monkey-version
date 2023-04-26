@@ -213,7 +213,7 @@ public abstract class BlockPlacingModule extends DisablingModule
             IBlockState iblockstate = mc.world.getBlockState(pos);
             Block iBlock = iblockstate.getBlock();
 
-            if (!iBlock.isReplaceable(mc.world, pos))
+            if (!iBlock.canCollideCheck(iblockstate, false)) //iBlock.isReplaceable(mc.world, pos) //TODO check
             {
                 pos = pos.offset(facing);
             }
@@ -280,8 +280,10 @@ public abstract class BlockPlacingModule extends DisablingModule
                             ? mc.player.inventory.currentItem
                             : this.lastSlot;
 
-            // TODO: dont switch if we dont have to?
-            cooldownBypass.getValue().switchTo(slot);
+
+            if(!(InventoryUtil.getServerItem() == slot)) {
+                cooldownBypass.getValue().switchTo(slot);
+            }
 
             if (!sneaking)
             {

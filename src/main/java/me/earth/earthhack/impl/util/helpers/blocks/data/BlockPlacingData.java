@@ -38,8 +38,8 @@ public class BlockPlacingData<T extends BlockPlacingModule>
                 "\n-Crystals, if you can't use attacking. Can cause kicks.");
         register("Raytrace",
                 "-Fast efficient and fast, works on most servers." +
-                "\n-Resign tries to find the best Raytrace but" +
-                " will fall back to Fast if needed." +
+                //"\n-Resign tries to find the best Raytrace but" +
+                //" will fall back to Fast if needed." +
                 "\n-Force similar to resign but will do more calculations." +
                 "\n-Smart will only accept the best Raytrace, which can" +
                 " cause blocks not to be placed at all (Legit).");

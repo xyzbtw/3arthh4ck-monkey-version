@@ -3,9 +3,18 @@ package me.earth.earthhack.impl.modules.combat.automend;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.earth.earthhack.impl.event.events.network.MotionUpdateEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
+import me.earth.earthhack.impl.util.blocks.InteractionUtil;
+import me.earth.earthhack.impl.util.client.ModuleUtil;
+import me.earth.earthhack.impl.util.helpers.blocks.modes.RayTraceMode;
+import me.earth.earthhack.impl.util.math.path.BasePath;
+import me.earth.earthhack.impl.util.math.path.PathFinder;
+import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
+import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
+import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
 import me.earth.earthhack.impl.util.network.NetworkUtil;
 import me.earth.earthhack.impl.util.text.ChatUtil;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.item.ItemExpBottle;
@@ -13,10 +22,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
+
+import static me.earth.earthhack.impl.util.helpers.blocks.ObbyModule.HELPER;
 
 
-public class ListenerMotion extends ModuleListener<automend, MotionUpdateEvent> {
-    public ListenerMotion(automend module) {
+public class ListenerMotion extends ModuleListener<AutoMend, MotionUpdateEvent> {
+    public ListenerMotion(AutoMend module) {
         super(module, MotionUpdateEvent.class);
     }
 
@@ -25,7 +38,35 @@ public class ListenerMotion extends ModuleListener<automend, MotionUpdateEvent> 
         {
             if(mc.world == null || mc.player == null) return;
 
-            if(module.willtakedmg()) return;
+            if(module.willtakedmg()) {
+                ModuleUtil.disableRed(module, "Will take dmg, disabling");
+                return;
+            }
+
+            if(module.blocks.getValue() && (
+                    BlockUtil.isReplaceable(PlayerUtil.getPlayerPos().add(1,1,0))
+                            || BlockUtil.isReplaceable(PlayerUtil.getPlayerPos().add(-1,1,0))
+                            || BlockUtil.isReplaceable(PlayerUtil.getPlayerPos().add(0,1,1))
+                            || BlockUtil.isReplaceable(PlayerUtil.getPlayerPos().add(0,1,-1))))
+            {
+                BlockPos pos = PlayerUtil.getPlayerPos();
+                for(Vec3i thing : module.blocking){
+                    if(BlockUtil.isReplaceable(pos.add(thing))){
+
+                        InteractionUtil.placeBlock(pos.add(thing), true, true, false);
+
+                    }
+                }
+            }
+            if(module.blocks.getValue() && (
+                    BlockUtil.isReplaceable(PlayerUtil.getPlayerPos().add(1,1,0))
+                            || BlockUtil.isReplaceable(PlayerUtil.getPlayerPos().add(-1,1,0))
+                            || BlockUtil.isReplaceable(PlayerUtil.getPlayerPos().add(0,1,1))
+                            || BlockUtil.isReplaceable(PlayerUtil.getPlayerPos().add(0,1,-1))))
+            {
+                return;
+            }
+
 
             float l_Pitch = 90f;
             float l_Yaw = mc.player.rotationYaw;
@@ -89,7 +130,7 @@ public class ListenerMotion extends ModuleListener<automend, MotionUpdateEvent> 
 
             boolean l_NeedBreak = false;
 
-            for (automend.MendState l_State : module.SlotsToMoveTo)
+            for (AutoMend.MendState l_State : module.SlotsToMoveTo)
             {
                 if (l_State.MovedToInv)
                     continue;
@@ -178,7 +219,7 @@ public class ListenerMotion extends ModuleListener<automend, MotionUpdateEvent> 
 
                 if (l_ArmorPct >= module.Pct.getValue()) {
                     if (!module.SlotsToMoveTo.isEmpty()) {
-                        automend.MendState l_State = module.SlotsToMoveTo.get(0);
+                        AutoMend.MendState l_State = module.SlotsToMoveTo.get(0);
 
                         if (l_State.DoneMending) {
                             module.SlotsToMoveTo.forEach(p_State ->
@@ -201,7 +242,7 @@ public class ListenerMotion extends ModuleListener<automend, MotionUpdateEvent> 
                         module.SlotsToMoveTo.remove(0);
                         module.SlotsToMoveTo.add(l_State);
 
-                        automend.MendState l_NewState = module.SlotsToMoveTo.get(0);
+                        AutoMend.MendState l_NewState = module.SlotsToMoveTo.get(0);
 
                         if (l_NewState.DoneMending || !l_NewState.NeedMend) {
                             module.SlotsToMoveTo.forEach(p_State ->

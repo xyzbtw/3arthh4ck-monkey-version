@@ -2,6 +2,7 @@ package me.earth.earthhack.impl.modules.movement.step;
 
 import me.earth.earthhack.impl.event.events.render.Render3DEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
+import me.earth.earthhack.impl.util.helpers.render.BlockESPModule;
 import me.earth.earthhack.impl.util.math.position.PositionUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
