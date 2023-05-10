@@ -62,7 +62,7 @@ public class DescriptionFrame extends Frame
         float y = this.getPosY() + 2 + (getHeight() / 2) + Managers.TEXT.getStringHeightI();
         List<String> strings = Managers.TEXT.listFormattedStringToWidth(this.getDescription(), (int) this.getWidth() - 1);
 
-        Render2DUtil.drawRect(getPosX(), getPosY() + getHeight(), getPosX() + getWidth(), getPosY() + getHeight() + 3 + (Managers.TEXT.getStringHeightI() + 1) * strings.size(), 0x92000000);
+        Render2DUtil.drawRect(getPosX(), getPosY() + getHeight(), getPosX() + getWidth(), getPosY() + getHeight() + 3 + (Managers.TEXT.getStringHeightI() + 1) * strings.size(), Click.COLOR_MODULE.get().getBgModule().getRGB()); // 0x92000000
 
         for (String string : strings)
         {

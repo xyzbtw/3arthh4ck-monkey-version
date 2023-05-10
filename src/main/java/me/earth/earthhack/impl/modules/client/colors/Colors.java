@@ -33,9 +33,10 @@ public class Colors extends Module
             register(new ColorSetting("SectionBackGround", new Color(0, 0, 0, 255))); // working
     public Setting<Color> textColorDescsetting =
             register(new ColorSetting("DescriptionColor", new Color(224, 224, 224, 255))); // working
-    /*
+
     public final ColorSetting bgColor =
-            register(new ColorSetting("BackGround", new Color(0, 0, 0, 126))); // nope
+            register(new ColorSetting("BackGround", new Color(0, 0, 0, 126)));
+    /*
     public final ColorSetting sidesColor =
             register(new ColorSetting("SidesColor", new Color(0, 0, 0, 255))); // nope
      */
@@ -50,6 +51,7 @@ public class Colors extends Module
     public Color topColor = topColorsetting.getValue();
     public Color topBgColor = topBgColorsetting.getValue();
     public Color textColorDesc = textColorDescsetting.getValue();
+    public Color backColor = bgColor.getValue();
     public Color catEars = catEarsSetting.getValue();
 
 
@@ -76,6 +78,7 @@ public class Colors extends Module
             modulesColor = modulesColorsetting.getValue();
             moduleHover = moduleHoversetting.getValue();
             onModule = onModulesetting.getValue();
+            backColor = bgColor.getValue();
             offModule = offModulesetting.getValue();
             topColor = topColorsetting.getValue();
             topBgColor = topBgColorsetting.getValue();
@@ -108,7 +111,10 @@ public class Colors extends Module
         updateColors();
         return offModule;
     }
-
+    public Color getBgModule(){
+        updateColors();
+        return backColor;
+    }
     public Color getTopColor() {
         updateColors();
         return topColor;

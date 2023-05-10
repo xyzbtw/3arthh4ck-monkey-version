@@ -5,6 +5,7 @@ import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Complexity;
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
+import me.earth.earthhack.api.setting.settings.ColorSetting;
 import me.earth.earthhack.api.setting.settings.EnumSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.managers.Managers;
@@ -17,6 +18,8 @@ import me.earth.earthhack.impl.util.client.ModuleUtil;
 import me.earth.earthhack.impl.util.helpers.blocks.BlockPlacingModule;
 import me.earth.earthhack.impl.util.helpers.blocks.ObbyModule;
 import me.earth.earthhack.impl.util.helpers.blocks.modes.Rotate;
+import me.earth.earthhack.impl.util.helpers.render.BlockESPBuilder;
+import me.earth.earthhack.impl.util.helpers.render.IAxisESP;
 import me.earth.earthhack.impl.util.math.MathUtil;
 import me.earth.earthhack.impl.util.math.StopWatch;
 import me.earth.earthhack.impl.util.math.position.PositionUtil;
@@ -25,13 +28,16 @@ import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
 import me.earth.earthhack.impl.util.minecraft.blocks.HoleUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
+import me.earth.earthhack.impl.util.render.Interpolation;
 import me.earth.earthhack.impl.util.text.TextColor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 // TODO: Make City thing better
@@ -96,6 +102,16 @@ public class Surround extends ObbyModule
         register(new BooleanSetting("Teleport", false));
     protected final Setting<Double> yTeleportRange =
         register(new NumberSetting<>("Y-TeleportRange", 0.0, 0.0, 100.0));
+    protected final Setting<Boolean> render =
+            register(new BooleanSetting("Render", false));
+    protected final Setting<Color> boxColor =
+            register(new ColorSetting("Box", new Color(255, 255, 255, 120)));
+    protected final Setting<Color> outLine =
+            register(new ColorSetting("Outline", new Color(255, 255, 255, 240)));
+    protected final Setting<Float> linewidth =
+            register(new NumberSetting<>("LineWidth", 1.0f, 0.0f, 5.0f));
+    protected final Setting<Float> renderheight =
+            register(new NumberSetting<>("Height", 1.0f, -1.0f, 1.0f));
     public final Setting<Boolean> fixStartPos =
         register(new BooleanSetting("FixStartPos", true))
             .setComplexity(Complexity.Dev);
@@ -125,9 +141,10 @@ public class Surround extends ObbyModule
         this.listeners.add(new ListenerExplosion(this));
         this.listeners.add(new ListenerSpawnObject(this));
         this.listeners.add(new ListenerTeleport(this));
+        this.listeners.add(new ListenerRender(this));
         this.setData(new SurroundData(this));
     }
-
+    ArrayList<BlockPos> scheduledPlacements = new ArrayList<>();
     @Override
     protected void onEnable()
     {
@@ -602,7 +619,15 @@ public class Surround extends ObbyModule
             ? new BlockPos(getPlayer())
             : PositionUtil.getPosition(getPlayer());
     }
-
+    protected IAxisESP esp = new BlockESPBuilder()
+            .withColor(boxColor)
+            .withOutlineColor(outLine)
+            .withLineWidth(linewidth)
+            .build();
+    public void renderPos(BlockPos pos)
+    {
+        esp.render(Interpolation.interpolatePos(pos, renderheight.getValue()));
+    }
     @Override
     public EntityPlayer getPlayerForRotations()
     {

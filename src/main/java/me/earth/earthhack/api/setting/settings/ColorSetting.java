@@ -18,6 +18,7 @@ public class ColorSetting extends Setting<Color> {
     private boolean staticRainbow;
     private Color staticColor;
     private float rainbowSpeed = 100.f;
+    private float StaticSpeed = 100.f;
     private float rainbowSaturation = 100.f;
     private float rainbowBrightness = 100.f;
     private Color mutableInitial;
@@ -348,6 +349,13 @@ public class ColorSetting extends Setting<Color> {
 
     public void setRainbowSpeed(float rainbowSpeed) {
         this.rainbowSpeed = rainbowSpeed;
+    }
+    public float getStaticSpeed() {
+        return StaticSpeed;
+    }
+
+    public void setStaticSpeed(float staticSpeed) {
+        this.StaticSpeed = staticSpeed;
     }
 
     public float getRainbowSaturation() {

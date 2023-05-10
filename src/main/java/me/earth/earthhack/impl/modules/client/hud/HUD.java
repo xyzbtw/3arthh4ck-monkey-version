@@ -100,8 +100,6 @@ public class HUD extends Module {
 
     protected final Setting<Boolean> time =
         register(new BooleanSetting("Time", false));
-    protected final Setting<Boolean> targethud =
-            register(new BooleanSetting("CloseTarget", false));
     protected final Setting<Boolean> worldtime =
             register(new BooleanSetting("WorldTime", false));
     protected final Setting<String> timeFormat =
@@ -110,10 +108,6 @@ public class HUD extends Module {
     protected final Setting<Integer> textOffset =
             register(new NumberSetting<>("Offset", 2, 0, 10))
                 .setComplexity(Complexity.Expert);
-    protected final Setting<Integer> targethudYOffset =
-            register(new NumberSetting<>("Target-Y-Offset", 0, -100, 100));
-    protected final Setting<Integer> targethudXOffset =
-            register(new NumberSetting<>("Target-X-Offset", 0, -100, 100));
 
     protected final List<Map.Entry<String, Module>> modules = new ArrayList<>();
 
@@ -276,9 +270,7 @@ public class HUD extends Module {
             offset += RENDERER.getStringHeightI() + textOffset.getValue();
 
         }
-        if(targethud.getValue()){
-            renderTargetHUD();
-        }
+
 
         if (fps.getValue()) {
             String fps = "FPS " + TextColor.GRAY + Minecraft.getDebugFPS();
@@ -300,7 +292,7 @@ public class HUD extends Module {
                             String.format(ChatFormatting.PREFIX_CODE + "f%,d " + ChatFormatting.PREFIX_CODE + "7[%,d]" + ChatFormatting.PREFIX_CODE + "8, " + ChatFormatting.PREFIX_CODE + "f%,d" + ChatFormatting.PREFIX_CODE + "8, " + ChatFormatting.PREFIX_CODE + "f%,d " + ChatFormatting.PREFIX_CODE + "7[%,d]", x, x / 8, y, z, z / 8) :
                             String.format(ChatFormatting.PREFIX_CODE + "f%,d" + ChatFormatting.PREFIX_CODE + "8, " + ChatFormatting.PREFIX_CODE + "f%,d" + ChatFormatting.PREFIX_CODE + "8, " + ChatFormatting.PREFIX_CODE + "f%,d", x, y, z));
             renderText(coords, 2, height - 2 - RENDERER.getStringHeightI() - animationY);
-            final String dir = RotationUtil.getDirection4D(false);
+            final String dir = RotationUtil.getDirection8D();
             renderText(dir, 2, height - 4 - RENDERER.getStringHeightI() * 2 - animationY);
         }
 

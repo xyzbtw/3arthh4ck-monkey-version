@@ -25,7 +25,9 @@ final class ListenerTick extends ModuleListener<Colors, TickEvent> {
                 filter(setting -> setting instanceof ColorSetting &&
                         ((ColorSetting) setting).isRainbow() && !((ColorSetting) setting).isSync()).
                 forEach(setting ->
-                        ((ColorSetting) setting).setValueAlpha(((ColorSetting) setting).isStaticRainbow() ? new Color(ColorUtil.staticRainbow(0, ((ColorSetting) setting).getStaticColor())) : ColorUtil.getRainbow((int) Math.max(((ColorSetting) setting).getRainbowSpeed() * 30.f, 30.f), 0, ((ColorSetting) setting).getRainbowSaturation() / 100.f, ((ColorSetting) setting).getRainbowBrightness() / 100.f))));
+                        ((ColorSetting) setting).setValueAlpha(((ColorSetting) setting).isStaticRainbow()
+                                ? new Color(ColorUtil.staticRainbow(0, ((ColorSetting) setting).getStaticColor()))
+                                : ColorUtil.getRainbow((int) Math.max(((ColorSetting) setting).getRainbowSpeed() * 30.f, 30.f), 0, ((ColorSetting) setting).getRainbowSaturation() / 100.f, ((ColorSetting) setting).getRainbowBrightness() / 100.f))));
     }
 
 }

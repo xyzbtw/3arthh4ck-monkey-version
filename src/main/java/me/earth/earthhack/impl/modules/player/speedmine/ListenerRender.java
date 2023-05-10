@@ -20,24 +20,25 @@ final class ListenerRender extends ModuleListener<Speedmine, Render3DEvent>
     {
         if (!PlayerUtil.isCreative(mc.player)
                 && module.esp.getValue() != ESPMode.None
-                && module.bb != null)
-        {
-            GL11.glPushMatrix();
-            GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+                && module.bb != null) {
 
+            if (module.esp.getValue() != ESPMode.Europa) {
+                GL11.glPushMatrix();
+                GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+            }
             float max = Math.min(module.maxDamage, 1.0f);
             AxisAlignedBB renderBB = module.bb;
-            if (module.growRender.getValue() && max < 1.0f)
-            {
+            if (module.growRender.getValue() && max < 1.0f) {
                 renderBB = renderBB.grow(-0.5 + (max / 2.0));
             }
 
             AxisAlignedBB bb = Interpolation.interpolateAxis(renderBB);
-            module.esp.getValue().drawEsp(module, bb, max);
-
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            GL11.glPopAttrib();
-            GL11.glPopMatrix();
+            module.esp.getValue().drawEsp(module, bb);
+            if(module.esp.getValue() != ESPMode.Europa) {
+                GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+                GL11.glPopAttrib();
+                GL11.glPopMatrix();
+            }
         }
     }
 

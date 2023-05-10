@@ -86,8 +86,8 @@ public class Speedmine extends Module
     protected final Setting<Integer> realDelay =
             register(new NumberSetting<>("Delay", 50, 0, 500))
                 .setComplexity(Complexity.Medium);
-    public final Setting<Boolean> onGround  = // this should be true?
-            register(new BooleanSetting("OnGround", false))
+    public final Setting<Boolean> onGround  =
+            register(new BooleanSetting("OnGround", true))
                 .setComplexity(Complexity.Expert);
     protected final Setting<Boolean> toAir     =
             register(new BooleanSetting("ToAir", false))
@@ -95,6 +95,8 @@ public class Speedmine extends Module
     protected final Setting<Boolean> swap      =
             register(new BooleanSetting("SilentSwitch", false))
                 .setComplexity(Complexity.Medium);
+    protected final Setting<Boolean> strict =
+            register(new BooleanSetting("Strict", false));
     protected final Setting<CooldownBypass> cooldownBypass =
             register(new EnumSetting<>("CoolDownBypass", CooldownBypass.None))
                 .setComplexity(Complexity.Medium);
@@ -296,6 +298,7 @@ public class Speedmine extends Module
         this.listeners.add(new ListenerBlockChange(this));
         this.listeners.add(new ListenerMultiBlockChange(this));
         this.listeners.add(new ListenerDeath(this));
+        this.listeners.add(new ListenerSlotChange(this));
         this.listeners.add(new ListenerLogout(this));
         this.listeners.add(new ListenerMotion(this));
         this.listeners.add(new ListenerDigging(this));
@@ -344,6 +347,7 @@ public class Speedmine extends Module
         reset();
     }
 
+
     /**
      * Resets the current pos and all damages dealt to it.
      */
@@ -363,6 +367,16 @@ public class Speedmine extends Module
         {
             damages[i] = 0.0f;
         }
+    }
+    /**
+     * Resets the current pos on slot change and all damages dealt to it.
+     */
+    public void resetSLot()
+    {
+        mc.player.connection.sendPacket(new CPacketPlayerDigging(
+                CPacketPlayerDigging.Action.START_DESTROY_BLOCK,
+                pos,
+                facing));
     }
 
     /**

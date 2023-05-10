@@ -112,6 +112,7 @@ final class ListenerMotion extends ModuleListener<Surround, MotionUpdateEvent>
                         module.confirmed.remove(pos);
                         if (module.placeBlock(pos))
                         {
+                            module.scheduledPlacements.add(pos);
                             break;
                         }
                     }

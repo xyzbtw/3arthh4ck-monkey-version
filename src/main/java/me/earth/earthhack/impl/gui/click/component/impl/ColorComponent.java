@@ -260,6 +260,7 @@ public class ColorComponent extends SettingComponent<Color, ColorSetting> {
                 Managers.TEXT.drawStringWithShadow("Speed: " + ChatFormatting.GRAY + getColorSetting().getRainbowSpeed(), colorPickerLeft, offset + 28, 0xFFFFFFFF);
                 Managers.TEXT.drawStringWithShadow("Saturation: " + ChatFormatting.GRAY + getColorSetting().getRainbowSaturation(), colorPickerLeft, offset + 42, 0xFFFFFFFF);
                 Managers.TEXT.drawStringWithShadow("Brightness: " + ChatFormatting.GRAY + getColorSetting().getRainbowBrightness(), colorPickerLeft, offset + 56, 0xFFFFFFFF);
+
                 Render2DUtil.drawBorderedRect(colorPickerLeft, offset + 36.5f, colorPickerLeft + lengthSpeed, offset + 38.5f, 0.5f, hoveredSpeed ? getColor().get().getModulesColor().brighter().getRGB() : getColor().get().getModulesColor().getRGB(), 0xff000000);
                 if (slidingSpeed) {
                     float speedValue = ((mouseX - colorPickerLeft) * (200.f) / smallWidth);

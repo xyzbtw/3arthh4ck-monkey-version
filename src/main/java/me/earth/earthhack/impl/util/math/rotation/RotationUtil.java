@@ -432,35 +432,42 @@ public class RotationUtil implements Globals
         return current + updated;
     }
 
-    public static int getDirection4D()
-    {
+    public static int getDirection4D() {
         return MathHelper.floor(
-                (mc.player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+                (mc.player.rotationYaw * 8.0F / 360.0F) + 0.5D) & 7;
     }
 
-    public static String getDirection4D(boolean northRed)
-    {
-        switch (getDirection4D())
-        {
+    public static String getDirection8D() {
+        switch (getDirection4D()) {
             case 0:
-                return "South "
-                        + TextColor.GRAY
-                        + "[" + TextColor.WHITE + "+Z" + TextColor.GRAY + "]";
+                return "S "
+                        + TextColor.GRAY  + "[" + TextColor.WHITE + "-Z" + TextColor.GRAY + "]";
             case 1:
-                return "West "
-                        + TextColor.GRAY
-                        + "[" + TextColor.WHITE + "-X" + TextColor.GRAY + "]";
+                return "SW "
+                        + TextColor.GRAY + "[" + TextColor.WHITE + "-Z" + TextColor.GRAY + ", " + TextColor.WHITE + "-X" + TextColor.GRAY + "]";
             case 2:
-                return (northRed ? ChatFormatting.RED : "")
-                        + "North " + TextColor.GRAY + "[" + TextColor.WHITE
-                        + "-Z" + TextColor.GRAY + "]";
+                return "W "
+                        + TextColor.GRAY + "[" + TextColor.WHITE + "-X" + TextColor.GRAY + "]";
             case 3:
+                return "NW "
+                        + TextColor.GRAY + "[" + TextColor.WHITE + "+Z" + TextColor.GRAY + ", " + TextColor.WHITE + "-X" + TextColor.GRAY + "]";
+            case 4:
+                return "N "
+                        + TextColor.GRAY + "[" + TextColor.WHITE + "+Z" + TextColor.GRAY + "]";
+            case 5:
+                return "NE "
+                        + TextColor.GRAY + "[" + TextColor.WHITE + "+Z" + TextColor.GRAY + ", " + TextColor.WHITE + "+X" + TextColor.GRAY + "]";
+            case 6:
+                return "E "
+                        + TextColor.GRAY  + "[" + TextColor.WHITE + "+X" + TextColor.GRAY + "]";
+            case 7:
+                return "SE "
+                        + TextColor.GRAY + "[" + TextColor.WHITE + "-Z" + TextColor.GRAY + ", " + TextColor.WHITE + "+X" + TextColor.GRAY + "]";
             default:
-                return "East "
-                        +TextColor.GRAY
-                        + "[" + TextColor.WHITE + "+X" + TextColor.GRAY + "]";
+                return "";
 
         }
     }
+
 
 }

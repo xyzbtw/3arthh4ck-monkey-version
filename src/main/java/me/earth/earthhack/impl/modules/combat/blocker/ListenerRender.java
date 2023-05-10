@@ -33,16 +33,6 @@ public class ListenerRender extends ModuleListener<Blocker, Render3DEvent> {
                 for (BlockPos thing : renderPos) {
                     if(thing == null) return;
                     if(!BlockUtil.isAir(thing)) return;
-                    final Color boxColor = module.boxColor.getValue();
-                    final Color outlineColor = module.outLine.getValue();
-                    final float height = module.renderheight.getValue();
-                   /*RenderUtil.renderBox(
-                            Interpolation.interpolatePos(thing, height),
-                            boxColor,
-                            outlineColor,
-                            module.linewidth.getValue());
-
-                    */
                     module.renderPos(thing);
                 }
                 renderPos.clear();

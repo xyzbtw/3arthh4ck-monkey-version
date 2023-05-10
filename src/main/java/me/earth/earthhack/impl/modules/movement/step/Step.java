@@ -1,15 +1,25 @@
 package me.earth.earthhack.impl.modules.movement.step;
 
+import me.earth.earthhack.api.cache.ModuleCache;
+import me.earth.earthhack.api.cache.SettingCache;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.EnumSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.managers.Managers;
+import me.earth.earthhack.impl.modules.Caches;
+import me.earth.earthhack.impl.modules.movement.blocklag.BlockLag;
+import me.earth.earthhack.impl.modules.movement.longjump.LongJump;
+import me.earth.earthhack.impl.modules.movement.packetfly.PacketFly;
+import me.earth.earthhack.impl.modules.movement.speed.Speed;
+import me.earth.earthhack.impl.modules.movement.speed.SpeedMode;
 import me.earth.earthhack.impl.util.helpers.disabling.DisablingModule;
 import me.earth.earthhack.impl.util.helpers.render.BlockESPModule;
 import me.earth.earthhack.impl.util.math.StopWatch;
+import net.minecraft.block.BlockSlab;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 
 import java.awt.*;
 
@@ -31,10 +41,20 @@ public class Step extends BlockESPModule
             register(new BooleanSetting("EntityStep", true));
     protected final Setting<Boolean> autoOff =
             register(new BooleanSetting("AutoOff", false));
+    protected final Setting<Boolean> reverseStep =
+            register(new BooleanSetting("ReverseStep", false));
     protected final Setting<Integer> lagTime =
             register(new NumberSetting<>("LagTime", 0, 0, 250));
+    protected final Setting<Double> speed =
+            register(new NumberSetting<>("Speed", 4.0, 0.1, 10.0));
+    protected final Setting<Double> distance =
+            register(new NumberSetting<>("Distance", 3.0, 0.1, 10.0));
+
+    protected final Setting<Boolean> strictLiquid =
+            register(new BooleanSetting("StrictLiquid", false));
     protected final Setting<Boolean> gapple =
             register(new BooleanSetting("Mine-Gapple", false));
+
 
     protected final StopWatch breakTimer = new StopWatch();
     protected AxisAlignedBB bb;
@@ -42,6 +62,9 @@ public class Step extends BlockESPModule
     protected double[] offsets;
     protected double currHeight;
     protected int index;
+    protected boolean jumped;
+    protected boolean waitForOnGround;
+    protected int packets;
 
     protected double x;
     protected double y;
@@ -55,6 +78,7 @@ public class Step extends BlockESPModule
         this.listeners.add(new ListenerBreak(this));
         this.listeners.add(new ListenerRender(this));
         this.listeners.add(new ListenerWorldClient(this));
+        this.listeners.add(new ListenerMotion(this));
         this.listeners.add(new ListenerPreMotionUpdate(this));
         register(new BooleanSetting("Compatibility", false));
         DisablingModule.makeDisablingModule(this);
@@ -112,6 +136,18 @@ public class Step extends BlockESPModule
         bb = null;
         offsets = null;
         index = 0;
+    }
+    protected double getNearestBlockBelow()
+    {
+        for (double y = mc.player.posY; y > 0; y -= 0.001) {
+            if (mc.world.getBlockState(new BlockPos(mc.player.posX, y, mc.player.posZ)).getBlock().getDefaultState().getCollisionBoundingBox(mc.world, new BlockPos(0, 0, 0)) != null) {
+                if (mc.world.getBlockState(new BlockPos(mc.player.posX, y, mc.player.posZ)).getBlock() instanceof BlockSlab) {
+                    return -1;
+                }
+                return y;
+            }
+        }
+        return -1;
     }
 
 }

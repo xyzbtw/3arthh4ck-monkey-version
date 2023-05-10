@@ -9,10 +9,10 @@ import net.minecraft.block.BlockSlab;
 import net.minecraft.util.math.BlockPos;
 
 public class ReverseStep extends Module
-{
-    protected boolean jumped;
+{  protected boolean jumped;
     protected boolean waitForOnGround;
     protected int packets;
+
 
     protected final Setting<Double> speed =
             register(new NumberSetting<>("Speed", 4.0, 0.1, 10.0));

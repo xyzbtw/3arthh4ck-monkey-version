@@ -7,7 +7,6 @@ public class HUDData extends DefaultData<HUD>
     public HUDData(HUD hud)
     {
         super(hud);
-        this.descriptions.put(hud.targethud, "Hud that shows the closest person that's not friended." + "For futur5");
         register(hud.timeFormat, "All letters 'A' to 'Z' and 'a' to 'z' are reserved as pattern letters.\n\n" +
             "    Symbol  Meaning                    \n" +
             "    ------  -------                    \n" +
