@@ -21,12 +21,14 @@ import me.earth.earthhack.impl.modules.movement.autosprint.AutoSprint;
 import me.earth.earthhack.impl.modules.movement.autosprint.mode.SprintMode;
 import me.earth.earthhack.impl.modules.movement.step.Step;
 import me.earth.earthhack.impl.modules.movement.velocity.Velocity;
+import me.earth.earthhack.impl.modules.render.esp.ESP;
 import me.earth.earthhack.impl.modules.render.norender.NoRender;
 import me.earth.earthhack.impl.util.math.StopWatch;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityType;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -60,6 +62,8 @@ public abstract class MixinEntity implements IEntity, Globals
     private static final SettingCache<Boolean, BooleanSetting, Step>
         STEP_COMP = Caches.getSetting
             (Step.class, BooleanSetting.class, "Compatibility", false);
+    private static final ModuleCache<me.earth.earthhack.impl.modules.render.esp.ESP> ESP =
+            Caches.getModule(me.earth.earthhack.impl.modules.render.esp.ESP.class);
 
     private static final SettingCache
         <Integer, NumberSetting<Integer>, Management> DEATH_TIME =
@@ -418,6 +422,13 @@ public abstract class MixinEntity implements IEntity, Globals
                                                     : 0.0F);
             Bus.EVENT_BUS.postReversed(event, null);
         }
+    }
+
+    @Inject(method = "isSneaking", at = @At(value = "HEAD"), cancellable = true)
+    public void isSneaking(CallbackInfoReturnable<Boolean> isSneaking) {
+            if(ESP.isEnabled() && ESP.get().sneak.getValue()){
+                isSneaking.setReturnValue(true);
+            }
     }
 
     @Inject(

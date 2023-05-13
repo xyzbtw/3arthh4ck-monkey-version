@@ -329,11 +329,31 @@ public enum ArmorMode implements Globals
                     int dura = DamageUtil.getDamage(stack) * lvl;
 
                     if (bestElytra == -1
-                        || !prio && dura > bestDura
-                        || prio && dura > threshold && dura < bestDura)
+                            || !prio && dura > bestDura
+                            || prio && dura > threshold && dura < bestDura)
                     {
                         bestElytra = i;
                         bestDura = dura;
+                    }
+
+                    if (dura < stack.getMaxDamage() * 0.2) {
+                        for (int j = i + 1; j < 45; j++) {
+                            ItemStack nextStack = getStack(j);
+                            if (!nextStack.isEmpty()
+                                    && nextStack.getItem() instanceof ItemElytra
+                                    && AutoArmor.curseCheck(nextStack, curse)) {
+
+                                int nextLvl = EnchantmentHelper.getEnchantmentLevel(
+                                        Enchantments.UNBREAKING, nextStack) + 1;
+                                int nextDura = DamageUtil.getDamage(nextStack) * nextLvl;
+
+                                if (nextDura > bestDura) {
+                                    bestElytra = j;
+                                    bestDura = nextDura;
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
 

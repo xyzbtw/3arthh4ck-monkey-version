@@ -37,5 +37,7 @@ public class HitEffects extends Module {
             register(new BooleanSetting("OnlyKills", false));
     protected final Setting<Boolean> onlyTargets =
             register(new BooleanSetting("OnlyTargets", false));
+    protected final Setting<Float> scale =
+            register(new NumberSetting<>("Scale", 1.0f, 0.0f, 10.0f));
 
 }

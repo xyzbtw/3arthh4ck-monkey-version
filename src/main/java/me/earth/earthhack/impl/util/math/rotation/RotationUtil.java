@@ -441,28 +441,28 @@ public class RotationUtil implements Globals
         switch (getDirection4D()) {
             case 0:
                 return "S "
-                        + TextColor.GRAY  + "[" + TextColor.WHITE + "-Z" + TextColor.GRAY + "]";
+                        + TextColor.GRAY  + "[" + TextColor.WHITE + "+Z" + TextColor.GRAY + "]";
             case 1:
                 return "SW "
-                        + TextColor.GRAY + "[" + TextColor.WHITE + "-Z" + TextColor.GRAY + ", " + TextColor.WHITE + "-X" + TextColor.GRAY + "]";
+                        + TextColor.GRAY + "[" + TextColor.WHITE + "-X" + TextColor.GRAY + ", " + TextColor.WHITE + "+Z" + TextColor.GRAY + "]";
             case 2:
                 return "W "
                         + TextColor.GRAY + "[" + TextColor.WHITE + "-X" + TextColor.GRAY + "]";
             case 3:
                 return "NW "
-                        + TextColor.GRAY + "[" + TextColor.WHITE + "+Z" + TextColor.GRAY + ", " + TextColor.WHITE + "-X" + TextColor.GRAY + "]";
+                        + TextColor.GRAY + "[" + TextColor.WHITE + "-X" + TextColor.GRAY + ", " + TextColor.WHITE + "-Z" + TextColor.GRAY + "]";
             case 4:
                 return "N "
-                        + TextColor.GRAY + "[" + TextColor.WHITE + "+Z" + TextColor.GRAY + "]";
+                        + TextColor.GRAY + "[" + TextColor.WHITE + "-Z" + TextColor.GRAY + "]";
             case 5:
                 return "NE "
-                        + TextColor.GRAY + "[" + TextColor.WHITE + "+Z" + TextColor.GRAY + ", " + TextColor.WHITE + "+X" + TextColor.GRAY + "]";
+                        + TextColor.GRAY + "[" + TextColor.WHITE + "+X" + TextColor.GRAY + ", " + TextColor.WHITE + "-Z" + TextColor.GRAY + "]";
             case 6:
                 return "E "
                         + TextColor.GRAY  + "[" + TextColor.WHITE + "+X" + TextColor.GRAY + "]";
             case 7:
                 return "SE "
-                        + TextColor.GRAY + "[" + TextColor.WHITE + "-Z" + TextColor.GRAY + ", " + TextColor.WHITE + "+X" + TextColor.GRAY + "]";
+                        + TextColor.GRAY + "[" + TextColor.WHITE + "+X" + TextColor.GRAY + ", " + TextColor.WHITE + "+Z" + TextColor.GRAY + "]";
             default:
                 return "";
 

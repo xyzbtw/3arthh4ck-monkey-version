@@ -5,6 +5,7 @@ import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.impl.event.events.misc.TickEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.modules.Caches;
+import me.earth.earthhack.impl.modules.combat.autoarmor.modes.ArmorMode;
 import me.earth.earthhack.impl.modules.combat.autoarmor.util.DamageStack;
 import me.earth.earthhack.impl.modules.combat.autoarmor.util.SingleMendingSlot;
 import me.earth.earthhack.impl.modules.player.noinventorydesync.MendingStage;

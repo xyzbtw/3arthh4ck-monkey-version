@@ -129,9 +129,11 @@ public abstract class MixinRenderLivingBase {
             GL11.glEnable(GL11.GL_POLYGON_OFFSET_FILL);
             GL11.glPolygonOffset(1.0f, -1100000.0f);
         }
-        if(ESP_MODULE.get().sneak.getValue() && ESP_MODULE.isEnabled()){
+        /*if(ESP_MODULE.get().sneak.getValue() && ESP_MODULE.isEnabled()){
             entity.setSneaking(true);
         }
+
+         */
     }
 
     @Inject(method = "doRender", at = @At("RETURN"))
@@ -148,9 +150,11 @@ public abstract class MixinRenderLivingBase {
             GL11.glDisable(GL11.GL_POLYGON_OFFSET_FILL);
             GL11.glPolygonOffset(1.0f, 1100000.0f);
         }
-        if(ESP_MODULE.get().sneak.getValue() && ESP_MODULE.isEnabled()){
+       /* if(ESP_MODULE.get().sneak.getValue() && ESP_MODULE.isEnabled()){
             entity.setSneaking(true);
         }
+
+        */
     }
 
     @Inject(method = "renderModel", locals = LocalCapture.CAPTURE_FAILHARD, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/ModelBase;render(Lnet/minecraft/entity/Entity;FFFFFF)V", shift = At.Shift.BEFORE), cancellable = true)
@@ -182,9 +186,11 @@ public abstract class MixinRenderLivingBase {
             }
 
             ci.cancel();
-            if(ESP_MODULE.get().sneak.getValue() && ESP_MODULE.isEnabled()){
+            /*if(ESP_MODULE.get().sneak.getValue() && ESP_MODULE.isEnabled()){
                 entitylivingbaseIn.setSneaking(true);
             }
+
+             */
         }
     }
 
@@ -199,9 +205,11 @@ public abstract class MixinRenderLivingBase {
                                                      limbSwing, limbSwingAmount,
                                                      ageInTicks, netHeadYaw,
                                                      headPitch, scaleFactor));
-        if(ESP_MODULE.get().sneak.getValue() && ESP_MODULE.isEnabled()){
+        /*if(ESP_MODULE.get().sneak.getValue() && ESP_MODULE.isEnabled()){
             entity.setSneaking(true);
         }
+
+         */
     }
 
 

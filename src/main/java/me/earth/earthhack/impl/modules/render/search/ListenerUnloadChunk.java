@@ -2,6 +2,11 @@ package me.earth.earthhack.impl.modules.render.search;
 
 import me.earth.earthhack.impl.event.events.render.UnloadChunkEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+
+import java.util.Iterator;
+import java.util.Map;
 
 final class ListenerUnloadChunk extends ModuleListener<Search, UnloadChunkEvent>
 {
@@ -11,11 +16,10 @@ final class ListenerUnloadChunk extends ModuleListener<Search, UnloadChunkEvent>
     }
 
     @Override
-    public void invoke(UnloadChunkEvent event)
-    {
-        if (module.noUnloaded.getValue() && mc.world != null)
-        {
-            module.toRender.keySet().removeIf(p -> !mc.world.isBlockLoaded(p));
+    public void invoke(UnloadChunkEvent event) {
+        if (module.noUnloaded.getValue() && mc.world != null) {
+            ChunkPos unloadedChunk = event.getChunk().getPos();
+            module.toRender.entrySet().removeIf(entry -> unloadedChunk.equals(new ChunkPos(entry.getKey())));
         }
     }
 

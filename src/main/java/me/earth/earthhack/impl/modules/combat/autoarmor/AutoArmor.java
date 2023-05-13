@@ -163,9 +163,6 @@ public class AutoArmor extends Module
             .setComplexity(Complexity.Expert);
     protected final Setting<Boolean> softInInv =
         register(new BooleanSetting("SoftInInv", false));
-    protected final Setting<Boolean> hotSwap =
-        register(new BooleanSetting("HotSwap", false))
-            .setComplexity(Complexity.Expert);
     protected final Setting<Boolean> fast =
         register(new BooleanSetting("Unsafe-Fast", false))
             .setComplexity(Complexity.Expert);

@@ -32,7 +32,7 @@ public class CoordAnnouncer extends DisablingModule {
 
         if(mc.world == null || mc.player == null) return;
         BlockPos coords = PlayerUtil.getPlayerPos();
-        StringSelection stringSelection = new StringSelection(String.valueOf(coords));
+        StringSelection stringSelection = new StringSelection("X: " + coords.getX() + " Y: " + coords.getY() + " Z: " + coords.getZ());
 
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(stringSelection, null);

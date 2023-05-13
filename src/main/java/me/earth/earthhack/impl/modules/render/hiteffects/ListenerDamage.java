@@ -3,7 +3,11 @@ package me.earth.earthhack.impl.modules.render.hiteffects;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.util.math.StopWatch;
 
+import me.earth.earthhack.impl.util.render.Interpolation;
+import me.earth.earthhack.impl.util.render.Render2DUtil;
+import me.earth.earthhack.impl.util.render.RenderUtil;
 import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -27,7 +31,7 @@ public class ListenerDamage extends ModuleListener<HitEffects, LivingHurtEvent> 
 
     // TIMERS
     StopWatch renderTimer = new StopWatch();
-    @SideOnly(Side.CLIENT) // makes this client-sided :^)
+    @Override
     public void invoke(LivingHurtEvent event)
     {
         if(module.onlyTargets.getValue())
@@ -48,12 +52,14 @@ public class ListenerDamage extends ModuleListener<HitEffects, LivingHurtEvent> 
             }
             if(module.superheroFx.getValue())
             {
-                if(firstDraw)
+                if(renderTimer.passed(300))
                 {
+                    AxisAlignedBB bb =
+                            Interpolation.interpolateAxis(
+                                    new AxisAlignedBB(event.getEntity().posX, event.getEntity().posY,  event.getEntity().posZ,  event.getEntity().posX+1,  event.getEntity().posY+2,  event.getEntity().posZ+1));
+                    RenderUtil.drawNametag(SuperheroParticle(),bb, module.scale.getValue(), SuperheroColor().hashCode());
                     renderTimer.reset();
-                    firstDraw = false;
                 }
-
             }
         }
     }

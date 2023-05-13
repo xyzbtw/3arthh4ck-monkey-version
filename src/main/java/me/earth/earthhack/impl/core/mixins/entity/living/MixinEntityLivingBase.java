@@ -437,9 +437,11 @@ public abstract class MixinEntityLivingBase extends MixinEntity
 
     @Inject(method = "isChild", at = @At("HEAD"), cancellable = true)
     public void isChild(CallbackInfoReturnable<Boolean> child) {
-        boolean isChild = ESP.isEnabled() ? ESP.get().child.getValue() : false;
-        child.setReturnValue(isChild);
+        if(ESP.isEnabled() && ESP.get().child.getValue()){
+            child.setReturnValue(true);
+        }
     }
+
 
 
 

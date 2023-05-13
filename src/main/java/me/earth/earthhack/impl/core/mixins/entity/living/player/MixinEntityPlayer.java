@@ -128,6 +128,7 @@ public abstract class MixinEntityPlayer extends MixinEntityLivingBase implements
         }
     }
 
+
     @Inject(
         method = "isEntityInsideOpaqueBlock",
         at = @At(value="HEAD"),
