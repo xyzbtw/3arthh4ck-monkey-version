@@ -14,6 +14,7 @@ import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
 import me.earth.earthhack.impl.util.minecraft.blocks.SpecialBlocks;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import me.earth.earthhack.impl.util.network.PacketUtil;
+import me.earth.earthhack.impl.util.otherplayers.IgnoreSelfClosest;
 import me.earth.earthhack.impl.util.thread.Locks;
 import me.earth.earthhack.pingbypass.PingBypass;
 import net.minecraft.block.state.IBlockState;
@@ -59,6 +60,13 @@ final class ListenerMotion extends ModuleListener<BlockLag, MotionUpdateEvent> {
 
         if (module.isInsideBlock()) {
             return;
+        }
+
+        EntityPlayer closest = IgnoreSelfClosest.GetClosestIgnore(3.0d);
+        if( closest != null &&
+                closest.getEntityBoundingBox().intersects(mc.player.getEntityBoundingBox())
+                && !module.isInsideBlock()){
+            module.disable();
         }
 
         EntityPlayer rEntity = mc.player;

@@ -119,6 +119,7 @@ final class ListenerUpdate extends ModuleListener<Speedmine, UpdateEvent>
         if (module.pos != null)
         {
             Blocker.speedminecache.add(module.pos);
+            if(module.mode.getValue() == MineMode.Compatibility) return;
             if ((module.mode.getValue() == MineMode.Smart
                         || module.mode.getValue() == MineMode.Fast
                         || module.mode.getValue() == MineMode.Instant
@@ -128,6 +129,13 @@ final class ListenerUpdate extends ModuleListener<Speedmine, UpdateEvent>
             {
                 module.abortCurrentPos();
                 return;
+            }
+
+            if(Managers.SWITCH.getLastSwitch()<=25 && module.strict.getValue()){
+                module.pausing=true;
+            }else if(Managers.SWITCH.getLastSwitch()>250 && module.strict.getValue()){
+                module.pausing=false;
+                module.tryBreak();
             }
 
             if (module.mode.getValue() == MineMode.Fast) {

@@ -7,6 +7,8 @@ import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.ColorSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
+import me.earth.earthhack.impl.event.events.misc.TickEvent;
+import me.earth.earthhack.impl.event.listeners.LambdaListener;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.player.speedmine.Speedmine;
 import me.earth.earthhack.impl.util.client.ModuleUtil;
@@ -67,15 +69,18 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian>{
     protected final Setting<Boolean> debug =
             register(new BooleanSetting("Debug", false));
 
+
     protected EntityPlayer target;
     protected final ModuleCache<Speedmine> speedmine = Caches.getModule(Speedmine.class);
     protected BlockPos niglet;
 
     public Blocker() {
         super("Blocker", Category.Combat);
+        this.listeners.clear(); // Remove DisablingModule listeners
         this.listeners.add(new ListenerBlockBreakAnim(this));
         this.listeners.add(new ListenerBlockChange(this));
         this.listeners.add(new ListenerUpdate(this));
+        this.listeners.add(new ListenerObsidian(this));
         this.listeners.add(new ListenerRender(this));
         this.setData(new BlockerData(this));
 
@@ -107,6 +112,7 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian>{
     {
         esp.render(Interpolation.interpolatePos(pos, renderheight.getValue()));
     }
+
 
 
     @Override
@@ -154,6 +160,7 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian>{
             scheduledPlacements.add(pos.offset(EnumFacing.EAST));
             scheduledPlacements.add(pos.offset(EnumFacing.WEST));
             niglet = null;
+            return;
         }
 
 
@@ -161,7 +168,7 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian>{
             return;
 
 
-        if(pos == playerPos.add(0,2,0)){
+        if(pos == playerPos.add(0,2,0) && anticev.getValue()){
             scheduledPlacements.add(pos.add(0,1,0));
             return;
         }
@@ -171,9 +178,11 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian>{
         for(EnumFacing face : EnumFacing.values()) {
             if(pos.offset(face).equals(playerPos)) continue;
 
-            if(mc.world.isAirBlock(pos.offset(EnumFacing.DOWN))){
+           /* if(mc.world.isAirBlock(pos.offset(EnumFacing.DOWN))){
                 scheduledPlacements.add(pos.offset(EnumFacing.DOWN));
             }
+
+            */
 
             if(fullExtend.getValue()){
                 if(pos.getY()==playerPos.getY()){
@@ -183,7 +192,7 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian>{
                 }
             }else {
                 if(playerPos.offset(face).equals(pos)){
-                    if(this.extend.getValue()){
+                    if(this.extend.getValue() && face != EnumFacing.DOWN){
                        scheduledPlacements.add(playerPos.offset(face).offset(face));
                     }
 
@@ -198,11 +207,6 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian>{
             }
         }
 
-    }
-    @Override
-    public boolean execute()
-    {
-        return super.execute();
     }
 
     @Override

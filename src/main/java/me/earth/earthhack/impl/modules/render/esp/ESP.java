@@ -76,6 +76,8 @@ public class ESP extends Module {
             register(new ColorSetting("InvisibleColor", new Color(180, 180, 255, 255)));
     public final Setting<Color> friendColor =
             register(new ColorSetting("FriendColor", new Color(50, 255, 50, 255)));
+    public final Setting<Color> crystalcolor          =
+            register(new ColorSetting("CrystalColor", new Color(255, 255, 255, 255)));
     public final Setting<Color> targetColor =
             register(new ColorSetting("TargetColor", new Color(255, 0, 0, 255)));
     protected final Setting<Float> scale =
@@ -211,7 +213,7 @@ public class ESP extends Module {
                 && monsters.getValue()) {
             return new Color(200, 60, 60, 255);
         } else if (entity instanceof EntityEnderCrystal && misc.getValue()) {
-            return new Color(200, 100, 200, 255);
+            return crystalcolor.getValue();
         } else if (entity instanceof EntityPlayer && players.getValue()) {
             EntityPlayer player = (EntityPlayer) entity;
             if (player.isInvisible()) {

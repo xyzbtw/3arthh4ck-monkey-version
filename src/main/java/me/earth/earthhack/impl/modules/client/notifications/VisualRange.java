@@ -21,10 +21,10 @@ final class VisualRange extends ModuleListener<Notifications, TickEvent> {
     List<Entity> players;
     @Override
     public void invoke(TickEvent event){
-        if (mc.world == null || mc.player == null || mc.player.getUniqueID() == null)
+        if (mc.world == null || mc.player == null) {
             return;
+        }
 
-        if (mc.player == null) return;
         players = mc.world.loadedEntityList.stream().filter(e -> e instanceof EntityPlayer).collect(Collectors.toList());
         try {
             for (Entity e : players) {
@@ -35,7 +35,7 @@ final class VisualRange extends ModuleListener<Notifications, TickEvent> {
                     }
                 }
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         try {
             for (Entity e : knownPlayers) {
@@ -46,7 +46,7 @@ final class VisualRange extends ModuleListener<Notifications, TickEvent> {
                     }
                 }
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     };
 

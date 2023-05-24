@@ -5,6 +5,7 @@ import me.earth.earthhack.impl.event.events.misc.TickEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.util.minecraft.MovementUtil;
+import me.earth.earthhack.impl.util.network.NetworkUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemFood;
@@ -25,6 +26,12 @@ final class ListenerTick extends ModuleListener<NoSlowDown, TickEvent>
     {
         Managers.NCP.setStrict(module.guiMove.getValue()
                                     && module.legit.getValue());
+        if (event.isSafe() && module.invStrictAlways.getValue() && mc.player.isSprinting() && !mc.player.onGround)
+        {
+            {
+                NetworkUtil.send(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SPRINTING));
+            }
+        }
         if (event.isSafe()
                 && module.legit.getValue()
                 && module.items.getValue())

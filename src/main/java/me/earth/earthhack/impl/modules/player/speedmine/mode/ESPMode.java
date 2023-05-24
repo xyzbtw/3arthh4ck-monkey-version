@@ -36,15 +36,7 @@ public enum ESPMode {
             Outline.drawEsp(module, bb);
             Block.drawEsp(module, bb);
         }
-    },
-    Europa()
-            {
-                @Override
-                public void drawEsp(Speedmine module, AxisAlignedBB bb) {
-                    RenderUtilEuropa.drawFilledBox(bb,module.color.getValue());
-                    RenderUtilEuropa.drawBlockOutline(bb, module.color.getValue(), module.lineWidth.getValue());
-                }
-            };
+    };
 
     public abstract void drawEsp(Speedmine module, AxisAlignedBB bb);
 

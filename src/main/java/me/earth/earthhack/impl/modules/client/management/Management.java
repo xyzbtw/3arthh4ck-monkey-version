@@ -12,10 +12,19 @@ import me.earth.earthhack.api.setting.settings.EnumSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.util.minecraft.CooldownBypass;
+import me.earth.earthhack.impl.util.misc.ClipboardUtil;
 import me.earth.earthhack.impl.util.text.ChatUtil;
 import net.minecraft.client.entity.EntityPlayerSP;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Comparator;
+import java.util.Optional;
 
 /**
  * {@link me.earth.earthhack.impl.core.mixins.util.MixinScreenShotHelper}
@@ -115,5 +124,19 @@ public class Management extends Module
     {
         return fogColor.getValue();
     }
+    public static Image getLatestScreenshot() throws IOException {
+        File path = new File("/screenshots/");
+        Optional<Path> lastFilePath = Files.list(path.toPath())
+                .filter(f -> !Files.isDirectory(f))
+                .max(Comparator.comparingLong(f -> f.toFile().lastModified()));
+        return new ImageIcon(lastFilePath.get().toString()).getImage();
+    }
 
+    public static void copyToClipboard(Image image) {
+        new Thread(() -> {
+            ClipboardUtil image1 = new ClipboardUtil(image);
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(image1, null);
+        }).start();
+    }
 }

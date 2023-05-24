@@ -8,7 +8,8 @@ public enum MineMode
     Fast(true),
     Instant(true),
     Civ(true),
-    Damage(false);
+    Damage(false),
+    Compatibility(true);
 
     /**
      * True if this mode can break the same block multiple times.

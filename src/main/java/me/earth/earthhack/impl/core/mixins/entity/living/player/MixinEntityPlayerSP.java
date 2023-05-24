@@ -6,6 +6,7 @@ import me.earth.earthhack.api.event.bus.instance.Bus;
 import me.earth.earthhack.api.event.events.Stage;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.impl.core.ducks.entity.IEntityPlayerSP;
+import me.earth.earthhack.impl.event.events.misc.EventSendMessage;
 import me.earth.earthhack.impl.event.events.misc.UpdateEvent;
 import me.earth.earthhack.impl.event.events.movement.BlockPushEvent;
 import me.earth.earthhack.impl.event.events.network.MotionUpdateEvent;
@@ -538,6 +539,14 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer
         if (!isSpectator() && SPECTATE.isEnabled())
         {
             cir.setReturnValue(true);
+        }
+    }
+    @Inject(method = "sendChatMessage", at = @At("HEAD"), cancellable = true)
+        private void onSendChatMessage(String message, CallbackInfo ci) {
+        EventSendMessage event = new EventSendMessage(message);
+        Bus.EVENT_BUS.post(event);
+        if (event.isCancelled()) {
+            ci.cancel();
         }
     }
 

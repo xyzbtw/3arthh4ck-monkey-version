@@ -133,5 +133,28 @@ final class ListenerObby extends ObbyListener<HoleFiller>
         result.setTargets(targets);
         return result;
     }
+    @Override
+    protected boolean update()
+    {
+        if (updatePlaced())
+        {
+            return false;
+        }
+
+        module.slot = getSlot();
+        if (module.slot == -1)
+        {
+            return false;
+        }
+
+        if (hasTimerNotPassed())
+        {
+            return false;
+        }
+
+        TargetResult result = getTargets(new TargetResult());
+        targets = result.getTargets();
+        return result.isValid();
+    }
 
 }

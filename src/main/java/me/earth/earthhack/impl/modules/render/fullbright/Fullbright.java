@@ -35,11 +35,7 @@ public class Fullbright extends Module
     @Override
     protected void onDisable()
     {
-        if (mc.gameSettings.gammaSetting == previousGamma) {
-            mc.gameSettings.gammaSetting = 1f;
-        } else {
-            mc.gameSettings.gammaSetting = previousGamma;
-        }
+        mc.gameSettings.gammaSetting = previousGamma;
         if (mc.player != null && mode.getValue() == BrightMode.Potion)
         {
             mc.player.removePotionEffect(MobEffects.NIGHT_VISION);

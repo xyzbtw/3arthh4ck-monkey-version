@@ -84,7 +84,6 @@ final class ListenerPlayerPackets extends CPacketPlayerListener
                 return;
             }
         }
-
         timer.pSpeed  = 1.0f;
         timer.sent    = 0;
         timer.packets = 0;

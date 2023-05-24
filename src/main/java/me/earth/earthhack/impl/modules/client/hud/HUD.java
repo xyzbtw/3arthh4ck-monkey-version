@@ -67,6 +67,12 @@ public class HUD extends Module {
             register(new StringSetting("LogoText", "3arthh4ck"));
     protected final Setting<Boolean> coordinates =
             register(new BooleanSetting("Coordinates", true));
+    protected final Setting<Boolean> fakecoords =
+            register(new BooleanSetting("Fakecoords", false));
+    protected final Setting<Integer> fakex =
+            register(new NumberSetting<>("Fake-X", 1, -30000000, 30000000));
+    protected final Setting<Integer> fakez =
+            register(new NumberSetting<>("Fake-Z", 1, -30000000, 30000000));
     protected final Setting<Boolean> armor =
             register(new BooleanSetting("Armor", true));
     protected final Setting<Boolean> totems =
@@ -287,10 +293,21 @@ public class HUD extends Module {
             final long x = Math.round(mc.player.posX);
             final long y = Math.round(mc.player.posY);
             final long z = Math.round(mc.player.posZ);
-            final String coords = mc.player.dimension == -1 ?   String.format(ChatFormatting.PREFIX_CODE + "7%,d " + ChatFormatting.PREFIX_CODE + "f[%,d]" + ChatFormatting.PREFIX_CODE + "8, " + ChatFormatting.PREFIX_CODE + "7%,d" + ChatFormatting.PREFIX_CODE + "8, " + ChatFormatting.PREFIX_CODE + "7%,d " + ChatFormatting.PREFIX_CODE + "f[%,d]", x, x * 8, y, z, z * 8) :
-                    (mc.player.dimension == 0 ?
-                            String.format(ChatFormatting.PREFIX_CODE + "f%,d " + ChatFormatting.PREFIX_CODE + "7[%,d]" + ChatFormatting.PREFIX_CODE + "8, " + ChatFormatting.PREFIX_CODE + "f%,d" + ChatFormatting.PREFIX_CODE + "8, " + ChatFormatting.PREFIX_CODE + "f%,d " + ChatFormatting.PREFIX_CODE + "7[%,d]", x, x / 8, y, z, z / 8) :
-                            String.format(ChatFormatting.PREFIX_CODE + "f%,d" + ChatFormatting.PREFIX_CODE + "8, " + ChatFormatting.PREFIX_CODE + "f%,d" + ChatFormatting.PREFIX_CODE + "8, " + ChatFormatting.PREFIX_CODE + "f%,d", x, y, z));
+            final String coords = mc.player.dimension == -1 ?
+                    String.format(ChatFormatting.PREFIX_CODE + "7%,d "
+                            + ChatFormatting.PREFIX_CODE + "f[%,d]"
+                            + ChatFormatting.PREFIX_CODE + "8, "
+                            + ChatFormatting.PREFIX_CODE + "7%,d"
+                            + ChatFormatting.PREFIX_CODE + "8, "
+                            + ChatFormatting.PREFIX_CODE + "7%,d "
+                            + ChatFormatting.PREFIX_CODE + "f[%,d]", fakecoords.getValue() ? fakex.getValue() + x : x,  fakecoords.getValue() ? (x+fakex.getValue())*8 : x * 8, y,
+                            fakecoords.getValue() ? fakez.getValue()+z : z,  fakecoords.getValue() ? (x+fakez.getValue())*8 : z * 8) :
+                    (mc.player.dimension == 0
+                            ? String.format(ChatFormatting.PREFIX_CODE + "f%,d " + ChatFormatting.PREFIX_CODE + "7[%,d]" + ChatFormatting.PREFIX_CODE + "8, " + ChatFormatting.PREFIX_CODE + "f%,d" + ChatFormatting.PREFIX_CODE + "8, " + ChatFormatting.PREFIX_CODE + "f%,d " + ChatFormatting.PREFIX_CODE + "7[%,d]",
+                            fakecoords.getValue() ? fakex.getValue() + x : x,  fakecoords.getValue() ? (x+fakex.getValue())/8 : x / 8, y,
+                            fakecoords.getValue() ? fakez.getValue()+z : z,  fakecoords.getValue() ? (x+fakez.getValue())/8 : z / 8)
+                            : String.format(ChatFormatting.PREFIX_CODE + "f%,d" + ChatFormatting.PREFIX_CODE + "8, " + ChatFormatting.PREFIX_CODE + "f%,d" + ChatFormatting.PREFIX_CODE + "8, " + ChatFormatting.PREFIX_CODE + "f%,d",
+                            fakecoords.getValue() ? fakex.getValue() + x : x, y, fakecoords.getValue() ? fakez.getValue() + z : z));
             renderText(coords, 2, height - 2 - RENDERER.getStringHeightI() - animationY);
             final String dir = RotationUtil.getDirection8D();
             renderText(dir, 2, height - 4 - RENDERER.getStringHeightI() * 2 - animationY);

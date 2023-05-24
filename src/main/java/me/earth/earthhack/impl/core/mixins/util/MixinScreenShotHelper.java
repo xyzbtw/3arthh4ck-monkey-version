@@ -24,6 +24,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -57,6 +58,7 @@ public abstract class MixinScreenShotHelper
         {
             try
             {
+
                 return makeScreenShot(
                         gameDirectory, name, width, height, buffer);
             }
@@ -145,7 +147,6 @@ public abstract class MixinScreenShotHelper
                 }
             }
         }));
-
         component.getStyle().setUnderlined(true);
         return component;
     }

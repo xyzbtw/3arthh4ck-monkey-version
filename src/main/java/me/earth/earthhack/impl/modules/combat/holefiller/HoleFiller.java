@@ -72,7 +72,6 @@ public class HoleFiller extends ObbyListenerModule<ListenerObby>
         this.listeners.add(this.listener);
         this.setData(new HoleFillerData(this));
     }
-
     @Override
     public String getDisplayInfo()
     {

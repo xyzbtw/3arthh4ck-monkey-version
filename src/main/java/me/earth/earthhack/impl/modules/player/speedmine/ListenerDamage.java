@@ -143,6 +143,9 @@ final class ListenerDamage extends ModuleListener<Speedmine, DamageBlockEvent>
                     }
 
                     break;
+                case Compatibility:{
+                    module.pos = event.getPos();
+                }
                 default:
             }
         }

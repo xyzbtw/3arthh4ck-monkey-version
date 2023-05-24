@@ -48,10 +48,16 @@ public class NoSlowDown extends Module
             register(new NumberSetting<>("Timer", 8.0, 0.1, 20.0));
     protected final Setting<Boolean> onGroundSpoof    =
             register(new BooleanSetting("OnGroundSpoof", false));
+
+
     protected final Setting<Boolean> superStrict =
             register(new BooleanSetting("SuperStrict", false));
     protected final Setting<Boolean> phobosGui =
             register(new BooleanSetting("PhobosGui", false));
+    protected final Setting<Boolean> invStrict =
+            register(new BooleanSetting("InvStrict", false));
+    protected final Setting<Boolean> invStrictAlways =
+            register(new BooleanSetting("InvStrictAlways", false));
 
 
 
@@ -88,6 +94,8 @@ public class NoSlowDown extends Module
         this.listeners.add(new ListenerInput(this));
         this.listeners.add(new ListenerTick(this));
         this.listeners.add(new ListenerMove(this));
+        this.listeners.add(new ListenerClickWindow(this));
+        this.listeners.add(new ListenerEntityAction(this));
         this.listeners.add(new ListenerPostKeys(this));
         this.listeners.add(new ListenerRightClickItem(this));
         this.listeners.add(new ListenerTryUseItem(this));

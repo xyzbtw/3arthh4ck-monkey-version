@@ -298,7 +298,6 @@ public class Speedmine extends Module
         this.listeners.add(new ListenerBlockChange(this));
         this.listeners.add(new ListenerMultiBlockChange(this));
         this.listeners.add(new ListenerDeath(this));
-        this.listeners.add(new ListenerSlotChange(this));
         this.listeners.add(new ListenerLogout(this));
         this.listeners.add(new ListenerMotion(this));
         this.listeners.add(new ListenerDigging(this));
@@ -373,10 +372,17 @@ public class Speedmine extends Module
      */
     public void resetSLot()
     {
-        mc.player.connection.sendPacket(new CPacketPlayerDigging(
-                CPacketPlayerDigging.Action.START_DESTROY_BLOCK,
-                pos,
-                facing));
+        maxDamage  = 0.0f;
+        sentPacket = false;
+        limitRotationSlot = -1;
+        limitRotationPacket = null;
+        fastHelper.reset();
+        AUTO_MINE.computeIfPresent(AutoMine::reset);
+
+        for (int i = 0; i < 9; i++)
+        {
+            damages[i] = 0.0f;
+        }
     }
 
     /**

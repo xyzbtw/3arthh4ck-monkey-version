@@ -82,7 +82,16 @@ public class MathUtil {
     {
         return i * i;
     }
-
+    public static double roundToClosest(double num, double low, double high)
+    {
+        double d2 = high - num;
+        double d1 = num - low;
+        if (d2 > d1)
+        {
+            return low;
+        }
+        return high;
+    }
     /**
      * A simple to Math.pow operation, taking
      * integers as power.

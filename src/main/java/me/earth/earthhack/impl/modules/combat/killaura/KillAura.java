@@ -3,6 +3,7 @@ package me.earth.earthhack.impl.modules.combat.killaura;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
+import me.earth.earthhack.api.setting.settings.ColorSetting;
 import me.earth.earthhack.api.setting.settings.EnumSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.managers.Managers;
@@ -36,6 +37,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+
+import java.awt.*;
 
 public class KillAura extends EntityTypeModule
 {
@@ -113,6 +116,10 @@ public class KillAura extends EntityTypeModule
         register(new BooleanSetting("Hold-Mouse", false));
     protected final Setting<AuraSwitch> autoSwitch =
         register(new EnumSetting<>("AutoSwitch", AuraSwitch.None));
+    protected final Setting<Boolean> targetRender =
+            register(new BooleanSetting("Target-Render", true));
+    protected final Setting<Color> jelloColor =
+            register(new ColorSetting("Jello", new Color(255, 255, 255, 255)));
 
     protected final RotationSmoother rotationSmoother =
             new RotationSmoother(Managers.ROTATION);
@@ -132,6 +139,7 @@ public class KillAura extends EntityTypeModule
         super("KillAura", Category.Combat);
         this.listeners.add(new ListenerMotion(this));
         this.listeners.add(new ListenerRiding(this));
+        this.listeners.add(new ListenerRender(this));
         this.listeners.add(new ListenerGameLoop(this));
         this.listeners.add(new ListenerEntityEquipment(this));
         this.setData(new KillAuraData(this));
