@@ -13,7 +13,8 @@ public class ListenerEat extends ModuleListener<SmartBlockLag,EatEvent> {
 
     @Override
     public void invoke(EatEvent event) {
-        if(event.getStack().getItem() instanceof ItemChorusFruit){
+        if(event.getStack().getItem() instanceof ItemChorusFruit
+                && event.getEntity() == mc.player){
             module.atechorus=true;
         }
     }
