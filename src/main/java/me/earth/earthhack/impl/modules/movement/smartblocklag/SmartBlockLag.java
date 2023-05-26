@@ -25,6 +25,7 @@ public class SmartBlockLag extends Module {
         super("SmartBlockLag", Category.Movement);
         this.listeners.add(new ListenerTick(this));
         this.listeners.add(new ListenerTeleport(this));
+        this.listeners.add(new ListenerEat(this));
     }
     protected final Setting<Float> smartRange =
             register(new NumberSetting<>("Range", 3.0f, 0.0f, 10.0f));
@@ -41,6 +42,7 @@ public class SmartBlockLag extends Module {
 
     protected final StopWatch delayTimer = new StopWatch();
     public boolean blockTeleporting;
+    protected boolean atechorus = false;
     public void onEnable(){
         delayTimer.setTime(0);
         if(mc.isSingleplayer()){
@@ -59,12 +61,9 @@ public class SmartBlockLag extends Module {
 
         return null;
     }
-
-    protected boolean isInsideBlock() {
-        double x = mc.player.posX;
-        double y = mc.player.posY + 0.20;
-        double z = mc.player.posZ;
-
-        return mc.world.getBlockState(new BlockPos(x, y, z)).getMaterial().blocksMovement() || !mc.player.collidedVertically;
+    @Override
+    public void onDisable(){
+        super.onDisable();
+        atechorus = false;
     }
 }

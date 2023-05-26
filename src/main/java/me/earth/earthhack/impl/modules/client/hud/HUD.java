@@ -1,5 +1,7 @@
 package me.earth.earthhack.impl.modules.client.hud;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
@@ -46,6 +48,8 @@ import net.minecraft.potion.PotionEffect;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.io.IOException;
+import java.net.URL;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -65,6 +69,10 @@ public class HUD extends Module {
             register(new BooleanSetting("Logo", true));
     protected final Setting<String> logoText =
             register(new StringSetting("LogoText", "3arthh4ck"));
+    protected final Setting<Boolean> motd =
+            register(new BooleanSetting("MOTD", false));
+    protected final Setting<String> serverstring =
+            register(new StringSetting("ServerString", "2b2t.org"));
     protected final Setting<Boolean> coordinates =
             register(new BooleanSetting("Coordinates", true));
     protected final Setting<Boolean> fakecoords =
@@ -251,6 +259,9 @@ public class HUD extends Module {
 
             renderText(tps, width - 2 - RENDERER.getStringWidth(tps), height - 2 - RENDERER.getStringHeightI() - offset - animationY);
             offset += RENDERER.getStringHeightI() + textOffset.getValue();
+        }
+        if(motd.getValue()){
+            renderText(motdthing(), width - 2 - RENDERER.getStringWidth(motdthing()), height - 2 - RENDERER.getStringHeightI() - offset - animationY);
         }
 
         if (time.getValue()) {
@@ -493,6 +504,23 @@ public class HUD extends Module {
                && getArrayEntries().containsKey(((PbModule) module)
                                                     .getModule());
     }
+    public String motdthing(){
+        try {
+            String ip = serverstring.getValue();  // replace with the IP address of the server
+            int port = 25565;  // replace with the port of the server
+            String url = "https://api.mcsrvstat.us/2/" + ip + ":" + port;
 
+            // make a GET request to the API endpoint
+            String json = new Scanner(new URL(url).openStream(), "UTF-8").useDelimiter("\\A").next();
+
+            // parse the JSON response
+            JsonObject response = new JsonObject();
+
+            return response.getAsJsonObject("motd").get("clean").getAsString();
+        }catch (Exception ignored) {
+
+        }
+        return "Not Defined";
+    }
 
 }

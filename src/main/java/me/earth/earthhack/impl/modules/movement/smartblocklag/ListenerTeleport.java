@@ -16,11 +16,13 @@ public class ListenerTeleport extends ModuleListener<SmartBlockLag, PacketEvent.
         EntityPlayerSP player = mc.player;
         if (player != null
                 && module.teleport.getValue()
-                && !module.blockTeleporting) {
+                && !module.blockTeleporting
+                && module.atechorus) {
             if(!ListenerTick.burrow.isEnabled()){
                 ListenerTick.burrow.enable();
+                module.atechorus=false;
                 if(module.chorusdisable.getValue()
-                        && !BlockUtil.isReplaceable(
+                        || !BlockUtil.isReplaceable(
                                 module.pos.add(0,0.2,0)))
                     ListenerTick.burrow.disable();
             }
