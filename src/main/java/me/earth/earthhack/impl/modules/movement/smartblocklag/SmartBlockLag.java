@@ -54,12 +54,12 @@ public class SmartBlockLag extends Module {
     @Override
     public String getDisplayInfo()
     {
-        if (target != null)
+        if (target != null && mc.player.getDistance(target) < 5)
         {
             return TextColor.RED + target.getName();
         }
 
-        return null;
+        return "No target";
     }
     @Override
     public void onDisable(){

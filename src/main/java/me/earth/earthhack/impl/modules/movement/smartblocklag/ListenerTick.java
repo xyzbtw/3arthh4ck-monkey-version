@@ -32,15 +32,14 @@ public class ListenerTick extends ModuleListener<SmartBlockLag, TickEvent> {
             return;
         }
         module.target = EntityUtil.getClosestEnemy();
+        if(module.target.getDistance(mc.player) > module.smartRange.getValue()) return;
         module.pos = PlayerUtil.getPlayerPos();
         BlockPos posabovehead = module.pos.add(0,2,0);
-        if (    !(Boolean)module.holeonly.getValue() || PlayerUtil.isInHole(mc.player)
-                && !mc.isSingleplayer()
+        if (    !module.holeonly.getValue() || PlayerUtil.isInHoleAll(mc.player)
                 && module.target != null
                 && !PhaseUtil.isPhasing(module.target, PushMode.MP)
                 && !Managers.FRIENDS.contains(module.target)
-                && mc.player.getDistance(module.target) <= module.smartRange.getValue()
-                && !PlayerUtil.isInHole(module.target)
+                && !PlayerUtil.isInHoleAll(module.target)
                 && !burrow.isEnabled()
                 && BlockUtil.isReplaceable(module.pos.add(0,0.2,0))
                 && !PhaseUtil.isPhasing(mc.player, PushMode.MP)
@@ -51,7 +50,6 @@ public class ListenerTick extends ModuleListener<SmartBlockLag, TickEvent> {
                 }
                 burrow.enable();
                 module.delayTimer.reset();
-                module.target = null;
                 if(module.turnoff.getValue()){
                     module.disable();
                 }

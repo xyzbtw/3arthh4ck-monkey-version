@@ -10,6 +10,8 @@ import me.earth.earthhack.impl.util.math.position.PositionUtil;
 import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
 import me.earth.earthhack.impl.util.minecraft.DamageUtil;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
+import me.earth.earthhack.impl.util.minecraft.PhaseUtil;
+import me.earth.earthhack.impl.util.minecraft.PushMode;
 import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
 import me.earth.earthhack.impl.util.minecraft.blocks.SpecialBlocks;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
@@ -58,16 +60,18 @@ final class ListenerMotion extends ModuleListener<BlockLag, MotionUpdateEvent> {
             }
         }
 
-        if (module.isInsideBlock()) {
+        if (PhaseUtil.isPhasing(mc.player, PushMode.MP)) {
             return;
         }
 
         EntityPlayer closest = IgnoreSelfClosest.GetClosestIgnore(3.0d);
-        if( closest != null &&
-                closest.getEntityBoundingBox().intersects(mc.player.getEntityBoundingBox())
-                && !module.isInsideBlock()){
-            module.disable();
+        double bottomY = mc.player.getEntityBoundingBox().minY + (mc.player.getEntityBoundingBox().maxY - mc.player.getEntityBoundingBox().minY) / 2;
+        if (closest != null
+                && closest.getEntityBoundingBox().intersects(mc.player.getEntityBoundingBox().setMaxY(bottomY))) {
+            return;
         }
+
+
 
         EntityPlayer rEntity = mc.player;
         if (BlockLag.FREECAM.isEnabled()) {
