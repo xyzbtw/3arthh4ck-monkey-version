@@ -7,39 +7,39 @@ import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.movement.blocklag.BlockLag;
+import me.earth.earthhack.impl.util.math.MathUtil;
+import me.earth.earthhack.impl.util.math.position.PositionUtil;
 import me.earth.earthhack.impl.util.minecraft.PhaseUtil;
 import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 import me.earth.earthhack.impl.util.minecraft.PushMode;
 import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
-import me.earth.earthhack.impl.util.minecraft.blocks.states.BlockStateHelper;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
-import net.minecraft.block.BlockAir;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 
-public class ListenerTick extends ModuleListener<SmartBlockLag, TickEvent> {
-    public ListenerTick(SmartBlockLag module) {
-        super(module, TickEvent.class);
+public class ListenerUpdate extends ModuleListener<SmartBlockLag, UpdateEvent> {
+    public ListenerUpdate(SmartBlockLag module) {
+        super(module, UpdateEvent.class);
     }
     public static final ModuleCache<BlockLag> burrow =
             Caches.getModule(BlockLag.class);
 
 
     @Override
-    public void invoke(TickEvent event) {
+    public void invoke(UpdateEvent event) {
         if(mc.world == null || mc.player == null){
             return;
         }
         module.target = EntityUtil.getClosestEnemy();
-        if(module.target.getDistance(mc.player) > module.smartRange.getValue()) return;
         module.pos = PlayerUtil.getPlayerPos();
         BlockPos posabovehead = module.pos.add(0,2,0);
-        if (    !module.holeonly.getValue() || PlayerUtil.isInHoleAll(mc.player)
+        if (    !module.holeonly.getValue() || isInHole(mc.player)
                 && module.target != null
-                && !PhaseUtil.isPhasing(module.target, PushMode.MP)
                 && !Managers.FRIENDS.contains(module.target)
-                && !PlayerUtil.isInHoleAll(module.target)
+                && mc.player.getDistanceSq(module.target) < MathUtil.square(module.smartRange.getValue())
+                && !isInHole(module.target)
                 && !burrow.isEnabled()
                 && BlockUtil.isReplaceable(module.pos.add(0,0.2,0))
                 && !PhaseUtil.isPhasing(mc.player, PushMode.MP)
@@ -54,6 +54,15 @@ public class ListenerTick extends ModuleListener<SmartBlockLag, TickEvent> {
                     module.disable();
                 }
         }
+    }
+    public boolean isInHole(EntityPlayer player) {
+        BlockPos position = PositionUtil.getPosition(player);
+        int count = 0;
+        for (EnumFacing face : EnumFacing.values()) {
+            if (face == EnumFacing.UP || face == EnumFacing.DOWN) continue;
+            if (!BlockUtil.isReplaceable(position.offset(face))) count++;
+        }
+        return count >= (module.twobyone.getValue() ? 3 : 4);
     }
 }
 

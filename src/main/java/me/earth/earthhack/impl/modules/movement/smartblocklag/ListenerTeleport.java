@@ -18,13 +18,13 @@ public class ListenerTeleport extends ModuleListener<SmartBlockLag, PacketEvent.
                 && module.teleport.getValue()
                 && !module.blockTeleporting
                 && module.atechorus) {
-            if(!ListenerTick.burrow.isEnabled()){
-                ListenerTick.burrow.enable();
+            if(!ListenerUpdate.burrow.isEnabled()){
+                ListenerUpdate.burrow.enable();
                 module.atechorus=false;
                 if(module.chorusdisable.getValue()
                         || !BlockUtil.isReplaceable(
                                 module.pos.add(0,0.2,0)))
-                    ListenerTick.burrow.disable();
+                    ListenerUpdate.burrow.disable();
             }
         }
     }

@@ -7,12 +7,9 @@ import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.util.math.StopWatch;
-import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
-import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import me.earth.earthhack.impl.util.text.ChatIDs;
 import me.earth.earthhack.impl.util.text.TextColor;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
 import static net.minecraft.util.math.MathHelper.floor;
@@ -23,7 +20,7 @@ public class SmartBlockLag extends Module {
 
     public SmartBlockLag() {
         super("SmartBlockLag", Category.Movement);
-        this.listeners.add(new ListenerTick(this));
+        this.listeners.add(new ListenerUpdate(this));
         this.listeners.add(new ListenerTeleport(this));
         this.listeners.add(new ListenerEat(this));
     }
@@ -33,6 +30,8 @@ public class SmartBlockLag extends Module {
             register(new BooleanSetting("AutoOff", false));
     protected  final Setting<Boolean> holeonly =
             register(new BooleanSetting("OnlyInHole", false));
+    protected  final Setting<Boolean> twobyone =
+            register(new BooleanSetting("2x1", false));
     protected  final Setting<Boolean> teleport =
             register(new BooleanSetting("OnTeleport", false));
     protected  final Setting<Boolean> chorusdisable =

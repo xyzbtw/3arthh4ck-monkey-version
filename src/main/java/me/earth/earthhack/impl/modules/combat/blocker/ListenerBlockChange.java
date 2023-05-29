@@ -5,7 +5,9 @@ import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.util.client.ModuleUtil;
 import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 import net.minecraft.block.BlockAir;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.multiplayer.GuiConnecting;
+import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.network.play.server.SPacketBlockChange;
 import net.minecraft.util.math.BlockPos;
 
@@ -26,7 +28,9 @@ public class ListenerBlockChange extends ModuleListener<Blocker, PacketEvent.Rec
                                                             PlayerUtil.getPlayerPos().getY(),
                                                             PlayerUtil.getPlayerPos().getZ()) > 10) return;
 
-
+        if (mc.world.getEntityByID(event.getPacket().getBlockPosition().getY()) instanceof EntityEnderCrystal) {
+            return;
+        }
         if (event.getPacket().getBlockState().getBlock() instanceof BlockAir) {
             final BlockPos blockPosition = event.getPacket().getBlockPosition();
             if(Blocker.speedminecache.contains(blockPosition)){
