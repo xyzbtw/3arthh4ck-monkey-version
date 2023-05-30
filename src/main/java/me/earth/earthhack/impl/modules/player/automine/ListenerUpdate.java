@@ -77,7 +77,7 @@ final class ListenerUpdate extends ModuleListener<AutoMine, UpdateEvent>
             return;
         }
 
-        if ((module.mode.getValue() == AutoMineMode.Combat
+       if ((module.mode.getValue() == AutoMineMode.Combat
             || module.mode.getValue() == AutoMineMode.AntiTrap)
             && (!SPEED_MINE.isEnabled()
             || !(SPEED_MINE.get().getMode() == MineMode.Smart
@@ -90,8 +90,12 @@ final class ListenerUpdate extends ModuleListener<AutoMine, UpdateEvent>
                  + "Disabled, enable Speedmine - Smart for AutoMine - Combat!");
             }
 
-            return;
+            if(!module.futurecomp.getValue()){
+               return;
+           }
         }
+
+
 
         if (mc.player.isCreative()
             || mc.player.isSpectator()
@@ -101,8 +105,14 @@ final class ListenerUpdate extends ModuleListener<AutoMine, UpdateEvent>
             && (module.current == null
             || !module.current.equals(SPEED_MINE.get().getPos()))))
         {
-            return;
+            if(!module.futurecomp.getValue()){
+                return;
+            }
         }
+
+
+
+
 
         BlockPos invalid = null;
         if (module.constellation != null)

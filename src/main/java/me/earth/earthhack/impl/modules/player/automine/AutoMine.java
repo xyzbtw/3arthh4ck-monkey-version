@@ -19,11 +19,13 @@ import me.earth.earthhack.impl.util.math.RayTraceUtil;
 import me.earth.earthhack.impl.util.math.StopWatch;
 import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
 import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
+import me.earth.earthhack.impl.util.network.NetworkUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
+import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -46,6 +48,10 @@ public class AutoMine extends BlockAddingModule implements IAutomine
         register(new BooleanSetting("Head", false));
     protected final Setting<Boolean> rotate = // TODO
         register(new BooleanSetting("Rotate", false));
+    protected final Setting<Boolean> futurecomp =
+            register(new BooleanSetting("FutureThing", false));
+    protected final Setting<Boolean> raytrace =
+            register(new BooleanSetting("Raytrace", false));
     protected final Setting<Boolean> self =
         register(new BooleanSetting("Self", true));
     protected final Setting<Boolean> prioSelf =
@@ -154,6 +160,7 @@ public class AutoMine extends BlockAddingModule implements IAutomine
     protected boolean attacking;
     protected BlockPos current;
     protected BlockPos last;
+    protected float[] rotations;
 
     public AutoMine()
     {
@@ -309,6 +316,15 @@ public class AutoMine extends BlockAddingModule implements IAutomine
         // Prevents Reset from getting called by Speedmine.
         this.attacking = true;
         assert facing != null;
+        if(raytrace.getValue()){
+            if(!RayTraceUtil.canBeSeen(pos.getX(), pos.getY(), pos.getZ(), mc.player)){
+                reset();
+                return;
+            }
+        }
+        if(rotate.getValue()){
+            rotations = RotationUtil.getRotations(pos, facing, mc.player);
+        }
         mc.playerController.onPlayerDamageBlock(pos, facing);
         this.attacking = false;
         this.timer.reset();

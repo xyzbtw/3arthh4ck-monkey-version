@@ -38,6 +38,7 @@ public class ListenerUpdate extends ModuleListener<SmartBlockLag, UpdateEvent> {
         if (    !module.holeonly.getValue() || isInHole(mc.player)
                 && module.target != null
                 && !Managers.FRIENDS.contains(module.target)
+                && !PhaseUtil.isPhasing(module.target, PushMode.MP)
                 && mc.player.getDistanceSq(module.target) < MathUtil.square(module.smartRange.getValue())
                 && !isInHole(module.target)
                 && !burrow.isEnabled()
