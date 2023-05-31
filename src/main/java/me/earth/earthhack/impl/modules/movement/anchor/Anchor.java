@@ -26,7 +26,9 @@ import me.earth.earthhack.impl.modules.render.holeesp.invalidation.Hole;
 import me.earth.earthhack.impl.modules.render.holeesp.invalidation.HoleManager;
 import me.earth.earthhack.impl.modules.render.holeesp.invalidation.SimpleHoleManager;
 import me.earth.earthhack.impl.util.client.SimpleData;
+import me.earth.earthhack.impl.util.math.RayTraceUtil;
 import me.earth.earthhack.impl.util.math.StopWatch;
+import me.earth.earthhack.impl.util.math.raytrace.RayTracer;
 import me.earth.earthhack.impl.util.minecraft.MovementUtil;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -47,6 +49,8 @@ public class Anchor extends Module
     private final Setting<InputMode> inputMode = register(new EnumSetting<>("Input-Mode", InputMode.Keys));
     private final Setting<Float> pitch = register(new NumberSetting<>("Pitch", 90f, -90f, 90f));
     private final Setting<Integer> delay = register(new NumberSetting<>("Delay", 400, 0, 5000));
+    private final Setting<Integer> yblocks = register(new NumberSetting<>("Y-Down", 1, 1, 6));
+    private final Setting<Integer> pullRange = register(new NumberSetting<>("PullRange", 1, 0, 3));
     private final Setting<Mode> yMode = register(new EnumSetting<>("Y-Mode", Mode.Off));
     private final Setting<Double> y = register(new NumberSetting<>("Y-Speed", 0.0, -10.0, 10.0));
     private final Setting<Mode> xzMode = register(new EnumSetting<>("XZ-Mode", Mode.Constant));
@@ -88,13 +92,12 @@ public class Anchor extends Module
             holeManager.reset();
             BlockPos pos = mc.player.getPosition();
             holeFinder.setChunk((IChunk) mc.world.getChunk(pos));
-            holeFinder.setMaxX(pos.getX() + 1);
-            holeFinder.setMinX(pos.getX() - 1);
+            holeFinder.setMaxX(pos.getX() + pullRange.getValue());
+            holeFinder.setMinX(pos.getX() - pullRange.getValue());
             holeFinder.setMaxY(pos.getY());
-            // TODO: what about 2 block deep holes?
-            holeFinder.setMinY(pos.getY() - 1);
-            holeFinder.setMaxZ(pos.getZ() + 1);
-            holeFinder.setMinZ(pos.getZ() - 1);
+            holeFinder.setMinY(pos.getY() - yblocks.getValue());
+            holeFinder.setMaxZ(pos.getZ() + pullRange.getValue());
+            holeFinder.setMinZ(pos.getZ() - pullRange.getValue());
             holeFinder.calcHoles();
 
             Hole hole = holeManager.getHoles()
@@ -179,6 +182,8 @@ public class Anchor extends Module
             "-NoKeys: module is only active while you are not pressing any movement keys.\n" +
             "-Keys: module is only active while you are pressing movement keys.");
         data.register(movingTowardsCheck, "Checks if you are moving towards the hole.");
+        data.register(yblocks, "How deep the holes can be");
+        data.register(pullRange, "How many blocks away you can be from hole");
         this.setData(data);
     }
 
