@@ -24,4 +24,6 @@ public class AutoRespawn extends Module
         this.setData(new AutoRespawnData(this));
     }
 
+
+
 }

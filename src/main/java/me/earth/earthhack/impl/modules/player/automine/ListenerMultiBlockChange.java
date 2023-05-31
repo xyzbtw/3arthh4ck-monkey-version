@@ -31,6 +31,9 @@ final class ListenerMultiBlockChange extends
             for (SPacketMultiBlockChange.BlockUpdateData data :
                     packet.getChangedBlocks())
             {
+                if(data.getPos() == module.current){
+                    module.current=null;
+                }
                 if (module.constellation.isAffected(
                         data.getPos(), data.getBlockState()))
                 {

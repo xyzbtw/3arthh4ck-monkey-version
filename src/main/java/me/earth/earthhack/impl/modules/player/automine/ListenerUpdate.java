@@ -18,6 +18,7 @@ import me.earth.earthhack.impl.modules.player.speedmine.Speedmine;
 import me.earth.earthhack.impl.modules.player.speedmine.mode.MineMode;
 import me.earth.earthhack.impl.util.client.ModuleUtil;
 import me.earth.earthhack.impl.util.math.MathUtil;
+import me.earth.earthhack.impl.util.math.RayTraceUtil;
 import me.earth.earthhack.impl.util.math.position.PositionUtil;
 import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
 import me.earth.earthhack.impl.util.minecraft.MovementUtil;
@@ -113,7 +114,6 @@ final class ListenerUpdate extends ModuleListener<AutoMine, UpdateEvent>
 
 
 
-
         BlockPos invalid = null;
         if (module.constellation != null)
         {
@@ -189,6 +189,14 @@ final class ListenerUpdate extends ModuleListener<AutoMine, UpdateEvent>
                 && (state = mc.world.getBlockState(position))
                 .getBlock() == Blocks.ENDER_CHEST)
             {
+                if (module.rotate.getValue()
+                        && !module.rotationSmoother.isRotating()
+                        && module.rotationSmoother.getRotationTicks()
+                        < module.rotationTicks.getValue())
+                {
+                    module.rotationSmoother.incrementRotationTicks();
+                    return;
+                }
                 attackPos(position,
                           new Constellation(mc.world,
                                             mc.player,
@@ -385,14 +393,16 @@ final class ListenerUpdate extends ModuleListener<AutoMine, UpdateEvent>
                             && headState.getBlock() == Blocks.OBSIDIAN
                             && module.isValidCrystalPos(upUp))
                         {
-                            attackPos(upUp,
-                                      new CrystalConstellation(mc.world,
-                                                               player,
-                                                               upUp,
-                                                               playerPos,
-                                                               headState,
-                                                               module));
-                            return true;
+                            if(module.rotationSmoother.getRotationTicks()>=module.rotationTicks.getValue()) {
+                                attackPos(upUp,
+                                        new CrystalConstellation(mc.world,
+                                                player,
+                                                upUp,
+                                                playerPos,
+                                                headState,
+                                                module));
+                                return true;
+                            }
                         }
                     }
 
@@ -537,6 +547,14 @@ final class ListenerUpdate extends ModuleListener<AutoMine, UpdateEvent>
             if (isValid(offset, state)
                 && module.checkCrystalPos(offset.offset(facing).down()))
             {
+                if (module.rotate.getValue()
+                        && !module.rotationSmoother.isRotating()
+                        && module.rotationSmoother.getRotationTicks()
+                        < module.rotationTicks.getValue())
+                {
+                    module.rotationSmoother.incrementRotationTicks();
+                    return false;
+                }
                 attackPos(offset,
                           new Constellation(mc.world,
                                             player,
@@ -571,6 +589,13 @@ final class ListenerUpdate extends ModuleListener<AutoMine, UpdateEvent>
             && pos.equals(module.current))
         {
             return;
+        }
+
+        if(module.rotate.getValue()){
+            EnumFacing facing = RayTraceUtil.getFacing(
+                    RotationUtil.getRotationPlayer(), pos, true);
+            assert facing !=null;
+            module.rotations = RotationUtil.getRotations(pos, facing, mc.player);
         }
 
         module.offer(c);

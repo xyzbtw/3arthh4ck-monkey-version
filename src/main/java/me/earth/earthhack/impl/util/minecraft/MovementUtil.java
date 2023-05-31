@@ -1,7 +1,12 @@
 package me.earth.earthhack.impl.util.minecraft;
 
+import me.earth.earthhack.api.cache.Cache;
+import me.earth.earthhack.api.cache.ModuleCache;
 import me.earth.earthhack.api.util.interfaces.Globals;
 import me.earth.earthhack.impl.event.events.movement.MoveEvent;
+import me.earth.earthhack.impl.modules.Caches;
+import me.earth.earthhack.impl.modules.movement.anchor.Anchor;
+import me.earth.earthhack.impl.modules.movement.badanchor.BadAnchor;
 import me.earth.earthhack.pingbypass.input.Keyboard;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.MobEffects;
@@ -12,6 +17,8 @@ import java.util.Objects;
 
 public class MovementUtil implements Globals
 {
+
+    protected static ModuleCache<BadAnchor> anchorCache = Caches.getModule(BadAnchor.class);
     public static boolean isMoving()
     {
         return mc.player.moveForward != 0.0 || mc.player.moveStrafing != 0.0;
@@ -76,6 +83,7 @@ public class MovementUtil implements Globals
 
     public static void strafe(MoveEvent event, double speed)
     {
+        if((BadAnchor.pulling && Caches.getModule(BadAnchor.class).isEnabled()) || (Caches.getModule(Anchor.class).isEnabled() && Anchor.pulling))return;
         if (isMoving())
         {
             double[] strafe = strafe(speed);

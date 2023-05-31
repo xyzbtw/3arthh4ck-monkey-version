@@ -36,7 +36,7 @@ final class ListenerMove
                 mc.player.motionY = 0.0;
                 event.setY(0.0);
             }
-            MovementUtil.strafe(event, 0.2783);
+            MovementUtil.strafe(event, 0.2873);
         }
     }
 }

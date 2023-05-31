@@ -55,8 +55,7 @@ import java.util.List;
 /**
  * A module specialized on placing Obsidian.
  */
-// TODO: VERY IMPORTANT: REPLACE ALL IS_REPLACEABLE CHECKS WITH CAN_COLLIDE! (?)
-// TODO: check if we run out of blocks, before sending all the packets...
+
 public abstract class BlockPlacingModule extends DisablingModule
 {
     private static final ModuleCache<NoGlitchBlocks> NO_GLITCH_BLOCKS =

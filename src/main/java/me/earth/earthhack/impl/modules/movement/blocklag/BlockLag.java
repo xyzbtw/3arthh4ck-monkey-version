@@ -153,6 +153,7 @@ public class BlockLag extends DisablingModule
             return;
         }
 
+
         startPos = getPlayerPos();
         if (singlePlayerCheck(startPos))
         {

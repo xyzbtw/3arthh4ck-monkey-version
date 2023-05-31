@@ -61,7 +61,7 @@ public class Anchor extends Module
     private final Setting<Boolean> movingTowardsCheck = register(new BooleanSetting("MovingTowardsCheck", false));
     private final Setting<Boolean> movingTowardsWithoutKeys = register(new BooleanSetting("MovingTowardsWithoutKeys", false));
     private final Setting<Boolean> holeCheck = register(new BooleanSetting("HoleCheck", true)).setComplexity(Complexity.Expert);
-    private final Setting<Boolean> oldCheck = register(new BooleanSetting("HoleCheck", false)).setComplexity(Complexity.Expert);
+    private final Setting<Boolean> oldCheck = register(new BooleanSetting("OldHoleCheck", false)).setComplexity(Complexity.Expert);
     private final Setting<Boolean> filterByY = register(new BooleanSetting("FilterByY", true)).setComplexity(Complexity.Expert);
 
     // TODO: higher distance for 2x1 and 2x2
@@ -70,7 +70,7 @@ public class Anchor extends Module
     private final HoleManager holeManager = new SimpleHoleManager();
     private final AirHoleFinder holeFinder = new AirHoleFinder(holeManager);
     private final StopWatch timer = new StopWatch();
-
+    public static boolean pulling = false;
     public Anchor()
     {
         super("Anchor", Category.Movement);
@@ -81,6 +81,7 @@ public class Anchor extends Module
                 || !Managers.NCP.passed(lagTime.getValue())
                 || !sneaking.getValue() && mc.player.isSneaking())
             {
+                pulling=false;
                 return;
             }
 
@@ -108,12 +109,14 @@ public class Anchor extends Module
                                    .orElse(null);
             if (hole == null)
             {
+                pulling=false;
                 return;
             }
 
             if (oldCheck.getValue() && Math.ceil(mc.player.posY) == hole.getY()
                 || holeCheck.getValue() && isInHole())
             {
+                pulling=false;
                 timer.reset();
                 return;
             }
@@ -132,6 +135,7 @@ public class Anchor extends Module
                 || mc.player.rotationPitch > pitch.getValue()
                 || holeCheck.getValue() && isInHole())
             {
+                pulling=false;
                 return;
             }
 
@@ -143,9 +147,10 @@ public class Anchor extends Module
             {
                 event.setX(0.0);
                 event.setY(0.0);
+                pulling=false;
                 return;
             }
-
+            pulling=true;
             // TODO: also take slowness into account?
             double pull_factor = xz.getValue() / distance;
             event.setX(modify(xzMode.getValue(), event.getX(), x * pull_factor));

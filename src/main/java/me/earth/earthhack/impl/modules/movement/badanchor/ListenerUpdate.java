@@ -41,12 +41,16 @@ public class ListenerUpdate extends ModuleListener<BadAnchor, UpdateEvent> {
                     mc.player.motionX = 0.0;
                     mc.player.motionZ = 0.0;
                 } else {
+                    BadAnchor.pulling =true;
                     Vec3d center = GetCenter(mc.player.posX, mc.player.posY, mc.player.posZ);
                     double MotionX = center.x-mc.player.posX;
                     double MotionZ = center.z-mc.player.posZ;
                     mc.player.motionX = MotionX/2;
                     mc.player.motionZ = MotionZ/2;
                 }
+            }
+            else{
+                BadAnchor.pulling =false;
             }
         }
     }

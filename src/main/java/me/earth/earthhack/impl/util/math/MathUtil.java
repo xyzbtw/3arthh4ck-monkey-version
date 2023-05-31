@@ -1,6 +1,7 @@
 package me.earth.earthhack.impl.util.math;
 
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
@@ -113,6 +114,19 @@ public class MathUtil {
         }
 
         return result;
+    }
+    public static double distanceTo(final BlockPos blockPos) {
+        return distanceTo(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+    }
+
+    public static double distanceTo(final double x, final double y, final double z) {
+        if (mc.player == null) {
+            return 0.0;
+        }
+        final float f = (float)(mc.player.posX - x);
+        final float g = (float)(mc.player.posY - y);
+        final float h = (float)(mc.player.posZ - z);
+        return MathHelper.sqrt(f * f + g * g + h * h);
     }
 
     public static double round(double value, int places) {

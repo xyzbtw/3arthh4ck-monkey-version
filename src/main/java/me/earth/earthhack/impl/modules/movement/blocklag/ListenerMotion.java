@@ -59,7 +59,6 @@ final class ListenerMotion extends ModuleListener<BlockLag, MotionUpdateEvent> {
                 return;
             }
         }
-
         if (PhaseUtil.isPhasing(mc.player, PushMode.MP)) {
             return;
         }

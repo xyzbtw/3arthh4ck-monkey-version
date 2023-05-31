@@ -3,6 +3,7 @@ package me.earth.earthhack.impl.modules.movement.speed;
 import me.earth.earthhack.api.util.interfaces.Globals;
 import me.earth.earthhack.impl.event.events.movement.MoveEvent;
 import me.earth.earthhack.impl.managers.Managers;
+import me.earth.earthhack.impl.modules.movement.badanchor.BadAnchor;
 import me.earth.earthhack.impl.util.math.MathUtil;
 import me.earth.earthhack.impl.util.math.position.PositionUtil;
 import me.earth.earthhack.impl.util.minecraft.KeyBoardUtil;
@@ -24,6 +25,7 @@ public enum SpeedMode implements Globals
             if (!module.noWaterInstant.getValue()
                     || (!mc.player.isInWater() && !mc.player.isInLava()))
             {
+
                 MovementUtil.strafe(event, MovementUtil.getSpeed(module.slow.getValue()));
             }
         }

@@ -6,6 +6,7 @@ import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.EnumSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
+import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.player.automine.mode.AutoMineMode;
 import me.earth.earthhack.impl.modules.player.automine.util.BigConstellation;
@@ -17,6 +18,7 @@ import me.earth.earthhack.impl.util.helpers.addable.BlockAddingModule;
 import me.earth.earthhack.impl.util.helpers.addable.ListType;
 import me.earth.earthhack.impl.util.math.RayTraceUtil;
 import me.earth.earthhack.impl.util.math.StopWatch;
+import me.earth.earthhack.impl.util.math.rotation.RotationSmoother;
 import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
 import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
 import me.earth.earthhack.impl.util.network.NetworkUtil;
@@ -27,6 +29,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
@@ -48,6 +51,8 @@ public class AutoMine extends BlockAddingModule implements IAutomine
         register(new BooleanSetting("Head", false));
     protected final Setting<Boolean> rotate = // TODO
         register(new BooleanSetting("Rotate", false));
+    protected final Setting<Integer> rotationTicks =
+            register(new NumberSetting<>("Rotation-Ticks", 0, 0, 10));
     protected final Setting<Boolean> futurecomp =
             register(new BooleanSetting("FutureThing", false));
     protected final Setting<Boolean> raytrace =
@@ -158,10 +163,14 @@ public class AutoMine extends BlockAddingModule implements IAutomine
     protected IConstellation constellation;
     protected Future<?> future;
     protected boolean attacking;
-    protected BlockPos current;
+    protected BlockPos current, rot;
+    protected boolean hasRotated=false;
     protected BlockPos last;
-    protected float[] rotations;
+    protected EnumFacing facing;
 
+    protected float[] rotations;
+    protected final RotationSmoother rotationSmoother =
+            new RotationSmoother(Managers.ROTATION);
     public AutoMine()
     {
         super("AutoMine",
@@ -171,7 +180,9 @@ public class AutoMine extends BlockAddingModule implements IAutomine
         this.listeners.add(new ListenerBlockChange(this));
         this.listeners.add(new ListenerMultiBlockChange(this));
         this.listeners.add(new ListenerWorldClient(this));
+        this.listeners.add(new ListenerClick(this));
         this.listeners.add(new ListenerPlace(this));
+        this.listeners.add(new ListenerMove(this));
         this.listType.setValue(ListType.BlackList);
 
         SimpleData data = new SimpleData(this, "Automatically mines Blocks.");
@@ -256,6 +267,8 @@ public class AutoMine extends BlockAddingModule implements IAutomine
 
             constellation = null;
             current = null;
+            rotations=null;
+            hasRotated=false;
             if (offset.getValue() != 0)
             {
                 timer.setTime(System.currentTimeMillis() + offset.getValue());
@@ -317,15 +330,18 @@ public class AutoMine extends BlockAddingModule implements IAutomine
         this.attacking = true;
         assert facing != null;
         if(raytrace.getValue()){
-            if(!RayTraceUtil.canBeSeen(pos.getX(), pos.getY(), pos.getZ(), mc.player)){
-                reset();
-                return;
-            }
+           if(!RayTraceUtil.canBeSeen(current.getX(), current.getY(), current.getZ(), RotationUtil.getRotationPlayer())){
+               reset();
+               return;
+           }
         }
-        if(rotate.getValue()){
-            rotations = RotationUtil.getRotations(pos, facing, mc.player);
+        if(hasRotated && rotate.getValue()) {
+            mc.player.swingArm(EnumHand.MAIN_HAND);
+            mc.playerController.onPlayerDamageBlock(pos, facing);
+        }else if(!rotate.getValue()){
+            mc.player.swingArm(EnumHand.MAIN_HAND);
+            mc.playerController.onPlayerDamageBlock(pos, facing);
         }
-        mc.playerController.onPlayerDamageBlock(pos, facing);
         this.attacking = false;
         this.timer.reset();
     }

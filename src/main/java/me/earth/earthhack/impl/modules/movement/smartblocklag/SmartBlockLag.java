@@ -6,6 +6,7 @@ import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.managers.Managers;
+import me.earth.earthhack.impl.util.client.ModuleUtil;
 import me.earth.earthhack.impl.util.math.StopWatch;
 import me.earth.earthhack.impl.util.text.ChatIDs;
 import me.earth.earthhack.impl.util.text.TextColor;
@@ -43,9 +44,8 @@ public class SmartBlockLag extends Module {
     public boolean blockTeleporting;
     protected boolean atechorus = false;
     public void onEnable(){
-        delayTimer.setTime(0);
         if(mc.isSingleplayer()){
-            Managers.CHAT.sendDeleteMessage("Not a multiplayer world retard", getName(), ChatIDs.MODULE);
+            ModuleUtil.disableRed(this,  "Not a multiplayer world retard" );
             this.disable();
         }
         target = null;
@@ -63,6 +63,7 @@ public class SmartBlockLag extends Module {
     @Override
     public void onDisable(){
         super.onDisable();
+        delayTimer.reset();
         atechorus = false;
     }
 }

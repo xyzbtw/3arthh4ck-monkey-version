@@ -21,8 +21,12 @@ final class ListenerBlockChange extends
         }
 
         SPacketBlockChange packet = event.getPacket();
+
         mc.addScheduledTask(() ->
         {
+            if(module.current == packet.getBlockPosition()){
+                module.current=null;
+            }
             if (module.constellation != null && module.constellation.isAffected(
                     packet.getBlockPosition(), packet.getBlockState()))
             {

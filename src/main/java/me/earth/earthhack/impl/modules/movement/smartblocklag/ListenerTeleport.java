@@ -2,6 +2,7 @@ package me.earth.earthhack.impl.modules.movement.smartblocklag;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
+import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.network.play.client.CPacketConfirmTeleport;

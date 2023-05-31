@@ -18,5 +18,11 @@ public class BadAnchor extends Module {
         this.listeners.add(new ListenerUpdate(this));
     }
 
+    public static boolean pulling=false;
 
+    @Override
+    public void onDisable(){
+        super.onDisable();
+        pulling=false;
+    }
 }
