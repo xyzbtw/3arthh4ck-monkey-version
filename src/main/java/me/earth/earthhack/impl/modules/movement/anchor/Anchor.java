@@ -132,7 +132,7 @@ public class Anchor extends Module
                 || inputMode.getValue() == InputMode.Keys && MovementUtil.noMovementKeys()
                 || inputMode.getValue() == InputMode.NoKeys && !MovementUtil.noMovementKeys()
                 || !timer.passed(delay.getValue())
-                || mc.player.rotationPitch > pitch.getValue()
+                || mc.player.rotationPitch < pitch.getValue()
                 || holeCheck.getValue() && isInHole())
             {
                 pulling=false;

@@ -23,6 +23,7 @@ public class ListenerUpdate extends ModuleListener<BadAnchor, UpdateEvent> {
             return;
         }
         if (mc.player.posY < 0) {
+            BadAnchor.pulling =false;
             return;
         }
         if (mc.player.rotationPitch >= module.pitch.getValue()) {
@@ -48,11 +49,8 @@ public class ListenerUpdate extends ModuleListener<BadAnchor, UpdateEvent> {
                     mc.player.motionX = MotionX/2;
                     mc.player.motionZ = MotionZ/2;
                 }
-            }
-            else{
-                BadAnchor.pulling =false;
-            }
-        }
+            } else BadAnchor.pulling =false;
+        } else BadAnchor.pulling =false;
     }
 
     public Vec3d GetCenter(double posX, double posY, double posZ) {
