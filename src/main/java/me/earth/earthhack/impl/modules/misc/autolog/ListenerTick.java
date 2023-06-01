@@ -2,6 +2,8 @@ package me.earth.earthhack.impl.modules.misc.autolog;
 
 import me.earth.earthhack.impl.event.events.misc.TickEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
+import me.earth.earthhack.impl.modules.Caches;
+import me.earth.earthhack.impl.modules.misc.autoreconnect.AutoReconnect;
 import me.earth.earthhack.impl.util.math.MathUtil;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
@@ -23,7 +25,11 @@ final class ListenerTick extends ModuleListener<AutoLog, TickEvent>
             float health = module.absorption.getValue()
                             ? EntityUtil.getHealth(mc.player)
                             : mc.player.getHealth();
-
+            if(module.ykick.getValue()){
+                if(mc.player.getPosition().getY() <= module.ylevel.getValue()){
+                    module.disconnect(health, null,InventoryUtil.getCount(Items.TOTEM_OF_UNDYING));
+                }
+            }
             if (health <= module.health.getValue())
             {
                 EntityPlayer player = module.enemy.getValue() == 100

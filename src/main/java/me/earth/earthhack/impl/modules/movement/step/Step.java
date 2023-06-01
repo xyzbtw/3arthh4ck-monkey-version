@@ -43,6 +43,8 @@ public class Step extends BlockESPModule
             register(new BooleanSetting("AutoOff", false));
     protected final Setting<Boolean> reverseStep =
             register(new BooleanSetting("ReverseStep", false));
+    protected final Setting<Boolean> stopsneak =
+            register(new BooleanSetting("StopOnSneak", false));
     protected final Setting<Integer> lagTime =
             register(new NumberSetting<>("LagTime", 0, 0, 250));
     protected final Setting<Double> speed =

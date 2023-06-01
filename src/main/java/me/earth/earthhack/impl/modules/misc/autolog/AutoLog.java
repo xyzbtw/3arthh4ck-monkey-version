@@ -5,6 +5,8 @@ import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
+import me.earth.earthhack.impl.modules.Caches;
+import me.earth.earthhack.impl.modules.misc.autoreconnect.AutoReconnect;
 import me.earth.earthhack.impl.util.math.MathUtil;
 import me.earth.earthhack.impl.util.network.ServerUtil;
 import net.minecraft.client.multiplayer.ServerData;
@@ -21,6 +23,12 @@ public class AutoLog extends Module
             register(new NumberSetting<>("Enemy", 12.0f, 0.0f, 100.0f));
     protected final Setting<Boolean> absorption =
             register(new BooleanSetting("Absorption", false));
+    protected final Setting<Boolean> ykick =
+            register(new BooleanSetting("Y-Kick", false));
+    protected final Setting<Float> ylevel       =
+            register(new NumberSetting<>("Y-Level", 30f, -20f, 255f));
+    protected final Setting<Boolean> disablereconnect =
+            register(new BooleanSetting("DisableAutoreconnect", false));
 
     protected ServerData serverData;
     protected String message;
@@ -48,7 +56,9 @@ public class AutoLog extends Module
             + (closest == null
                 ? ""
                 : " Closest Enemy: " + closest.getName() + ".");
-
+        if(Caches.getModule(AutoReconnect.class).isEnabled() && disablereconnect.getValue()){
+            Caches.getModule(AutoReconnect.class).disable();
+        }
         this.serverData = mc.getCurrentServerData();
         this.awaitScreen = true;
         NetHandlerPlayClient connection = mc.getConnection();
@@ -60,6 +70,7 @@ public class AutoLog extends Module
         {
             ServerUtil.disconnectFromMC(message);
         }
+        this.disable();
     }
 
 }
