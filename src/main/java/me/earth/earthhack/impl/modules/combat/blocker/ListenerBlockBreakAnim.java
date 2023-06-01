@@ -27,6 +27,7 @@ public class ListenerBlockBreakAnim extends ModuleListener<Blocker, PacketEvent.
         if(mc.player==null)return;
         if(mc.currentScreen instanceof GuiConnecting)return;
         if(!module.onanim.getValue()) return;
+        if(event.getPacket().getBreakerId() == mc.player.getEntityId()) return;
         if(event.getPacket().getPosition().getDistance( PlayerUtil.getPlayerPos().getX(),
                                                         PlayerUtil.getPlayerPos().getY(),
                                                         PlayerUtil.getPlayerPos().getZ()) > 10) return;

@@ -10,6 +10,7 @@ import me.earth.earthhack.impl.util.render.Interpolation;
 import me.earth.earthhack.impl.util.render.RenderUtil;
 import me.earth.earthhack.impl.util.render.mutables.BBRender;
 import me.earth.earthhack.impl.util.render.mutables.MutableBB;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
@@ -22,29 +23,16 @@ public class ListenerRender extends ModuleListener<Blocker, Render3DEvent> {
     public ListenerRender(Blocker module) {
         super(module, Render3DEvent.class);
     }
-    private final MutableBB bb = new MutableBB();
-
-
-
     @Override
     public void invoke(Render3DEvent event) {
         ArrayList<BlockPos> renderPos = (ArrayList<BlockPos>) module.scheduledPlacements.clone();
         if(module.render.getValue() && !renderPos.isEmpty()){
                 for (BlockPos thing : renderPos) {
-                    if(thing == null) return;
+                    if(thing == null || mc.world.getBlockState(thing).getBlock() == Blocks.BEDROCK) return;
                     if(!BlockUtil.isAir(thing)) return;
                     module.renderPos(thing);
                 }
                 renderPos.clear();
         }
-    }
-    private void renderBoxMutable(BlockPos pos) {
-        bb.setFromBlockPos(pos);
-        Interpolation.interpolateMutable(bb);
-        BBRender.renderBox(
-                bb,
-                module.boxColor.getValue(),
-                module.outLine.getValue(),
-                module.linewidth.getValue());
     }
 }

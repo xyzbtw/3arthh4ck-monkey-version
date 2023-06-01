@@ -27,7 +27,7 @@ final class ListenerStep extends ModuleListener<Step, StepEvent> {
             module.reset();
             return;
         }
-        if(module.stopsneak.getValue() || !mc.player.isSneaking()) return;
+        if(module.stopsneak.getValue() && mc.player.isSneaking()) return;
         if (event.getStage() == Stage.PRE) {
             if (mc.player.getRidingEntity() != null) {
                 mc.player.getRidingEntity().stepHeight =

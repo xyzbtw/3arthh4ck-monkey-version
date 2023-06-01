@@ -107,7 +107,8 @@ final class ListenerTick extends ModuleListener<AutoEat, TickEvent>
         //  start with CPacketPlayerTryUseItem and send it again
         //  when server ends our eating With SPacketDataManagerThing?
         KeyBinding.setKeyBindState(mc.gameSettings.keyBindUseItem.getKeyCode(),
-                                   true);
+                true);
+
         module.isEating  = true;
     }
 
