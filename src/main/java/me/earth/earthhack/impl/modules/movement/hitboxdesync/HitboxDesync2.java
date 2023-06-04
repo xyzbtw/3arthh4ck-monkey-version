@@ -6,9 +6,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 
-public class HitboxDesync extends Module {
+// 
 
-    public HitboxDesync()
+public class HitboxDesync2 extends Module {
+
+    public HitboxDesync2()
     {
         super("HitboxDesync", Category.Movement);
     }
@@ -25,6 +27,7 @@ public class HitboxDesync extends Module {
         disable();
     }
 
+    // эти ютилы это пиздец + кокас паста но похуй, мио ссосать
     public void ifTwoBlock(BlockPos pos, BlockPos otherPos1) {
         BlockPos otherPos = pos.add(otherPos1.getX(),otherPos1.getY(),otherPos1.getZ());
         float x = 0.3F;
