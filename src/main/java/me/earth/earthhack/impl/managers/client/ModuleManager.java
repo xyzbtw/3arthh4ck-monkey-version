@@ -152,7 +152,6 @@ import me.earth.earthhack.impl.modules.player.scaffold.Scaffold;
 import me.earth.earthhack.impl.modules.player.sorter.Sorter;
 import me.earth.earthhack.impl.modules.player.spectate.Spectate;
 import me.earth.earthhack.impl.modules.player.speedmine.Speedmine;
-import me.earth.earthhack.impl.modules.player.strictautomine.StrictAutoMine;
 import me.earth.earthhack.impl.modules.player.suicide.Suicide;
 import me.earth.earthhack.impl.modules.player.swing.Swing;
 import me.earth.earthhack.impl.modules.player.timer.Timer;
@@ -352,7 +351,6 @@ public class ModuleManager extends IterationRegister<Module>
         this.forceRegister(new Swing());
         this.forceRegister(new Speedmine());
         this.forceRegister(new Suicide());
-        this.forceRegister(new StrictAutoMine());
         this.forceRegister(new Timer());
         this.forceRegister(new XCarry());
 

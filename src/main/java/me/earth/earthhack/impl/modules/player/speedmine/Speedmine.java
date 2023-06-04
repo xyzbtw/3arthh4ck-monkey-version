@@ -300,6 +300,7 @@ public class Speedmine extends Module
         this.listeners.add(new ListenerDeath(this));
         this.listeners.add(new ListenerLogout(this));
         this.listeners.add(new ListenerMotion(this));
+        this.listeners.add(new ListenerPacket(this));
         this.listeners.add(new ListenerDigging(this));
         this.listeners.add(new ListenerKeyPress(this));
         this.listeners.add(new ListenerSpawnObject(this));
@@ -367,23 +368,7 @@ public class Speedmine extends Module
             damages[i] = 0.0f;
         }
     }
-    /**
-     * Resets the current pos on slot change and all damages dealt to it.
-     */
-    public void resetSLot()
-    {
-        maxDamage  = 0.0f;
-        sentPacket = false;
-        limitRotationSlot = -1;
-        limitRotationPacket = null;
-        fastHelper.reset();
-        AUTO_MINE.computeIfPresent(AutoMine::reset);
 
-        for (int i = 0; i < 9; i++)
-        {
-            damages[i] = 0.0f;
-        }
-    }
 
     /**
      * Returns the current mode.
@@ -587,6 +572,7 @@ public class Speedmine extends Module
             onSendPacket();
         }
     }
+
 
     private int findBreakSlot()
     {

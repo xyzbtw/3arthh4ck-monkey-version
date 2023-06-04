@@ -189,14 +189,6 @@ final class ListenerUpdate extends ModuleListener<AutoMine, UpdateEvent>
                 && (state = mc.world.getBlockState(position))
                 .getBlock() == Blocks.ENDER_CHEST)
             {
-                if (module.rotate.getValue()
-                        && !module.rotationSmoother.isRotating()
-                        && module.rotationSmoother.getRotationTicks()
-                        < module.rotationTicks.getValue())
-                {
-                    module.rotationSmoother.incrementRotationTicks();
-                    return;
-                }
                 attackPos(position,
                           new Constellation(mc.world,
                                             mc.player,
@@ -393,7 +385,6 @@ final class ListenerUpdate extends ModuleListener<AutoMine, UpdateEvent>
                             && headState.getBlock() == Blocks.OBSIDIAN
                             && module.isValidCrystalPos(upUp))
                         {
-                            if(module.rotationSmoother.getRotationTicks()>=module.rotationTicks.getValue()) {
                                 attackPos(upUp,
                                         new CrystalConstellation(mc.world,
                                                 player,
@@ -402,7 +393,7 @@ final class ListenerUpdate extends ModuleListener<AutoMine, UpdateEvent>
                                                 headState,
                                                 module));
                                 return true;
-                            }
+
                         }
                     }
 
@@ -547,14 +538,6 @@ final class ListenerUpdate extends ModuleListener<AutoMine, UpdateEvent>
             if (isValid(offset, state)
                 && module.checkCrystalPos(offset.offset(facing).down()))
             {
-                if (module.rotate.getValue()
-                        && !module.rotationSmoother.isRotating()
-                        && module.rotationSmoother.getRotationTicks()
-                        < module.rotationTicks.getValue())
-                {
-                    module.rotationSmoother.incrementRotationTicks();
-                    return false;
-                }
                 attackPos(offset,
                           new Constellation(mc.world,
                                             player,
@@ -592,10 +575,8 @@ final class ListenerUpdate extends ModuleListener<AutoMine, UpdateEvent>
         }
 
         if(module.rotate.getValue()){
-            EnumFacing facing = RayTraceUtil.getFacing(
-                    RotationUtil.getRotationPlayer(), pos, true);
-            assert facing !=null;
-            module.rotations = RotationUtil.getRotations(pos, facing, mc.player);
+            module.rotations = RotationUtil.getRotations(pos.getX(), pos.getY()+0.5, pos.getX());
+
         }
 
         module.offer(c);

@@ -6,6 +6,7 @@ import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.EnumSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
+import me.earth.earthhack.impl.core.ducks.network.IPlayerControllerMP;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.player.automine.mode.AutoMineMode;
@@ -28,6 +29,7 @@ import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.play.client.CPacketPlayer;
+import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -51,8 +53,6 @@ public class AutoMine extends BlockAddingModule implements IAutomine
         register(new BooleanSetting("Head", false));
     protected final Setting<Boolean> rotate = // TODO
         register(new BooleanSetting("Rotate", false));
-    protected final Setting<Integer> rotationTicks =
-            register(new NumberSetting<>("Rotation-Ticks", 0, 0, 10));
     protected final Setting<Boolean> futurecomp =
             register(new BooleanSetting("FutureThing", false));
     protected final Setting<Boolean> raytrace =
@@ -69,6 +69,7 @@ public class AutoMine extends BlockAddingModule implements IAutomine
         register(new BooleanSetting("ConstCheck", true));
     protected final Setting<Boolean> improve =
         register(new BooleanSetting("Improve", false));
+
     protected final Setting<Boolean> improveInvalid =
         register(new BooleanSetting("ImproveInvalid", false));
     protected final Setting<Integer> delay =
@@ -163,7 +164,8 @@ public class AutoMine extends BlockAddingModule implements IAutomine
     protected IConstellation constellation;
     protected Future<?> future;
     protected boolean attacking;
-    protected BlockPos current, rot;
+    protected BlockPos current;
+
     protected boolean hasRotated=false;
     protected BlockPos last;
     protected EnumFacing facing;
@@ -330,8 +332,7 @@ public class AutoMine extends BlockAddingModule implements IAutomine
         this.attacking = true;
         assert facing != null;
         if(raytrace.getValue()){
-           if(!RayTraceUtil.canBeSeen(current.getX(), current.getY(), current.getZ(), RotationUtil.getRotationPlayer())){
-               reset();
+           if(!RotationUtil.isLegit(pos, facing)){
                return;
            }
         }
@@ -343,6 +344,7 @@ public class AutoMine extends BlockAddingModule implements IAutomine
             mc.playerController.onPlayerDamageBlock(pos, facing);
         }
         this.attacking = false;
+        this.hasRotated=false;
         this.timer.reset();
     }
 

@@ -71,7 +71,7 @@ public class KillAura extends EntityTypeModule
     protected final Setting<Boolean> stay =
         register(new BooleanSetting("Stay", false));
     protected final Setting<Float> soft =
-        register(new NumberSetting<>("Soft", 180.0f, 0.1f, 180.0f));
+            register(new NumberSetting<>("Soft", 180.0f, 0.1f, 180.0f));
     protected final Setting<Integer> rotationTicks =
         register(new NumberSetting<>("Rotation-Ticks", 0, 0, 10));
     protected final Setting<AuraTeleport> auraTeleport =

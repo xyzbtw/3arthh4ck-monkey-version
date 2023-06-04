@@ -31,6 +31,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.awt.*;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.glRotatef;
 
 @Mixin(ItemRenderer.class)
 public abstract class MixinItemRenderer
@@ -90,6 +91,7 @@ public abstract class MixinItemRenderer
                             ? VIEW_MODEL.get().getY(hand)
                             : 0;
 
+
         itemRenderer.renderItemInFirstPerson(player,
                                              drinkOffset,
                                              mapAngle,
@@ -122,11 +124,25 @@ public abstract class MixinItemRenderer
                     ? VIEW_MODEL.get().getTranslation()
                     : ViewModel.DEFAULT_TRANSLATION;
 
+            float[] rotations = VIEW_MODEL.isPresent()
+                    ? VIEW_MODEL.get().getRotations()
+                    : ViewModel.DEFAULT_ROTATIONS;
+
             GL11.glScalef(scale[0], scale[1], scale[2]);
+
+
             GL11.glRotatef(translation[0],
                            translation[1],
                            translation[2],
                            translation[3]);
+
+
+
+
+
+            glRotatef(rotations[0], 0.0f, 1.0f, 0.0f);
+            glRotatef(rotations[1], 1.0f, 0.0f, 0.0f);
+            glRotatef(rotations[2], 0.0f, 0.0f, 1.0f);
 
             // ???????????????????? this fucks nametags
             // GlStateManager.enableDepth();

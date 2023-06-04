@@ -1,7 +1,11 @@
 package me.earth.earthhack.impl.modules.player.automine;
 
+import me.earth.earthhack.impl.core.ducks.network.IPlayerControllerMP;
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
+import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
+import me.earth.earthhack.impl.util.network.NetworkUtil;
+import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.network.play.server.SPacketMultiBlockChange;
 
 final class ListenerMultiBlockChange extends

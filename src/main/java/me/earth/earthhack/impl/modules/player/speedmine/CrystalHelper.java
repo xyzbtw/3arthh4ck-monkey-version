@@ -32,6 +32,10 @@ public class CrystalHelper implements Globals {
             new Vec3i(0, -1, 1),
             new Vec3i(-1, -1, 0),
             new Vec3i(0, -1, -1),
+                new Vec3i(1, 1, 0),
+                new Vec3i(-1,1,0),
+                new Vec3i(0,1,1),
+                new Vec3i(0,1,-1),
             new Vec3i(0, 0, 0) // check this one last!
         };
     private static final ModuleCache<AutoCrystal> AUTOCRYSTAL =

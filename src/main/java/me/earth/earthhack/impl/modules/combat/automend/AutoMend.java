@@ -39,6 +39,8 @@ public class AutoMend extends Module
             register(new NumberSetting<>("DelayXP", 150.0f, 0.0f, 1000.0f));
     protected final Setting<Float>  Pct =
             register(new NumberSetting<>("Percent", 90.0f, 0.0f, 100.0f));
+    protected final Setting<Float>  pitch =
+            register(new NumberSetting<>("Pitch", 90.0f, -90.0f, 90.0f));
     protected final Setting<Float>  maxdmg =
             register(new NumberSetting<>("Max-Dmg", 6.0f, 0.0f, 36.0f));
     protected final Setting<Boolean> blocks =

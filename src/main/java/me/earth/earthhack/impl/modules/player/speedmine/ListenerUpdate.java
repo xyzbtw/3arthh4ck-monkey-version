@@ -131,13 +131,6 @@ final class ListenerUpdate extends ModuleListener<Speedmine, UpdateEvent>
                 return;
             }
 
-            if(Managers.SWITCH.getLastSwitch()<=25 && module.strict.getValue()){
-                module.pausing=true;
-            }else if(Managers.SWITCH.getLastSwitch()>250 && module.strict.getValue()){
-                module.pausing=false;
-                module.tryBreak();
-            }
-
             if (module.mode.getValue() == MineMode.Fast) {
                 module.fastHelper.onUpdate();
                 return;
