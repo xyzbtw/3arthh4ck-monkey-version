@@ -19,6 +19,7 @@ import me.earth.earthhack.impl.modules.client.configs.ConfigModule;
 import me.earth.earthhack.impl.modules.client.customfont.FontMod;
 import me.earth.earthhack.impl.modules.client.debug.Debug;
 import me.earth.earthhack.impl.modules.client.hud.HUD;
+import me.earth.earthhack.impl.modules.client.keybindlist.keybindthing;
 import me.earth.earthhack.impl.modules.client.management.Management;
 import me.earth.earthhack.impl.modules.client.media.Media;
 import me.earth.earthhack.impl.modules.client.nospoof.NoSpoof;
@@ -306,6 +307,7 @@ public class ModuleManager extends IterationRegister<Module>
         this.forceRegister(new FastSwim());
         this.forceRegister(new Flight());
         this.forceRegister(new HighJump());
+        this.forceRegister(new HitBoxDesync());
         this.forceRegister(new ReverseStep());
         this.forceRegister(new IceSpeed());
         this.forceRegister(new Jesus());
