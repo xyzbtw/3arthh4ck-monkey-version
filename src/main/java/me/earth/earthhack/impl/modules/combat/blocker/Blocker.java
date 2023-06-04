@@ -6,6 +6,7 @@ import me.earth.earthhack.api.setting.Complexity;
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.ColorSetting;
+import me.earth.earthhack.api.setting.settings.EnumSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.event.events.misc.TickEvent;
 import me.earth.earthhack.impl.event.listeners.LambdaListener;
@@ -29,7 +30,8 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Blocker extends ObbyListenerModule<ListenerObsidian>{
-
+    protected final Setting<mode> modeSetting =
+            register(new EnumSetting<>("Mode", mode.broken));
     protected final Setting<Boolean> anticev =
             register(new BooleanSetting("AntiCev", false));
     protected final Setting<Boolean> extend =
@@ -48,12 +50,6 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian>{
             register(new NumberSetting<>("EnemyRange", 6.0f, 0.0f, 10.0f));
     protected final Setting<Integer> clearDelay =
             register(new NumberSetting<>("ClearDelay", 500, 0, 3000));
-    protected final Setting<Boolean> antidrew =
-            register(new BooleanSetting("UnderSurround", false));
-    protected final Setting<Boolean> onanim =
-            register(new BooleanSetting("OnAnim", false));
-    protected final Setting<Boolean> blockchange =
-            register(new BooleanSetting("OnChange", true));
     protected final Setting<Integer> progress =
             register(new NumberSetting<>("Progress", 3, 0, 9));
     protected final Setting<Boolean> render =
@@ -85,6 +81,12 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian>{
         this.setData(new BlockerData(this));
 
     }
+    protected enum mode{
+        touched,
+        broken
+
+    }
+
     protected ArrayList<BlockPos> scheduledPlacements = new ArrayList<>();
     public static ArrayList<BlockPos> speedminecache = new ArrayList<>();
     Vec3i[] replaceList= new Vec3i[]{
@@ -151,17 +153,7 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian>{
             }
         }
 
-        if(antidrew.getValue() && pos == niglet.add(0,-1,0)) {
-            if(debug.getValue()){
-                ModuleUtil.sendMessageWithAquaModule(this, "Antidrew starting to activate for " + pos, "");
-            }
-            scheduledPlacements.add(pos.offset(EnumFacing.NORTH));
-            scheduledPlacements.add(pos.offset(EnumFacing.SOUTH));
-            scheduledPlacements.add(pos.offset(EnumFacing.EAST));
-            scheduledPlacements.add(pos.offset(EnumFacing.WEST));
-            niglet = null;
-            return;
-        }
+
 
 
         if(hole.getValue() && !PlayerUtil.isInHoleAll(mc.player))

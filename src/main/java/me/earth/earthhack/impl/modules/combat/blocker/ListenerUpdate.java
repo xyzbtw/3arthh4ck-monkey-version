@@ -14,9 +14,6 @@ public class ListenerUpdate extends ModuleListener<Blocker, UpdateEvent> {
     {
         super(module, UpdateEvent.class, 1);
     }
-
-
-
     StopWatch timer = new StopWatch();
 
     @Override

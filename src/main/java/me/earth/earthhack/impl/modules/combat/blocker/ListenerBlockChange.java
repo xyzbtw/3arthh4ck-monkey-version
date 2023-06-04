@@ -19,18 +19,17 @@ public class ListenerBlockChange extends ModuleListener<Blocker, PacketEvent.Rec
 
     @Override
     public void invoke(PacketEvent.Receive<SPacketBlockChange> event) {
-        if(!module.blockchange.getValue()) return;
+        if(module.modeSetting.getValue() != Blocker.mode.broken) return;
         if(mc.world==null)return;
         if(mc.player==null)return;
         if (event.getPacket() == null ) return;
         if(mc.currentScreen instanceof GuiConnecting)return;
         if(event.getPacket().getBlockPosition().getDistance(PlayerUtil.getPlayerPos().getX(),
                                                             PlayerUtil.getPlayerPos().getY(),
-                                                            PlayerUtil.getPlayerPos().getZ()) > 10) return;
+                                                            PlayerUtil.getPlayerPos().getZ()) > 6) return;
 
-        if (mc.world.getEntityByID(event.getPacket().getBlockPosition().getY()) instanceof EntityEnderCrystal) {
-            return;
-        }
+        if (mc.world.getEntityByID(event.getPacket().getBlockPosition().getY()) instanceof EntityEnderCrystal) return;
+
         if (event.getPacket().getBlockState().getBlock() instanceof BlockAir) {
             final BlockPos blockPosition = event.getPacket().getBlockPosition();
             if(Blocker.speedminecache.contains(blockPosition)){
@@ -38,9 +37,8 @@ public class ListenerBlockChange extends ModuleListener<Blocker, PacketEvent.Rec
                 return;
             }
             if(blockPosition == PlayerUtil.getPlayerPos().add(0,2,0) && !module.anticev.getValue()) return;
-            if(blockPosition == PlayerUtil.getPlayerPos().down() && !module.antidrew.getValue()) return;
             if(module.debug.getValue()){
-                ModuleUtil.sendMessageWithAquaModule(module, "Received at " + blockPosition.toString(), "" );
+                ModuleUtil.sendMessage(module, "Received at " + blockPosition.toString(), "Blocker");
             }
 
             module.scanAndPlace(blockPosition);

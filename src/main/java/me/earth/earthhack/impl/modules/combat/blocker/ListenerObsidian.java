@@ -3,6 +3,8 @@ package me.earth.earthhack.impl.modules.combat.blocker;
 import me.earth.earthhack.api.event.bus.api.EventBus;
 import me.earth.earthhack.impl.util.helpers.blocks.ObbyListener;
 import me.earth.earthhack.impl.util.helpers.blocks.util.TargetResult;
+import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
