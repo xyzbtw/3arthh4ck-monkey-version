@@ -1,6 +1,7 @@
 package me.earth.earthhack.impl.modules.combat.blocker;
 
 import me.earth.earthhack.api.cache.ModuleCache;
+import me.earth.earthhack.api.event.bus.instance.Bus;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Complexity;
 import me.earth.earthhack.api.setting.Setting;
@@ -8,8 +9,12 @@ import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.ColorSetting;
 import me.earth.earthhack.api.setting.settings.EnumSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
+import me.earth.earthhack.impl.event.events.misc.DeathEvent;
+import me.earth.earthhack.impl.event.events.misc.EndCrystalDestroyEvent;
 import me.earth.earthhack.impl.event.events.misc.TickEvent;
+import me.earth.earthhack.impl.event.events.network.PacketEvent;
 import me.earth.earthhack.impl.event.listeners.LambdaListener;
+import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.player.speedmine.Speedmine;
 import me.earth.earthhack.impl.util.client.ModuleUtil;
@@ -21,10 +26,15 @@ import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import me.earth.earthhack.impl.util.render.Interpolation;
 import net.minecraft.client.multiplayer.GuiConnecting;
+import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.play.server.SPacketDestroyEntities;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -70,7 +80,7 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian>{
 
     protected EntityPlayer target;
     protected final ModuleCache<Speedmine> speedmine = Caches.getModule(Speedmine.class);
-    protected BlockPos niglet;
+    protected ArrayList<BlockPos> crystalpos = new ArrayList<>();
 
     public Blocker() {
         super("Blocker", Category.Combat);
@@ -81,8 +91,19 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian>{
         this.listeners.add(new ListenerObsidian(this));
         this.listeners.add(new ListenerRender(this));
         this.setData(new BlockerData(this));
-
     }
+    @Override
+    public void onEnable(){
+        super.onEnable();
+        MinecraftForge.EVENT_BUS.register(this);
+    }
+    @Override
+    public void onDisable(){
+        super.onDisable();
+        MinecraftForge.EVENT_BUS.unregister(this);
+        crystalpos.clear();
+    }
+
     protected enum mode{
         touched,
         broken
@@ -116,6 +137,12 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian>{
         esp.render(Interpolation.interpolatePos(pos, renderheight.getValue()));
     }
 
+    @SubscribeEvent
+    public void onLivingDeath(LivingDeathEvent event) {
+        if (event.getEntity() instanceof EntityEnderCrystal) {
+            crystalpos.add(event.getEntity().getPosition());
+        }
+    }
 
 
     @Override
@@ -133,7 +160,7 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian>{
         if(Speedmine.compatibility.contains(pos)) return;
         if(target == null || pos.getDistance(target.getPosition().getX(), target.getPosition().getY(), target.getPosition().getZ()) >= this.enemyrange.getValue()) return;
 
-
+        if(crystalpos.contains(pos)) return;
         BlockPos playerPos = PlayerUtil.getPlayerPos();
 
         //checking if we should care about the block in question

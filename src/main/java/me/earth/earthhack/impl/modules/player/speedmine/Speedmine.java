@@ -318,6 +318,12 @@ public class Speedmine extends Module
     }
 
     @Override
+    protected void onDisable(){
+        super.onDisable();
+        compatibility.clear();
+    }
+
+    @Override
     public String getDisplayInfo()
     {
         if (display.getValue()
@@ -349,6 +355,16 @@ public class Speedmine extends Module
         mc.world.sendBlockBreakProgress(this.mc.player.getEntityId(), pos, -1);
         mc.player.resetCooldown();
         reset();
+    }
+    public void resetCD(){
+        ((IPlayerControllerMP) mc.playerController).setCurBlockDamageMP(0.0f);
+        mc.world.sendBlockBreakProgress(this.mc.player.getEntityId(), pos, -1);
+        mc.player.resetCooldown();
+        maxDamage=0.0f;
+        for (int i = 0; i < 9; i++)
+        {
+            damages[i] = 0.0f;
+        }
     }
 
 

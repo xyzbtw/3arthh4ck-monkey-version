@@ -2,8 +2,11 @@ package me.earth.earthhack.impl.modules.combat.blocker;
 
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
+import me.earth.earthhack.impl.managers.Managers;
+import me.earth.earthhack.impl.modules.player.speedmine.Speedmine;
 import me.earth.earthhack.impl.util.client.ModuleUtil;
 import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
+import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
 import net.minecraft.block.BlockAir;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.multiplayer.GuiConnecting;
@@ -31,7 +34,8 @@ public class ListenerBlockChange extends ModuleListener<Blocker, PacketEvent.Rec
         if (mc.world.getEntityByID(event.getPacket().getBlockPosition().getY()) instanceof EntityEnderCrystal) return;
 
         if (event.getPacket().getBlockState().getBlock() instanceof BlockAir) {
-            final BlockPos blockPosition = event.getPacket().getBlockPosition();
+            BlockPos blockPosition = event.getPacket().getBlockPosition();
+            Speedmine.compatibility.remove(blockPosition);
             if(blockPosition == PlayerUtil.getPlayerPos().add(0,2,0) && !module.anticev.getValue()) return;
             if(module.debug.getValue()){
                 ModuleUtil.sendMessage(module, "Received at " + blockPosition.toString(), "Blocker");

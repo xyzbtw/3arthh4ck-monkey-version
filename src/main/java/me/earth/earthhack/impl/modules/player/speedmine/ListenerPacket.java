@@ -29,19 +29,20 @@ public class ListenerPacket extends ModuleListener<Speedmine, PacketEvent.Send> 
         if(event.getPacket() instanceof CPacketPlayerDigging) {
             if (((CPacketPlayerDigging) event.getPacket()).getAction()== CPacketPlayerDigging.Action.RELEASE_USE_ITEM
                     || ((CPacketPlayerDigging) event.getPacket()).getAction() == CPacketPlayerDigging.Action.SWAP_HELD_ITEMS) {
-                module.abortCurrentPos();
-                mc.playerController.onPlayerDamageBlock(position, facing);
-                position=null;
-                facing=null;
+                module.resetCD();
+               // mc.playerController.onPlayerDamageBlock(position, facing);
+                //position=null;
+                //facing=null;
                 return;
             }
         }
         if(event.getPacket() instanceof CPacketHeldItemChange){
             if(((CPacketHeldItemChange) event.getPacket()).getSlotId() == InventoryUtil.findHotbarItem(Items.DIAMOND_PICKAXE )) return;
-            module.abortCurrentPos();
-            mc.playerController.onPlayerDamageBlock(position, facing);
-            position=null;
-            facing=null;
+           // module.abortCurrentPos();
+           // mc.playerController.onPlayerDamageBlock(position, facing);
+           // position=null;
+           // facing=null;
+            module.resetCD();
             return;
         }
     }

@@ -21,6 +21,7 @@ public class ListenerUpdate extends ModuleListener<Blocker, UpdateEvent> {
         if(timer.passed(module.clearDelay.getValue())){
             timer.reset();
             module.scheduledPlacements.clear();
+            module.crystalpos.clear();
         }
     }
 }
