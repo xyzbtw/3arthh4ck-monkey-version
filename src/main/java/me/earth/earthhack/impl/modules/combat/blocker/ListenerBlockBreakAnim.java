@@ -35,7 +35,6 @@ public class ListenerBlockBreakAnim extends ModuleListener<Blocker, PacketEvent.
         if(mc.world.getBlockState(blockPosition).getBlock() == (Blocks.BEDROCK)) return;
 
         if(blockPosition.equals(PlayerUtil.getPlayerPos().add(0, 2,0)) && !module.anticev.getValue()) return;
-
         if ((event.getPacket().getProgress() > module.progress.getValue() || module.progress.getValue() == 0)) {
             module.scanAndPlace(blockPosition);
             if(module.debug.getValue()){

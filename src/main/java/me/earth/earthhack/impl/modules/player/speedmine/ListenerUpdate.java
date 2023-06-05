@@ -118,7 +118,7 @@ final class ListenerUpdate extends ModuleListener<Speedmine, UpdateEvent>
 
         if (module.pos != null)
         {
-            Blocker.speedminecache.add(module.pos);
+            Speedmine.compatibility.add(module.pos);
             if(module.mode.getValue() == MineMode.Compatibility) return;
             if ((module.mode.getValue() == MineMode.Smart
                         || module.mode.getValue() == MineMode.Fast

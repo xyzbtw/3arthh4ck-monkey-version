@@ -162,7 +162,7 @@ import me.earth.earthhack.impl.modules.render.ambience.Ambience;
 import me.earth.earthhack.impl.modules.render.blockhighlight.BlockHighlight;
 import me.earth.earthhack.impl.modules.render.breadcrumbs.BreadCrumbs;
 import me.earth.earthhack.impl.modules.render.chams.Chams;
-import me.earth.earthhack.impl.modules.render.crosshair.Crosshair;
+import me.earth.earthhack.impl.modules.render.crosshair.CrossHair;
 import me.earth.earthhack.impl.modules.render.crystalchams.CrystalChams;
 import me.earth.earthhack.impl.modules.render.crystalscale.CrystalScale;
 import me.earth.earthhack.impl.modules.render.esp.ESP;
@@ -385,7 +385,7 @@ public class ModuleManager extends IterationRegister<Module>
         this.forceRegister(new HandChams());
         this.forceRegister(new CrystalChams());
         this.forceRegister(new RainbowEnchant());
-        this.forceRegister(new Crosshair());
+        this.forceRegister(new CrossHair());
         this.forceRegister(new PopChams());
         this.forceRegister(new ItemChams());
         this.forceRegister(new Ambience());

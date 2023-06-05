@@ -20,6 +20,11 @@ final class ListenerBlockChange extends
     public void invoke(PacketEvent.Receive<SPacketBlockChange> event)
     {
         SPacketBlockChange packet = event.getPacket();
+
+        if(module.mode.getValue()== MineMode.Compatibility){
+            Speedmine.compatibility.remove(packet.getBlockPosition());
+        }
+
         if (module.mode.getValue() == MineMode.Fast) {
             module.fastHelper.onBlockChange(packet.getBlockPosition(),
                                             packet.getBlockState());

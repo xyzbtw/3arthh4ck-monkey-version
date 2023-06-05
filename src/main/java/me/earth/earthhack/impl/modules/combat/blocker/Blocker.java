@@ -46,6 +46,8 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian>{
             register(new BooleanSetting("Extend-diag", false));
     protected final Setting<Boolean> helping =
             register(new BooleanSetting("HelpingBlocks", false));
+    protected final Setting<Boolean> undersurround =
+            register(new BooleanSetting("UnderSurround", true));
     protected final Setting<Float> enemyrange =
             register(new NumberSetting<>("EnemyRange", 6.0f, 0.0f, 10.0f));
     protected final Setting<Integer> clearDelay =
@@ -88,7 +90,6 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian>{
     }
 
     protected ArrayList<BlockPos> scheduledPlacements = new ArrayList<>();
-    public static ArrayList<BlockPos> speedminecache = new ArrayList<>();
     Vec3i[] replaceList= new Vec3i[]{
             new Vec3i(0,2,0), //anticev check
             new Vec3i(0,-1,0), //block underneath you
@@ -129,7 +130,7 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian>{
         if(mc.player==null)return;
         if(mc.currentScreen instanceof GuiConnecting)return;
         target = EntityUtil.getClosestEnemy();
-        if (pos == this.speedmine.get().getPos()) return;
+        if(Speedmine.compatibility.contains(pos)) return;
         if(target == null || pos.getDistance(target.getPosition().getX(), target.getPosition().getY(), target.getPosition().getZ()) >= this.enemyrange.getValue()) return;
 
 
@@ -160,12 +161,21 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian>{
             return;
 
 
+
+
         if(pos == playerPos.add(0,2,0) && anticev.getValue()){
             scheduledPlacements.add(pos.add(0,1,0));
             return;
         }
 
-
+        if(pos == playerPos.add(0,-1, 0) && undersurround.getValue()){
+            for(EnumFacing facing : EnumFacing.VALUES){
+                if(pos.offset(facing).equals(playerPos)) continue;
+                scheduledPlacements.add(pos.offset(facing));
+            }
+        }else if (pos == playerPos.add(0, -1, 0) && !undersurround.getValue()){
+            return;
+        }
 
         for(EnumFacing face : EnumFacing.values()) {
             if(pos.offset(face).equals(playerPos)) continue;

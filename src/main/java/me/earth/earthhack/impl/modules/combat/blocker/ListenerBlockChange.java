@@ -32,10 +32,6 @@ public class ListenerBlockChange extends ModuleListener<Blocker, PacketEvent.Rec
 
         if (event.getPacket().getBlockState().getBlock() instanceof BlockAir) {
             final BlockPos blockPosition = event.getPacket().getBlockPosition();
-            if(Blocker.speedminecache.contains(blockPosition)){
-                Blocker.speedminecache.clear();
-                return;
-            }
             if(blockPosition == PlayerUtil.getPlayerPos().add(0,2,0) && !module.anticev.getValue()) return;
             if(module.debug.getValue()){
                 ModuleUtil.sendMessage(module, "Received at " + blockPosition.toString(), "Blocker");

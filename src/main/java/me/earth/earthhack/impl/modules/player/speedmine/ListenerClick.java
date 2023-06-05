@@ -16,6 +16,8 @@ final class ListenerClick extends ModuleListener<Speedmine, ClickBlockEvent>
     @Override
     public void invoke(ClickBlockEvent event)
     {
+        Speedmine.compatibility.add(event.getPos());
+
         if (!PlayerUtil.isCreative(mc.player)
                 && (module.noReset.getValue()
                     || module.mode.getValue() == MineMode.Reset)

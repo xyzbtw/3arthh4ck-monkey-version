@@ -46,6 +46,18 @@ public class ModuleCache<T extends Module> extends Cache<T>
             return null;
         }, type);
     }
+    /**
+     * @return {@link Module#getDisplayName()}, if present.
+     */
+    public String getDisplayName()
+    {
+        if (isPresent())
+        {
+            return get().getDisplayName();
+        }
+
+        return null;
+    }
 
     public ModuleCache(Supplier<T> getter, Class<T> type)
     {

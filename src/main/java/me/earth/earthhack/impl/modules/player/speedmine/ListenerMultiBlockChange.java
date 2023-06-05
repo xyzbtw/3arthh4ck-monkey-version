@@ -17,6 +17,13 @@ final class ListenerMultiBlockChange extends
     @Override
     public void invoke(PacketEvent.Receive<SPacketMultiBlockChange> event)
     {
+
+        if(module.mode.getValue() == MineMode.Compatibility){
+            for(SPacketMultiBlockChange.BlockUpdateData data : event.getPacket().getChangedBlocks()){
+                Speedmine.compatibility.remove(data.getPos());
+            }
+        }
+
         SPacketMultiBlockChange packet = event.getPacket();
         if (module.mode.getValue() == MineMode.Fast) {
             for (SPacketMultiBlockChange.BlockUpdateData data

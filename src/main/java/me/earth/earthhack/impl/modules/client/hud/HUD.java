@@ -61,9 +61,9 @@ import java.util.stream.Collectors;
 public class HUD extends Module {
     public static final TextRenderer RENDERER = Managers.TEXT;
 
-    protected final Setting<HudRainbow> colorMode =
+    public final Setting<HudRainbow> colorMode =
             register(new EnumSetting<>("Rainbow", HudRainbow.None));
-    protected final Setting<Color> color =
+    public final Setting<Color> color =
             register(new ColorSetting("Color", Color.WHITE));
     protected final Setting<Boolean> logo =
             register(new BooleanSetting("Logo", true));

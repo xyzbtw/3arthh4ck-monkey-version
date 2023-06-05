@@ -43,6 +43,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static net.minecraft.network.play.client.CPacketPlayerDigging.Action.ABORT_DESTROY_BLOCK;
 import static net.minecraft.network.play.client.CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK;
@@ -56,7 +59,8 @@ public class Speedmine extends Module
             Caches.getModule(AutoMine.class);
     private static final ModuleCache<AutoTrap> AUTO_TRAP =
         Caches.getModule(AutoTrap.class);
-
+    public static ArrayList<BlockPos> compatibility =
+            new ArrayList<>();
     protected final Setting<MineMode> mode     =
             register(new EnumSetting<>("Mode", MineMode.Smart));
     protected final Setting<Boolean> noReset   =
