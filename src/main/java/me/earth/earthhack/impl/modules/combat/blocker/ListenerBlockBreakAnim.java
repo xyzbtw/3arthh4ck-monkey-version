@@ -26,7 +26,8 @@ public class ListenerBlockBreakAnim extends ModuleListener<Blocker, PacketEvent.
         if(mc.world==null)return;
         if(mc.player==null)return;
         if(mc.currentScreen instanceof GuiConnecting)return;
-        if(module.modeSetting.getValue() != Blocker.mode.touched) return;
+
+        if(module.modeSetting.getValue() != Blocker.mode.touched && module.modeSetting.getValue() != Blocker.mode.both) return;
         if(event.getPacket().getBreakerId() == mc.player.getEntityId()) return;
         if(event.getPacket().getPosition().getDistance( PlayerUtil.getPlayerPos().getX(),
                                                         PlayerUtil.getPlayerPos().getY(),
@@ -34,7 +35,6 @@ public class ListenerBlockBreakAnim extends ModuleListener<Blocker, PacketEvent.
         BlockPos blockPosition = event.getPacket().getPosition();
         if(mc.world.getBlockState(blockPosition).getBlock() == (Blocks.BEDROCK)) return;
 
-        if(blockPosition.equals(PlayerUtil.getPlayerPos().add(0, 2,0)) && !module.anticev.getValue()) return;
         if ((event.getPacket().getProgress() > module.progress.getValue() || module.progress.getValue() == 0)) {
             module.scanAndPlace(blockPosition);
             if(module.debug.getValue()){

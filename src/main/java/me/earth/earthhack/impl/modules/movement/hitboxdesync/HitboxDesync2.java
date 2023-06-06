@@ -58,7 +58,6 @@ public class HitboxDesync2 extends Module {
                         && (mc.world.getBlockState(pos.north()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(pos.north()).getBlock() == Blocks.BEDROCK)
                         && mc.world.getBlockState(pos).getMaterial() == Material.AIR
                         && mc.world.getBlockState(pos.up()).getMaterial() == Material.AIR
-                        && mc.world.getBlockState(pos.up(2)).getMaterial() == Material.AIR
                         && (mc.world.getBlockState(pos.east().down()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(pos.east().down()).getBlock() == Blocks.BEDROCK)
                         && (mc.world.getBlockState(pos.east(2)).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(pos.east(2)).getBlock() == Blocks.BEDROCK)
                         && (mc.world.getBlockState(pos.east().south()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(pos.east().south()).getBlock() == Blocks.BEDROCK)
@@ -75,7 +74,6 @@ public class HitboxDesync2 extends Module {
                         && (mc.world.getBlockState(pos.north()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(pos.north()).getBlock() == Blocks.BEDROCK)
                         && mc.world.getBlockState(pos).getMaterial() == Material.AIR
                         && mc.world.getBlockState(pos.up()).getMaterial() == Material.AIR
-                        && mc.world.getBlockState(pos.up(2)).getMaterial() == Material.AIR
                         && (mc.world.getBlockState(pos.south().down()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(pos.south().down()).getBlock() == Blocks.BEDROCK)
                         && (mc.world.getBlockState(pos.south(2)).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(pos.south(2)).getBlock() == Blocks.BEDROCK)
                         && (mc.world.getBlockState(pos.south().east()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(pos.south().east()).getBlock() == Blocks.BEDROCK)
@@ -97,7 +95,6 @@ public class HitboxDesync2 extends Module {
                         && (mc.world.getBlockState(pos.north()).getBlock() == Blocks.BEDROCK)
                         && mc.world.getBlockState(pos).getMaterial() == Material.AIR
                         && mc.world.getBlockState(pos.up()).getMaterial() == Material.AIR
-                        && mc.world.getBlockState(pos.up(2)).getMaterial() == Material.AIR
                         && (mc.world.getBlockState(pos.east().down()).getBlock() == Blocks.BEDROCK)
                         && (mc.world.getBlockState(pos.east(2)).getBlock() == Blocks.BEDROCK)
                         && (mc.world.getBlockState(pos.east().south()).getBlock() == Blocks.BEDROCK)
@@ -114,7 +111,6 @@ public class HitboxDesync2 extends Module {
                         && (mc.world.getBlockState(pos.north()).getBlock() == Blocks.BEDROCK)
                         && mc.world.getBlockState(pos).getMaterial() == Material.AIR
                         && mc.world.getBlockState(pos.up()).getMaterial() == Material.AIR
-                        && mc.world.getBlockState(pos.up(2)).getMaterial() == Material.AIR
                         && (mc.world.getBlockState(pos.south().down()).getBlock() == Blocks.BEDROCK)
                         && (mc.world.getBlockState(pos.south(2)).getBlock() == Blocks.BEDROCK)
                         && (mc.world.getBlockState(pos.south().east()).getBlock() == Blocks.BEDROCK)

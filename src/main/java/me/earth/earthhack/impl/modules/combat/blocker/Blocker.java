@@ -25,6 +25,9 @@ import me.earth.earthhack.impl.util.helpers.render.IAxisESP;
 import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import me.earth.earthhack.impl.util.render.Interpolation;
+import net.minecraft.block.BlockEnderChest;
+import net.minecraft.block.BlockObsidian;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,6 +41,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Blocker extends ObbyListenerModule<ListenerObsidian>{
     protected final Setting<mode> modeSetting =
@@ -77,10 +81,11 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian>{
     protected final Setting<Boolean> debug =
             register(new BooleanSetting("Debug", false));
 
+    protected HashMap<BlockPos, IBlockState> blockmap = new HashMap<>();
+
 
     protected EntityPlayer target;
     protected final ModuleCache<Speedmine> speedmine = Caches.getModule(Speedmine.class);
-    protected ArrayList<BlockPos> crystalpos = new ArrayList<>();
 
     public Blocker() {
         super("Blocker", Category.Combat);
@@ -89,24 +94,15 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian>{
         this.listeners.add(new ListenerBlockChange(this));
         this.listeners.add(new ListenerUpdate(this));
         this.listeners.add(new ListenerObsidian(this));
+        //this.listeners.add(new ListenerMultiBlockChang(this));
         this.listeners.add(new ListenerRender(this));
         this.setData(new BlockerData(this));
-    }
-    @Override
-    public void onEnable(){
-        super.onEnable();
-        MinecraftForge.EVENT_BUS.register(this);
-    }
-    @Override
-    public void onDisable(){
-        super.onDisable();
-        MinecraftForge.EVENT_BUS.unregister(this);
-        crystalpos.clear();
     }
 
     protected enum mode{
         touched,
-        broken
+        broken,
+        both
 
     }
 
@@ -137,18 +133,12 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian>{
         esp.render(Interpolation.interpolatePos(pos, renderheight.getValue()));
     }
 
-    @SubscribeEvent
-    public void onLivingDeath(LivingDeathEvent event) {
-        if (event.getEntity() instanceof EntityEnderCrystal) {
-            crystalpos.add(event.getEntity().getPosition());
-        }
-    }
 
 
     @Override
     protected boolean shouldHelp(EnumFacing facing, BlockPos pos)
     {
-        return super.shouldHelp(facing, pos) // ?????? //shut up monkey :heart:
+        return super.shouldHelp(facing, pos)
                 && helping.getValue();
     }
 
@@ -159,8 +149,13 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian>{
         target = EntityUtil.getClosestEnemy();
         if(Speedmine.compatibility.contains(pos)) return;
         if(target == null || pos.getDistance(target.getPosition().getX(), target.getPosition().getY(), target.getPosition().getZ()) >= this.enemyrange.getValue()) return;
+        if(modeSetting.getValue()==mode.broken)
+            if (!(blockmap.get(pos).getBlock() instanceof BlockObsidian) && !(blockmap.get(pos).getBlock() instanceof BlockEnderChest)) {
+                if(debug.getValue()) ModuleUtil.sendMessage(this, "failed the fucking check xyz", "Blocker");
+                blockmap.remove(pos);
+                return;
+            }
 
-        if(crystalpos.contains(pos)) return;
         BlockPos playerPos = PlayerUtil.getPlayerPos();
 
         //checking if we should care about the block in question
@@ -235,7 +230,6 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian>{
                 }
             }
         }
-
     }
 
     @Override
