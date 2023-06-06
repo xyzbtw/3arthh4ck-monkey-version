@@ -2,6 +2,7 @@ package me.earth.earthhack.impl.modules.movement.hitboxdesync;
 
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -51,76 +52,85 @@ public class HitboxDesync2 extends Module {
     }
 
     public static BlockPos validTwoBlockObiXZ(BlockPos pos) {
-        if (
-                (mc.world.getBlockState(pos.down()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(pos.down()).getBlock() == Blocks.BEDROCK)
-                        && (mc.world.getBlockState(pos.west()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(pos.west()).getBlock() == Blocks.BEDROCK)
-                        && (mc.world.getBlockState(pos.south()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(pos.south()).getBlock() == Blocks.BEDROCK)
-                        && (mc.world.getBlockState(pos.north()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(pos.north()).getBlock() == Blocks.BEDROCK)
-                        && mc.world.getBlockState(pos).getMaterial() == Material.AIR
-                        && mc.world.getBlockState(pos.up()).getMaterial() == Material.AIR
-                        && (mc.world.getBlockState(pos.east().down()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(pos.east().down()).getBlock() == Blocks.BEDROCK)
-                        && (mc.world.getBlockState(pos.east(2)).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(pos.east(2)).getBlock() == Blocks.BEDROCK)
-                        && (mc.world.getBlockState(pos.east().south()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(pos.east().south()).getBlock() == Blocks.BEDROCK)
-                        && (mc.world.getBlockState(pos.east().north()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(pos.east().north()).getBlock() == Blocks.BEDROCK)
-                        && mc.world.getBlockState(pos.east()).getMaterial() == Material.AIR
-                        && mc.world.getBlockState(pos.east().up()).getMaterial() == Material.AIR
-                        && mc.world.getBlockState(pos.east().up(2)).getMaterial() == Material.AIR
-        ) {
+        if (checkObsidianOrBedrock(pos.down(),
+                pos.west(),
+                pos.south(),
+                pos.north(),
+                pos.east().down(),
+                pos.east(2),
+                pos.east().south(),
+                pos.east().north())
+                && checkMaterialAir(pos, pos.up(), pos.east(), pos.east().up(), pos.east().up(2))) {
             return validTwoBlockBedrockXZ(pos) == null ? new BlockPos(1, 0, 0) : null;
         } else if (
-                (mc.world.getBlockState(pos.down()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(pos.down()).getBlock() == Blocks.BEDROCK)
-                        && (mc.world.getBlockState(pos.west()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(pos.west()).getBlock() == Blocks.BEDROCK)
-                        && (mc.world.getBlockState(pos.east()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(pos.east()).getBlock() == Blocks.BEDROCK)
-                        && (mc.world.getBlockState(pos.north()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(pos.north()).getBlock() == Blocks.BEDROCK)
-                        && mc.world.getBlockState(pos).getMaterial() == Material.AIR
-                        && mc.world.getBlockState(pos.up()).getMaterial() == Material.AIR
-                        && (mc.world.getBlockState(pos.south().down()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(pos.south().down()).getBlock() == Blocks.BEDROCK)
-                        && (mc.world.getBlockState(pos.south(2)).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(pos.south(2)).getBlock() == Blocks.BEDROCK)
-                        && (mc.world.getBlockState(pos.south().east()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(pos.south().east()).getBlock() == Blocks.BEDROCK)
-                        && (mc.world.getBlockState(pos.south().west()).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(pos.south().west()).getBlock() == Blocks.BEDROCK)
-                        && mc.world.getBlockState(pos.south()).getMaterial() == Material.AIR
-                        && mc.world.getBlockState(pos.south().up()).getMaterial() == Material.AIR
-                        && mc.world.getBlockState(pos.south().up(2)).getMaterial() == Material.AIR
-        ) {
+                checkObsidianOrBedrock(pos.down(),
+                        pos.west(),
+                        pos.east(),
+                        pos.north(),
+                        pos.south().down(),
+                        pos.south(2),
+                        pos.south().east(),
+                        pos.south().west())
+                && checkMaterialAir(pos, pos.up(), pos.south(), pos.south().up(), pos.south().up(2))) {
             return validTwoBlockBedrockXZ(pos) == null ? new BlockPos(0, 0, 1) : null;
         }
         return null;
     }
 
+
     public static BlockPos validTwoBlockBedrockXZ(BlockPos pos) {
-        if (
-                (mc.world.getBlockState(pos.down()).getBlock() == Blocks.BEDROCK)
-                        && (mc.world.getBlockState(pos.west()).getBlock() == Blocks.BEDROCK)
-                        && (mc.world.getBlockState(pos.south()).getBlock() == Blocks.BEDROCK)
-                        && (mc.world.getBlockState(pos.north()).getBlock() == Blocks.BEDROCK)
-                        && mc.world.getBlockState(pos).getMaterial() == Material.AIR
-                        && mc.world.getBlockState(pos.up()).getMaterial() == Material.AIR
-                        && (mc.world.getBlockState(pos.east().down()).getBlock() == Blocks.BEDROCK)
-                        && (mc.world.getBlockState(pos.east(2)).getBlock() == Blocks.BEDROCK)
-                        && (mc.world.getBlockState(pos.east().south()).getBlock() == Blocks.BEDROCK)
-                        && (mc.world.getBlockState(pos.east().north()).getBlock() == Blocks.BEDROCK)
-                        && mc.world.getBlockState(pos.east()).getMaterial() == Material.AIR
-                        && mc.world.getBlockState(pos.east().up()).getMaterial() == Material.AIR
-                        && mc.world.getBlockState(pos.east().up(2)).getMaterial() == Material.AIR
-        ) {
+        if (checkBedrock(pos.down(),
+                pos.west(),
+                pos.south(),
+                pos.north(),
+                pos.east().down(),
+                pos.east(2),
+                pos.east().south(),
+                pos.east().north())
+                && checkMaterialAir(pos, pos.up(), pos.east(), pos.east().up(), pos.east().up(2))) {
             return new BlockPos(1, 0, 0);
-        } else if (
-                (mc.world.getBlockState(pos.down()).getBlock() == Blocks.BEDROCK)
-                        && (mc.world.getBlockState(pos.west()).getBlock() == Blocks.BEDROCK)
-                        && (mc.world.getBlockState(pos.east()).getBlock() == Blocks.BEDROCK)
-                        && (mc.world.getBlockState(pos.north()).getBlock() == Blocks.BEDROCK)
-                        && mc.world.getBlockState(pos).getMaterial() == Material.AIR
-                        && mc.world.getBlockState(pos.up()).getMaterial() == Material.AIR
-                        && (mc.world.getBlockState(pos.south().down()).getBlock() == Blocks.BEDROCK)
-                        && (mc.world.getBlockState(pos.south(2)).getBlock() == Blocks.BEDROCK)
-                        && (mc.world.getBlockState(pos.south().east()).getBlock() == Blocks.BEDROCK)
-                        && (mc.world.getBlockState(pos.south().west()).getBlock() == Blocks.BEDROCK)
-                        && mc.world.getBlockState(pos.south()).getMaterial() == Material.AIR
-                        && mc.world.getBlockState(pos.south().up()).getMaterial() == Material.AIR
-                        && mc.world.getBlockState(pos.south().up(2)).getMaterial() == Material.AIR
-        ) {
+        } else if (checkBedrock(
+                pos.down(),
+                pos.west(),
+                pos.east(),
+                pos.north(),
+                pos.south().down(),
+                pos.south(2),
+                pos.south().east(),
+                pos.south().west())
+                && checkMaterialAir(pos, pos.up(), pos.south(), pos.south().up(), pos.south().up(2))) {
             return new BlockPos(0, 0, 1);
         }
         return null;
+    }
+
+    private static boolean checkBedrock(BlockPos... positions) {
+        for (BlockPos pos : positions) {
+            Block block = mc.world.getBlockState(pos).getBlock();
+            if (block != Blocks.BEDROCK) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean checkObsidianOrBedrock(BlockPos... positions) {
+        for (BlockPos pos : positions) {
+            Block block = mc.world.getBlockState(pos).getBlock();
+            if (block != Blocks.OBSIDIAN && block != Blocks.BEDROCK) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean checkMaterialAir(BlockPos... positions) {
+        for (BlockPos pos : positions) {
+            Material material = mc.world.getBlockState(pos).getMaterial();
+            if (material != Material.AIR) {
+                return false;
+            }
+        }
+        return true;
     }
 }
