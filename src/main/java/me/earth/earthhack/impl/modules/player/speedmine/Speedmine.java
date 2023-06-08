@@ -64,7 +64,7 @@ public class Speedmine extends Module
     protected final Setting<MineMode> mode     =
             register(new EnumSetting<>("Mode", MineMode.Smart));
     protected final Setting<Boolean> noReset   =
-            register(new BooleanSetting("Reset", true));
+            register(new BooleanSetting("No-Reset", true));
     public final Setting<Float> limit       =
             register(new NumberSetting<>("Damage", 1.0f, 0.0f, 2.0f))
                 .setComplexity(Complexity.Medium);
@@ -105,6 +105,7 @@ public class Speedmine extends Module
             register(new EnumSetting<>("CoolDownBypass", CooldownBypass.None))
                 .setComplexity(Complexity.Medium);
     protected final Setting<Boolean> requireBreakSlot      =
+
             register(new BooleanSetting("RequireBreakSlot", false))
                 .setComplexity(Complexity.Expert);
     protected final Setting<Boolean> placeCrystal =
@@ -356,15 +357,35 @@ public class Speedmine extends Module
         mc.player.resetCooldown();
         reset();
     }
+
+
+
+    /**
+     * For strict and cc
+     */
     public void resetCD(){
+        CPacketPlayerDigging start = new CPacketPlayerDigging(CPacketPlayerDigging.Action.START_DESTROY_BLOCK, pos, facing);
+        CPacketPlayerDigging abort = new CPacketPlayerDigging(ABORT_DESTROY_BLOCK, pos, facing);
+        ((ICPacketPlayerDigging) start).setNormalDigging(false);
+        ((ICPacketPlayerDigging) start).setClientSideBreaking(false);
+
         ((IPlayerControllerMP) mc.playerController).setCurBlockDamageMP(0.0f);
-        mc.world.sendBlockBreakProgress(this.mc.player.getEntityId(), pos, -1);
-        mc.player.resetCooldown();
+
+        mc.world.sendBlockBreakProgress(mc.player.getEntityId(), pos, -1);
+        sentPacket=false;
         maxDamage=0.0f;
         for (int i = 0; i < 9; i++)
         {
             damages[i] = 0.0f;
         }
+        if(event.getValue()) {
+            mc.player.connection.sendPacket(start);
+            mc.player.connection.sendPacket(abort);
+        }else{
+            NetworkUtil.sendPacketNoEvent(start, false);
+            NetworkUtil.sendPacketNoEvent(abort, false);
+        }
+        mc.player.resetCooldown();
     }
 
 

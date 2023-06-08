@@ -557,7 +557,14 @@ public class Auto32k extends Module {
                         InventoryUtil.switchTo(44 - shulkerSlot);
                     }
                 }
-                mc.playerController.windowClick(mc.player.openContainer.windowId, swordIndex, trashSlot.getValue() == 0 ? mc.player.inventory.currentItem : (trashSlot.getValue() - 1), ClickType.SWAP, mc.player);
+                mc.playerController.windowClick(
+                        mc.player.openContainer.windowId,
+                        swordIndex,
+                        trashSlot.getValue() == 0
+                                ? mc.player.inventory.currentItem
+                                : (trashSlot.getValue() - 1),
+                        ClickType.SWAP,
+                        mc.player);
             } else {
                 if (closeGui.getValue() && secretClose.getValue()) {
                     mc.player.closeScreen();

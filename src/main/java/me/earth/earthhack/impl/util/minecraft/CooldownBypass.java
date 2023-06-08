@@ -13,18 +13,24 @@ public enum CooldownBypass {
             this.switchTo(lastSlot);
         }
     },
-    Slot() {
+    Slot() { 
         @Override
         public void switchTo(int slot) {
-            InventoryUtil.switchToBypass(
-                InventoryUtil.hotbarToInventory(slot));
+            InventoryUtil.switchToBypass(slot);
+        }
+        @Override
+        public void switchBack(int lastSlot, int from){
+            switchTo(lastSlot);
         }
     },
     Swap() {
         @Override
         public void switchTo(int slot) {
-            InventoryUtil.switchToBypassAlt(
-                InventoryUtil.hotbarToInventory(slot));
+            InventoryUtil.switchToBypassAlt(slot);
+        }
+        @Override
+        public void switchBack(int last, int from){
+            switchTo(from);
         }
     },
     Pick() {

@@ -146,7 +146,7 @@ public class Anchor extends Module
             double z = (hole.getZ() + (hole.getMaxZ() - hole.getZ()) / 2.0) - mc.player.posZ;
             double distance = Math.sqrt(x * x + z * z);
             event.setY(modify(yMode.getValue(), event.getY(), y.getValue()));
-            if (distance == 0.0)
+            if (distance == 0)
             {
                 event.setX(0.0);
                 event.setY(0.0);
