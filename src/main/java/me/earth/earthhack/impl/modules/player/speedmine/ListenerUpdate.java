@@ -19,6 +19,7 @@ import me.earth.earthhack.impl.modules.player.speedmine.mode.MineMode;
 import me.earth.earthhack.impl.util.math.MathUtil;
 import me.earth.earthhack.impl.util.math.position.PositionUtil;
 import me.earth.earthhack.impl.util.minecraft.ArmUtil;
+import me.earth.earthhack.impl.util.minecraft.CooldownBypass;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
@@ -42,37 +43,28 @@ import net.minecraft.util.math.Vec3d;
 import java.util.Arrays;
 
 //TODO: maybe account for Tps?
-final class ListenerUpdate extends ModuleListener<Speedmine, UpdateEvent>
-{
-    private static final ModuleCache<Nuker> NUKER =
-            Caches.getModule(Nuker.class);
-    private static final ModuleCache<AutoCrystal> AUTOCRYSTAL =
-            Caches.getModule(AutoCrystal.class);
-    private static final ModuleCache<AnvilAura> ANVIL_AURA =
-            Caches.getModule(AnvilAura.class);
-    private static final SettingCache<Boolean, BooleanSetting, Nuker> NUKE =
-            Caches.getSetting(Nuker.class, BooleanSetting.class, "Nuke", false);
+final class ListenerUpdate extends ModuleListener<Speedmine, UpdateEvent> {
+    private static final ModuleCache<Nuker> NUKER = Caches.getModule(Nuker.class);
+    private static final ModuleCache<AutoCrystal> AUTOCRYSTAL = Caches.getModule(AutoCrystal.class);
+    private static final ModuleCache<AnvilAura> ANVIL_AURA = Caches.getModule(AnvilAura.class);
+    private static final SettingCache<Boolean, BooleanSetting, Nuker> NUKE = Caches.getSetting(Nuker.class,
+            BooleanSetting.class, "Nuke", false);
 
-    public ListenerUpdate(Speedmine module)
-    {
+    public ListenerUpdate(Speedmine module) {
         super(module, UpdateEvent.class, -10);
     }
 
-    private EntityPlayer getPlacePlayer(BlockPos pos)
-    {
-        for (EntityPlayer player : mc.world.playerEntities)
-        {
-            if (Managers.FRIENDS.contains(player) || player == mc.player) continue;
+    private EntityPlayer getPlacePlayer(BlockPos pos) {
+        for (EntityPlayer player : mc.world.playerEntities) {
+            if (Managers.FRIENDS.contains(player) || player == mc.player)
+                continue;
             final BlockPos playerPos = PositionUtil.getPosition(player);
-            for (EnumFacing facing : EnumFacing.HORIZONTALS)
-            {
-                if (playerPos.offset(facing).equals(pos))
-                {
+            for (EnumFacing facing : EnumFacing.HORIZONTALS) {
+                if (playerPos.offset(facing).equals(pos)) {
                     return player;
                 }
             }
-            if (playerPos.offset(EnumFacing.UP).offset(EnumFacing.UP).equals(pos))
-            {
+            if (playerPos.offset(EnumFacing.UP).offset(EnumFacing.UP).equals(pos)) {
                 return player;
             }
         }
@@ -81,52 +73,45 @@ final class ListenerUpdate extends ModuleListener<Speedmine, UpdateEvent>
     }
 
     @Override
-    public void invoke(UpdateEvent event)
-    {
-        if (PingBypass.isConnected() && !event.isPingBypass())
-        {
+    public void invoke(UpdateEvent event) {
+        if (PingBypass.isConnected() && !event.isPingBypass()) {
             return;
         }
 
         module.checkReset();
         if (PlayerUtil.isCreative(mc.player)
                 || NUKER.isEnabled() && NUKE.getValue()
-                || ANVIL_AURA.isEnabled() && ANVIL_AURA.get().isMining())
-        {
+                || ANVIL_AURA.isEnabled() && ANVIL_AURA.get().isMining()) {
             return;
         }
 
         if (!PlayerUtil.isCreative(mc.player)
-            && PingBypass.isConnected()
-            && module.esp.getValue() != ESPMode.None
-            && module.bb != null)
-        {
+                && PingBypass.isConnected()
+                && module.esp.getValue() != ESPMode.None
+                && module.bb != null) {
             PingBypass.sendPacket(new S2CRenderPacket(
-                module.bb, module.pbOutline.getValue(),
-                module.pbColor.getValue()));
+                    module.bb, module.pbOutline.getValue(),
+                    module.pbColor.getValue()));
         }
 
         ((IPlayerControllerMP) mc.playerController).setBlockHitDelay(0);
         if (!module.multiTask.getValue()
                 && (module.noReset.getValue()
-                    || module.mode.getValue() == MineMode.Reset)
-                && mc.gameSettings.keyBindUseItem.isKeyDown())
-        {
+                        || module.mode.getValue() == MineMode.Reset)
+                && mc.gameSettings.keyBindUseItem.isKeyDown()) {
             ((IPlayerControllerMP) mc.playerController)
                     .setIsHittingBlock(false);
         }
 
-        if (module.pos != null)
-        {
+        if (module.pos != null) {
             Speedmine.compatibility.add(module.pos);
-            if(module.mode.getValue() == MineMode.Compatibility) return;
+            if (module.mode.getValue() == MineMode.Compatibility)
+                return;
             if ((module.mode.getValue() == MineMode.Smart
-                        || module.mode.getValue() == MineMode.Fast
-                        || module.mode.getValue() == MineMode.Instant
-                        || module.mode.getValue() == MineMode.Civ)
-                    && mc.player.getDistanceSq(module.pos) >
-                            MathUtil.square(module.range.getValue()))
-            {
+                    || module.mode.getValue() == MineMode.Fast
+                    || module.mode.getValue() == MineMode.Instant
+                    || module.mode.getValue() == MineMode.Civ)
+                    && mc.player.getDistanceSq(module.pos) > MathUtil.square(module.range.getValue())) {
                 module.abortCurrentPos();
                 return;
             }
@@ -140,26 +125,21 @@ final class ListenerUpdate extends ModuleListener<Speedmine, UpdateEvent>
                     && module.facing != null
                     && !BlockUtil.isAir(module.pos)
                     && !module.isPausing()
-                    && module.delayTimer.passed(module.realDelay.getValue()))
-            {
+                    && module.delayTimer.passed(module.realDelay.getValue())) {
                 ArmUtil.swingPacket(EnumHand.MAIN_HAND);
                 module.sendStopDestroy(module.pos, module.facing, false);
             }
 
-
             module.updateDamages();
-            if (module.normal.getValue())
-            {
+            if (module.normal.getValue()) {
                 int fastSlot = module.getFastSlot();
                 boolean prePlace = false;
                 if ((module.damages[mc.player.inventory.currentItem] >= module.limit.getValue()
                         || module.swap.getValue() && fastSlot != -1
                         || (prePlace = module.prePlaceCheck()))
-                        && (!module.checkPacket.getValue() || !module.sentPacket))
-                {
+                        && (!module.checkPacket.getValue() || !module.sentPacket)) {
                     boolean finalPrePlace = prePlace;
-                    Locks.acquire(Locks.WINDOW_CLICK_LOCK, () ->
-                    {
+                    Locks.acquire(Locks.WINDOW_CLICK_LOCK, () -> {
                         int crystalSlot;
                         BlockPos crystalPos;
                         boolean swap = module.swap.getValue();
@@ -168,9 +148,9 @@ final class ListenerUpdate extends ModuleListener<Speedmine, UpdateEvent>
                         if (module.placeCrystal.getValue()
                                 && (crystalSlot = InventoryUtil.findHotbarItem(Items.END_CRYSTAL)) != -1
                                 && (crystalPos = module.crystalHelper.calcCrystal(module.pos)) != null
-                                && module.crystalHelper.doCrystalPlace(crystalPos, crystalSlot, lastSlot, swap, finalPrePlace)
-                                    || finalPrePlace)
-                        {
+                                && module.crystalHelper.doCrystalPlace(crystalPos, crystalSlot, lastSlot, swap,
+                                        finalPrePlace)
+                                || finalPrePlace) {
                             return;
                         }
 
@@ -182,30 +162,28 @@ final class ListenerUpdate extends ModuleListener<Speedmine, UpdateEvent>
             }
 
             int pickSlot = InventoryUtil.findHotbarItem(Items.DIAMOND_PICKAXE);
-            if ((module.damages[mc.player.inventory.currentItem] >=
-                            module.limit.getValue())
+            if ((module.damages[mc.player.inventory.currentItem] >= module.limit.getValue())
                     || (pickSlot >= 0 && module.damages[pickSlot] >= module.limit.getValue())
-                    && !module.pausing
-                    && module.breakBind.getValue().getKey() == -1)
-            {
+                            && !module.pausing
+                            && module.breakBind.getValue().getKey() == -1) {
                 int lastSlot = mc.player.inventory.currentItem;
                 final EntityPlayer placeTarg = getPlacePlayer(module.pos);
                 if (placeTarg != null) {
                     // System.out.println(placeTarg.getName());
                     final BlockPos p = PlayerUtil.getBestPlace(module.pos, placeTarg);
-                    if (module.placeCrystal.getValue() && AUTOCRYSTAL.isEnabled() && p != null && BlockUtil.canPlaceCrystal(p,false,false)) {
+                    if (module.placeCrystal.getValue() && AUTOCRYSTAL.isEnabled() && p != null
+                            && BlockUtil.canPlaceCrystal(p, false, false)) {
                         final RayTraceResult result = new RayTraceResult(new Vec3d(0.5, 1.0, 0.5), EnumFacing.UP, p);
 
-                        if (mc.player.getHeldItemOffhand() != ItemStack.EMPTY && mc.player.getHeldItemOffhand().getItem() == Items.END_CRYSTAL) {
-                            final CPacketPlayerTryUseItemOnBlock place =
-                                    new CPacketPlayerTryUseItemOnBlock(p,
-                                            result.sideHit,
-                                            EnumHand.OFF_HAND,
-                                            (float) result.hitVec.x,
-                                            (float) result.hitVec.y,
-                                            (float) result.hitVec.z);
-                            final CPacketAnimation animation =
-                                    new CPacketAnimation(EnumHand.OFF_HAND);
+                        if (mc.player.getHeldItemOffhand() != ItemStack.EMPTY
+                                && mc.player.getHeldItemOffhand().getItem() == Items.END_CRYSTAL) {
+                            final CPacketPlayerTryUseItemOnBlock place = new CPacketPlayerTryUseItemOnBlock(p,
+                                    result.sideHit,
+                                    EnumHand.OFF_HAND,
+                                    (float) result.hitVec.x,
+                                    (float) result.hitVec.y,
+                                    (float) result.hitVec.z);
+                            final CPacketAnimation animation = new CPacketAnimation(EnumHand.OFF_HAND);
                             InventoryUtil.syncItem();
                             mc.player.connection.sendPacket(place);
                             if (AUTOCRYSTAL.isPresent()) {
@@ -217,51 +195,59 @@ final class ListenerUpdate extends ModuleListener<Speedmine, UpdateEvent>
                             final int crystalSlot = InventoryUtil.findHotbarItem(Items.END_CRYSTAL);
                             if (crystalSlot != -1) {
                                 Locks.acquire(Locks.WINDOW_CLICK_LOCK, () -> {
-                                    module.cooldownBypass.getValue().switchTo(crystalSlot);
-                                    final CPacketPlayerTryUseItemOnBlock place =
-                                        new CPacketPlayerTryUseItemOnBlock(p,
-                                                                           result.sideHit,
-                                                                           EnumHand.MAIN_HAND,
-                                                                           (float) result.hitVec.x,
-                                                                           (float) result.hitVec.y,
-                                                                           (float) result.hitVec.z);
-                                    final CPacketAnimation animation =
-                                        new CPacketAnimation(EnumHand.MAIN_HAND);
+                                    boolean switched = false;
+                                    if (!InventoryUtil.isHolding(Items.END_CRYSTAL)) {
+                                        module.cooldownBypass.getValue().switchTo(crystalSlot);
+                                        switched = true;
+                                    }
+                                    final CPacketPlayerTryUseItemOnBlock place = new CPacketPlayerTryUseItemOnBlock(p,
+                                            result.sideHit,
+                                            !InventoryUtil.isHolding(Items.END_CRYSTAL, EnumHand.OFF_HAND)
+                                                    ? EnumHand.MAIN_HAND
+                                                    : EnumHand.OFF_HAND,
+                                            (float) result.hitVec.x,
+                                            (float) result.hitVec.y,
+                                            (float) result.hitVec.z);
+                                    final CPacketAnimation animation = new CPacketAnimation(
+                                            !InventoryUtil.isHolding(Items.END_CRYSTAL, EnumHand.OFF_HAND)
+                                                    ? EnumHand.MAIN_HAND
+                                                    : EnumHand.OFF_HAND);
                                     mc.player.connection.sendPacket(place);
                                     mc.player.connection.sendPacket(animation);
-                                    module.cooldownBypass.getValue().switchBack(lastSlot, crystalSlot);
+                                    if (switched) {
+                                        module.cooldownBypass.getValue().switchBack(lastSlot, crystalSlot);
+                                    }
                                 });
                             }
                         }
                     }
                 }
 
-                Locks.acquire(Locks.WINDOW_CLICK_LOCK, () ->
-                {
-                    if (module.swap.getValue())
-                    {
+                Locks.acquire(Locks.WINDOW_CLICK_LOCK, () -> {
+                    if (module.swap.getValue()) {
                         module.cooldownBypass.getValue().switchTo(pickSlot);
                     }
 
                     NetworkUtil.sendPacketNoEvent(
-                        new CPacketPlayerDigging(
-                            CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK,
-                            module.pos,
-                            module.facing),
-                        false);
+                            new CPacketPlayerDigging(
+                                    CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK,
+                                    module.pos,
+                                    module.facing),
+                            false);
 
-                    if (module.swap.getValue())
-                    {
-                        module.cooldownBypass.getValue().switchBack(
-                            lastSlot, pickSlot);
+                    if (module.swap.getValue()) {
+                        module.cooldownBypass.getValue().switchBack(lastSlot, pickSlot);
                     }
                 });
 
-                if (module.toAir.getValue())
-                {
+                if (module.toAir.getValue()) {
                     mc.playerController.onPlayerDestroyBlock(module.pos);
                 }
-
+                if (module.reBreak.getValue()) {
+                    if (!BlockUtil.isAir(module.pos)) {
+                        mc.playerController.onPlayerDamageBlock(module.pos, module.facing);
+                    }
+                }
                 module.onSendPacket();
             }
         }

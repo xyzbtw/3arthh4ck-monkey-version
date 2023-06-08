@@ -23,6 +23,7 @@ import me.earth.earthhack.impl.util.minecraft.CooldownBypass;
 import me.earth.earthhack.impl.util.minecraft.DamageUtil;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import me.earth.earthhack.impl.util.minecraft.Swing;
+import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
 import me.earth.earthhack.impl.util.minecraft.blocks.mine.MineUtil;
 import me.earth.earthhack.impl.util.minecraft.blocks.states.BlockStateHelper;
 import me.earth.earthhack.impl.util.minecraft.blocks.states.IBlockStateHelper;
@@ -77,6 +78,7 @@ public class Speedmine extends Module {
             .setComplexity(Complexity.Medium);
     public final Setting<Boolean> onGround = register(new BooleanSetting("OnGround", true))
             .setComplexity(Complexity.Expert);
+    public final Setting<Boolean> reBreak = register(new BooleanSetting("reBreak", false));
     protected final Setting<Boolean> toAir = register(new BooleanSetting("ToAir", false))
             .setComplexity(Complexity.Medium);
     protected final Setting<Boolean> swap = register(new BooleanSetting("SilentSwitch", false))
@@ -290,7 +292,7 @@ public class Speedmine extends Module {
 
         ((IPlayerControllerMP) mc.playerController).setIsHittingBlock(false);
         ((IPlayerControllerMP) mc.playerController).setCurBlockDamageMP(0.0f);
-        mc.world.sendBlockBreakProgress(this.mc.player.getEntityId(), pos, -1);
+        mc.world.sendBlockBreakProgress(mc.player.getEntityId(), pos, -1);
         mc.player.resetCooldown();
         reset();
     }
@@ -313,12 +315,13 @@ public class Speedmine extends Module {
         for (int i = 0; i < 9; i++) {
             damages[i] = 0.0f;
         }
+
         if (event.getValue()) {
             mc.player.connection.sendPacket(start);
-            mc.player.connection.sendPacket(abort);
+            // mc.player.connection.sendPacket(abort);
         } else {
             NetworkUtil.sendPacketNoEvent(start, false);
-            NetworkUtil.sendPacketNoEvent(abort, false);
+            // NetworkUtil.sendPacketNoEvent(abort, false);
         }
         mc.player.resetCooldown();
         mc.playerController.updateController();
@@ -410,7 +413,6 @@ public class Speedmine extends Module {
         if (mode.getValue() == MineMode.Fast) {
             fastHelper.sendAbortStart(pos, facing);
         }
-
         onSendPacket();
         return true;
     }

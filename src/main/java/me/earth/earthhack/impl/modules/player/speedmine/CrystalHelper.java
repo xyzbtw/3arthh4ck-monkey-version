@@ -26,22 +26,20 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3i;
 
 public class CrystalHelper implements Globals {
-    private static final Vec3i[] CRYSTAL_OFFSETS = new Vec3i[]
-        {
-            new Vec3i(1, -1, 0),
-            new Vec3i(0, -1, 1),
-            new Vec3i(-1, -1, 0),
-            new Vec3i(0, -1, -1),
-                new Vec3i(1, 1, 0),
-                new Vec3i(-1,1,0),
-                new Vec3i(0,1,1),
-                new Vec3i(0,1,-1),
+    private static final Vec3i[] CRYSTAL_OFFSETS = new Vec3i[] {
+            new Vec3i(1, 1, 0),
+            new Vec3i(-1, 1, 0),
+            new Vec3i(0, 1, 1),
+            new Vec3i(0, 1, -1),
+            new Vec3i(1, 2, 0),
+            new Vec3i(-1, 2, 0),
+            new Vec3i(0, 2, 1),
+            new Vec3i(0, 2, -1),
+            new Vec3i(0, 3, 0),
             new Vec3i(0, 0, 0) // check this one last!
-        };
-    private static final ModuleCache<AutoCrystal> AUTOCRYSTAL =
-        Caches.getModule(AutoCrystal.class);
-    private static final ModuleCache<Offhand> OFFHAND =
-        Caches.getModule(Offhand.class);
+    };
+    private static final ModuleCache<AutoCrystal> AUTOCRYSTAL = Caches.getModule(AutoCrystal.class);
+    private static final ModuleCache<Offhand> OFFHAND = Caches.getModule(Offhand.class);
     private final IBlockStateHelper helper = new BlockStateHelper();
 
     private final Speedmine module;
@@ -50,40 +48,32 @@ public class CrystalHelper implements Globals {
         this.module = module;
     }
 
-    public BlockPos calcCrystal(BlockPos mined)
-    {
+    public BlockPos calcCrystal(BlockPos mined) {
         return calcCrystal(mined, null, false);
     }
 
-    public BlockPos calcCrystal(BlockPos mined, EntityPlayer player, boolean ignoreCrystals)
-    {
+    public BlockPos calcCrystal(BlockPos mined, EntityPlayer player, boolean ignoreCrystals) {
         helper.clearAllStates();
         helper.addAir(mined);
         DamageResult result = new DamageResult();
         result.bestDamage = Float.MIN_VALUE;
-        for (Vec3i offset : CRYSTAL_OFFSETS)
-        {
+        for (Vec3i offset : CRYSTAL_OFFSETS) {
             BlockPos pos = mined.add(offset);
             if (BlockUtil.isCrystalPosInRange(pos, module.crystalRange.getValue(), module.crystalTrace.getValue(),
-                                              module.crystalBreakTrace.getValue())
-                && BlockUtil.canPlaceCrystal(pos, ignoreCrystals, module.newVer.getValue(), mc.world.loadedEntityList,
-                                             module.newVerEntities.getValue(), 0L))
-            {
+                    module.crystalBreakTrace.getValue())
+                    && BlockUtil.canPlaceCrystal(pos, ignoreCrystals, module.newVer.getValue(),
+                            mc.world.loadedEntityList,
+                            module.newVerEntities.getValue(), 0L)) {
                 float selfDamage = DamageUtil.calculate(pos, mc.player, helper);
-                if (selfDamage > module.maxSelfDmg.getValue())
-                {
+                if (selfDamage > module.maxSelfDmg.getValue()) {
                     continue;
                 }
 
-                if (player == null)
-                {
-                    for (EntityPlayer p : mc.world.playerEntities)
-                    {
+                if (player == null) {
+                    for (EntityPlayer p : mc.world.playerEntities) {
                         checkPlayer(p, pos, result);
                     }
-                }
-                else
-                {
+                } else {
                     checkPlayer(player, pos, result);
                 }
             }
@@ -93,110 +83,92 @@ public class CrystalHelper implements Globals {
     }
 
     private void checkPlayer(EntityPlayer player,
-                             BlockPos pos,
-                             DamageResult result) {
+            BlockPos pos,
+            DamageResult result) {
         if (player != null
-            && !player.equals(mc.player)
-            && !player.equals(RotationUtil.getRotationPlayer())
-            && !Managers.FRIENDS.contains(player)
-            && !EntityUtil.isDead(player)
-            && player.getDistanceSq(pos) < 144)
-        {
+                && !player.equals(mc.player)
+                && !player.equals(RotationUtil.getRotationPlayer())
+                && !Managers.FRIENDS.contains(player)
+                && !EntityUtil.isDead(player)
+                && player.getDistanceSq(pos) < 144) {
             float damage = DamageUtil.calculate(pos, player, helper);
-            if (damage > module.minDmg.getValue() && damage > result.bestDamage)
-            {
+            if (damage > module.minDmg.getValue() && damage > result.bestDamage) {
                 result.bestPos = pos;
                 result.bestDamage = damage;
             }
         }
     }
 
-    public void placeCrystal(BlockPos pos, int slot, RayTraceResult ray, boolean prePlace)
-    {
+    public void placeCrystal(BlockPos pos, int slot, RayTraceResult ray, boolean prePlace) {
         EnumHand hand = module.offhandPlace.getValue()
-            ? EnumHand.OFF_HAND
-            : InventoryUtil.getHand(slot);
+                ? EnumHand.OFF_HAND
+                : InventoryUtil.getHand(slot);
 
         float[] f = RayTraceUtil.hitVecToPlaceVec(pos, ray.hitVec);
-        Locks.acquire(Locks.PLACE_SWITCH_LOCK, () ->
-        {
+        Locks.acquire(Locks.PLACE_SWITCH_LOCK, () -> {
             OffhandMode mode = null;
-            if (slot != -2)
-            {
-                if (module.offhandPlace.getValue())
-                {
+            if (slot != -2) {
+                if (module.offhandPlace.getValue()) {
                     mode = OFFHAND.get().getMode();
                     OFFHAND.get().forceMode(OffhandMode.CRYSTAL);
-                    if (OFFHAND.get().getMode() != OffhandMode.CRYSTAL)
-                    {
+                    if (OFFHAND.get().getMode() != OffhandMode.CRYSTAL) {
                         return;
                     }
-                }
-                else
-                {
+                } else {
                     module.cooldownBypass.getValue().switchTo(slot);
                 }
             }
 
-            if (AUTOCRYSTAL.get().placeSwing.getValue() == SwingTime.Pre)
-            {
+            if (AUTOCRYSTAL.get().placeSwing.getValue() == SwingTime.Pre) {
                 AUTOCRYSTAL.get().rotationHelper.swing(hand, false);
             }
 
             mc.player.connection.sendPacket(
-                new CPacketPlayerTryUseItemOnBlock(
-                    pos, ray.sideHit, hand, f[0], f[1], f[2]));
+                    new CPacketPlayerTryUseItemOnBlock(
+                            pos, ray.sideHit, hand, f[0], f[1], f[2]));
 
-            if (AUTOCRYSTAL.get().placeSwing.getValue() == SwingTime.Post)
-            {
+            if (AUTOCRYSTAL.get().placeSwing.getValue() == SwingTime.Post) {
                 AUTOCRYSTAL.get().rotationHelper.swing(hand, false);
             }
 
-            if (module.offhandSilent.getValue() && mode != null)
-            {
+            if (module.offhandSilent.getValue() && mode != null) {
                 OFFHAND.get().setMode(mode);
-                if (module.megaSilent.getValue())
-                {
+                if (module.megaSilent.getValue()) {
                     OFFHAND.get().forceMode(mode);
                 }
             }
         });
 
-        if (AUTOCRYSTAL.isPresent() && !prePlace)
-        {
+        if (AUTOCRYSTAL.isPresent() && !prePlace) {
             AUTOCRYSTAL.get().placed.put(
-                pos.up(), new CrystalTimeStamp(Float.MAX_VALUE, false));
+                    pos.up(), new CrystalTimeStamp(Float.MAX_VALUE, false));
             AUTOCRYSTAL.get().bombPos = pos.up();
         }
     }
 
-    public boolean doCrystalPlace(BlockPos crystalPos, int crystalSlot, int lastSlot, boolean swap, boolean prePlace)
-    {
+    public boolean doCrystalPlace(BlockPos crystalPos, int crystalSlot, int lastSlot, boolean swap, boolean prePlace) {
         if (module.antiAntiSilentSwitch.getValue()
-            && !module.aASSSwitchTimer.passed(module.aASSwitchTime.getValue()))
-        {
+                && !module.aASSSwitchTimer.passed(module.aASSwitchTime.getValue())) {
             return true;
         }
 
         RayTraceResult ray = RotationUtil.rayTraceTo(crystalPos, mc.world);
-        if (ray != null && ray.sideHit != null && ray.hitVec != null)
-        {
+        if (ray != null && ray.sideHit != null && ray.hitVec != null) {
             module.crystalHelper.placeCrystal(crystalPos, crystalSlot, ray, prePlace);
             boolean swappedBack = false;
             if (!swap || module.rotate.getValue()
-                && module.limitRotations.getValue()
-                && !RotationUtil.isLegit(module.pos, module.facing))
-            {
+                    && module.limitRotations.getValue()
+                    && !RotationUtil.isLegit(module.pos, module.facing)) {
                 swappedBack = true;
                 // TODO:?????????????????????????
                 module.cooldownBypass.getValue().switchBack(
-                    lastSlot, crystalSlot);
+                        lastSlot, crystalSlot);
             }
 
             if (module.antiAntiSilentSwitch.getValue()) {
                 if (!swappedBack && !module.offhandPlace.getValue()) {
                     module.cooldownBypass.getValue().switchBack(
-                        lastSlot, crystalSlot);
+                            lastSlot, crystalSlot);
                 }
 
                 module.aASSSwitchTimer.reset();
@@ -207,8 +179,7 @@ public class CrystalHelper implements Globals {
         return false;
     }
 
-    private static final class DamageResult
-    {
+    private static final class DamageResult {
         public BlockPos bestPos;
         public float bestDamage;
     }
