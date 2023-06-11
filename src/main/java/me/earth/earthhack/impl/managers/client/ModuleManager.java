@@ -50,6 +50,7 @@ import me.earth.earthhack.impl.modules.combat.holefiller.HoleFiller;
 import me.earth.earthhack.impl.modules.combat.killaura.KillAura;
 import me.earth.earthhack.impl.modules.combat.legswitch.LegSwitch;
 import me.earth.earthhack.impl.modules.combat.offhand.Offhand;
+import me.earth.earthhack.impl.modules.combat.pearlclip.PearlClip;
 import me.earth.earthhack.impl.modules.combat.pistonaura.PistonAura;
 import me.earth.earthhack.impl.modules.combat.automend.AutoMend;
 import me.earth.earthhack.impl.modules.combat.selftrap.SelfTrap;
@@ -175,6 +176,7 @@ import me.earth.earthhack.impl.modules.render.lagometer.LagOMeter;
 import me.earth.earthhack.impl.modules.render.logoutspots.LogoutSpots;
 import me.earth.earthhack.impl.modules.render.nametags.Nametags;
 import me.earth.earthhack.impl.modules.render.newchunks.NewChunks;
+import me.earth.earthhack.impl.modules.render.newchunks.OIdChunks;
 import me.earth.earthhack.impl.modules.render.norender.NoRender;
 import me.earth.earthhack.impl.modules.render.penis.Penis;
 import me.earth.earthhack.impl.modules.render.popchams.PopChams;
@@ -190,16 +192,15 @@ import me.earth.earthhack.impl.modules.render.viewclip.CameraClip;
 import me.earth.earthhack.impl.modules.render.viewmodel.ViewModel;
 import me.earth.earthhack.impl.modules.render.voidesp.VoidESP;
 import me.earth.earthhack.impl.modules.render.waypoints.WayPoints;
+import me.earth.earthhack.impl.modules.combat.fastprojectiles.FastProjectile;
 import me.earth.earthhack.impl.modules.render.weather.Weather;
 import me.earth.earthhack.impl.modules.render.xray.XRay;
 import me.earth.earthhack.vanilla.Environment;
 
 import java.util.ArrayList;
 
-public class ModuleManager extends IterationRegister<Module>
-{
-    public void init()
-    {
+public class ModuleManager extends IterationRegister<Module> {
+    public void init() {
         Earthhack.getLogger().info("Initializing Modules.");
         this.forceRegister(new AccountSpoof());
         this.forceRegister(new AntiCheat());
@@ -235,6 +236,7 @@ public class ModuleManager extends IterationRegister<Module>
         this.forceRegister(new BowSpam());
         this.forceRegister(new BowKiller());
         this.forceRegister(new Blocker());
+        this.forceRegister(new PearlClip());
         this.forceRegister(new Criticals());
         this.forceRegister(new HoleFiller());
         this.forceRegister(new KillAura());
@@ -324,6 +326,7 @@ public class ModuleManager extends IterationRegister<Module>
         this.forceRegister(new BadAnchor());
         this.forceRegister(new TickShift());
         this.forceRegister(new Velocity());
+        this.forceRegister(new FastProjectile());
         this.forceRegister(new SmartBlockLag());
 
         this.forceRegister(new AutoMine());
@@ -370,6 +373,7 @@ public class ModuleManager extends IterationRegister<Module>
         this.forceRegister(new NewChunks());
         this.forceRegister(new NoRender());
         this.forceRegister(new Search());
+        this.forceRegister(new OIdChunks());
         this.forceRegister(new Skeleton());
         this.forceRegister(new Sounds());
         this.forceRegister(new Tracers());
@@ -397,29 +401,24 @@ public class ModuleManager extends IterationRegister<Module>
         Bus.EVENT_BUS.post(new PostInitEvent());
     }
 
-    public void load()
-    {
+    public void load() {
         Caches.setManager(this);
-        for (Module module : getRegistered())
-        {
+        for (Module module : getRegistered()) {
             module.load();
         }
     }
 
     @Override
-    public void unregister(Module module) throws CantUnregisterException
-    {
+    public void unregister(Module module) throws CantUnregisterException {
         super.unregister(module);
         module.setRegistered(false);
         Bus.EVENT_BUS.unsubscribe(module);
     }
 
-    protected void forceRegister(Module module)
-    {
+    protected void forceRegister(Module module) {
         registered.add(module);
         module.setRegistered(true);
-        if (module instanceof Registrable)
-        {
+        if (module instanceof Registrable) {
             ((Registrable) module).onRegister();
         }
     }
@@ -427,14 +426,17 @@ public class ModuleManager extends IterationRegister<Module>
     public ArrayList<Module> getModulesFromCategory(Category moduleCategory) {
         final ArrayList<Module> iModules = new ArrayList<>();
         for (Module iModule : getRegistered()) {
-            if (iModule.getCategory() == moduleCategory) iModules.add(iModule);
+            if (iModule.getCategory() == moduleCategory)
+                iModules.add(iModule);
         }
         return iModules;
     }
+
     public ArrayList<Module> getHiddenModules() {
         ArrayList<Module> hiddenModules = new ArrayList<>();
         for (Module hidModule : getRegistered()) {
-            if (hidModule.getHiddenState()) hiddenModules.add(hidModule);
+            if (hidModule.getHiddenState())
+                hiddenModules.add(hidModule);
         }
         return hiddenModules;
     }

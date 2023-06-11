@@ -19,7 +19,7 @@ import net.minecraft.util.math.BlockPos;
 
 
 
-// TODO: thingy that makes crystals fall on us
+
 public class PearlPhase extends DisablingModule
 {
 

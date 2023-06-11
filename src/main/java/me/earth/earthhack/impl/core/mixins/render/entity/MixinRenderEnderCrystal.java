@@ -99,8 +99,12 @@ public abstract class MixinRenderEnderCrystal
         }
 
         float limbSwing = 0.0F;
-        float limbSwingAmount = modify.getValue() && CHAMS.isEnabled() ? f * 3.0F * spinspeed.getValue() : f * 3.0F;
-        float ageInTicks = modify.getValue() && CHAMS.isEnabled() ? f1 * 0.2F * bouncespeed.getValue() : f1 * 0.2F;
+        float limbSwingAmount = modify.getValue() && CHAMS.isEnabled() 
+                                                    ? f * 3.0F * spinspeed.getValue() 
+                                                    : f * 3.0F;
+        float ageInTicks = modify.getValue() && CHAMS.isEnabled() 
+                                                    ? f1 * 0.2F * bouncespeed.getValue() 
+                                                    : f1 * 0.2F;
         float netHeadYaw = 0.0F;
         float headPitch = 0.0F;
         float scale = 0.0625F;

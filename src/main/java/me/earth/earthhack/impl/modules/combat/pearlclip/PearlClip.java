@@ -2,7 +2,9 @@ package me.earth.earthhack.impl.modules.combat.pearlclip;
 
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
+import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.EnumSetting;
+import me.earth.earthhack.impl.util.minecraft.CooldownBypass;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
@@ -27,6 +29,7 @@ public class PearlClip extends Module {
     public PearlClip() {
         super("PearlClip", Category.Combat);
     }
+    protected Setting<CooldownBypass> swap = new EnumSetting<>("CDBypass", CooldownBypass.None);
 
 
     @Override
@@ -42,9 +45,9 @@ public class PearlClip extends Module {
             mc.player.connection.sendPacket(new CPacketPlayerTryUseItem(EnumHand.MAIN_HAND));
         } else {
             int oldSlot = mc.player.inventory.currentItem;
-            InventoryUtil.switchSilent(PEARLSLOT, PEARLSLOT, oldSlot, switchh.getValue());
+            swap.getValue().switchTo(PEARLSLOT);
             mc.player.connection.sendPacket(new CPacketPlayerTryUseItem(EnumHand.MAIN_HAND));
-            InventoryUtil.switchSilent(oldSlot, PEARLSLOT, oldSlot, switchh.getValue());
+            swap.getValue().switchBack(oldSlot, PEARLSLOT);
         }
         mc.player.connection.sendPacket(new CPacketPlayer.Rotation(mc.player.rotationYaw, mc.player.rotationPitch, mc.player.onGround));
         disable();

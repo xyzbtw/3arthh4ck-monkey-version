@@ -21,6 +21,7 @@ import net.minecraft.util.math.Vec3d;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.EXTFramebufferObject;
 import org.lwjgl.opengl.EXTPackedDepthStencil;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
@@ -74,7 +75,46 @@ public class RenderUtil implements Globals
                 (float) res.getScaledWidth() / (float) mc.displayWidth,
                 (float) res.getScaledHeight() / (float) mc.displayHeight);
     }
+    public static void draw2DRec(AxisAlignedBB bb, float width, float red, float green, float blue, float alpha) {
+        GlStateManager.pushMatrix();
+        GlStateManager.enableBlend();
+        GlStateManager.disableDepth();
+        GlStateManager.tryBlendFuncSeparate((int)770, (int)771, (int)0, (int)1);
+        GlStateManager.disableTexture2D();
+        GlStateManager.depthMask((boolean)false);
+        GL11.glEnable(2848);
+        GL11.glHint(3154, 4354);
+        GL11.glLineWidth(width);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(3, DefaultVertexFormats.POSITION_COLOR);
+        bufferbuilder.pos(bb.minX, bb.maxY, bb.minZ).color(red, green, blue, alpha).endVertex();
+        bufferbuilder.pos(bb.maxX, bb.maxY, bb.minZ).color(red, green, blue, alpha).endVertex();
+        bufferbuilder.pos(bb.maxX, bb.maxY, bb.maxZ).color(red, green, blue, alpha).endVertex();
+        bufferbuilder.pos(bb.minX, bb.maxY, bb.maxZ).color(red, green, blue, alpha).endVertex();
+        bufferbuilder.pos(bb.minX, bb.maxY, bb.minZ).color(red, green, blue, alpha).endVertex();
+        bufferbuilder.pos(bb.minX, bb.maxY, bb.maxZ).color(red, green, blue, 0.0f).endVertex();
+        bufferbuilder.pos(bb.maxX, bb.maxY, bb.maxZ).color(red, green, blue, 0.0f).endVertex();
+        bufferbuilder.pos(bb.maxX, bb.maxY, bb.minZ).color(red, green, blue, 0.0f).endVertex();
+        tessellator.draw();
+        GL11.glDisable(2848);
+        GlStateManager.depthMask((boolean)true);
+        GlStateManager.enableDepth();
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
+        GlStateManager.popMatrix();
+    }
+    public static AxisAlignedBB getBB(BlockPos pos, int size) {
+        return new AxisAlignedBB((double)pos.getX() - RenderUtil.mc.getRenderManager().viewerPosX, (double)pos.getY() - RenderUtil.mc.getRenderManager().viewerPosY, (double)pos.getZ() - RenderUtil.mc.getRenderManager().viewerPosZ, (double)(pos.getX() + size) - RenderUtil.mc.getRenderManager().viewerPosX, (double)(pos.getY() + size) - RenderUtil.mc.getRenderManager().viewerPosY, (double)(pos.getZ() + size) - RenderUtil.mc.getRenderManager().viewerPosZ);
+    }
 
+    public static AxisAlignedBB getBB(Vec3d pos, double size, double ySize) {
+        return new AxisAlignedBB(pos.x - RenderUtil.mc.getRenderManager().viewerPosX, pos.y - RenderUtil.mc.getRenderManager().viewerPosY, pos.z - RenderUtil.mc.getRenderManager().viewerPosZ, pos.x + size - RenderUtil.mc.getRenderManager().viewerPosX, pos.y + ySize - RenderUtil.mc.getRenderManager().viewerPosY, pos.z + size - RenderUtil.mc.getRenderManager().viewerPosZ);
+    }
+
+    public static AxisAlignedBB getBB(BlockPos pos, double xSize, double ySize, double zSize) {
+        return new AxisAlignedBB((double)pos.getX() - RenderUtil.mc.getRenderManager().viewerPosX, (double)pos.getY() - RenderUtil.mc.getRenderManager().viewerPosY, (double)pos.getZ() - RenderUtil.mc.getRenderManager().viewerPosZ, (double)pos.getX() + xSize - RenderUtil.mc.getRenderManager().viewerPosX, (double)pos.getY() + ySize - RenderUtil.mc.getRenderManager().viewerPosY, (double)pos.getZ() + zSize - RenderUtil.mc.getRenderManager().viewerPosZ);
+    }
     public static Entity getEntity()
     {
         return mc.getRenderViewEntity() == null

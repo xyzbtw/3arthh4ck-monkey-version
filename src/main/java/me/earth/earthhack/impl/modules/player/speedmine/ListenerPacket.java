@@ -11,49 +11,39 @@ import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.network.play.server.SPacketHeldItemChange;
 import net.minecraft.network.play.server.SPacketSetSlot;
 
-public class ListenerPacket extends ModuleListener<Speedmine, PacketEvent> {
+public class ListenerPacket extends ModuleListener<Speedmine, PacketEvent.Send> {
 
     public ListenerPacket(Speedmine module) {
-        super(module, PacketEvent.class);
+        super(module, PacketEvent.Send.class);
     }
 
     @Override
-    public void invoke(PacketEvent event) {
+    public void invoke(PacketEvent.Send event) {
         if (!module.strict.getValue())
             return;
         if (module.pos == null)
             return;
-        if (event.getClass() == PacketEvent.Send.class) {
-            if (event.getPacket() instanceof CPacketPlayerDigging) {
-                if (((CPacketPlayerDigging) event.getPacket())
-                        .getAction() == CPacketPlayerDigging.Action.RELEASE_USE_ITEM
-                        || ((CPacketPlayerDigging) event.getPacket())
-                                .getAction() == CPacketPlayerDigging.Action.SWAP_HELD_ITEMS) {
-                    module.resetCD();
-                    return;
-                }
-            }
-            if (event.getPacket() instanceof CPacketHeldItemChange
-                    && module.damages[mc.player.inventory.currentItem] < module.limit.getValue()) {
+        if (event.getPacket() instanceof CPacketPlayerDigging) {
+            if (((CPacketPlayerDigging) event.getPacket())
+                    .getAction() == CPacketPlayerDigging.Action.RELEASE_USE_ITEM
+                    || ((CPacketPlayerDigging) event.getPacket())
+                            .getAction() == CPacketPlayerDigging.Action.SWAP_HELD_ITEMS) {
                 module.resetCD();
                 return;
             }
-            /*
-             * if (event.getPacket() instanceof CPacketPlayerTryUseItemOnBlock
-             * && !InventoryUtil.isHolding(Items.END_CRYSTAL)) {
-             * module.resetCD();
-             * return;
-             * }
-             */
-        } else if (event.getClass() == PacketEvent.Send.class) {
-            Packet<?> packet = event.getPacket();
-            if (packet instanceof SPacketHeldItemChange
-                    && module.damages[mc.player.inventory.currentItem] < module.limit.getValue()) {
-                module.resetCD();
-            }
-
         }
+        if (event.getPacket() instanceof CPacketHeldItemChange
+                && module.damages[mc.player.inventory.currentItem] < module.limit.getValue()) {
+            module.resetCD();
+            return;
+        }
+        /*
+         * if (event.getPacket() instanceof CPacketPlayerTryUseItemOnBlock
+         * && !InventoryUtil.isHolding(Items.END_CRYSTAL)) {
+         * module.resetCD();
+         * return;
+         * }
+         */
 
     }
-
 }

@@ -5,6 +5,7 @@ import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.managers.Managers;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 
 final class ListenerTick extends ModuleListener<NoRender, TickEvent>
 {
@@ -39,6 +40,16 @@ final class ListenerTick extends ModuleListener<NoRender, TickEvent>
                 {
                     module.ids.forEach(Managers.SET_DEAD::revive);
                     module.ids.clear();
+                }
+            }
+            if (module.invisible.getValue())
+            {
+                for (EntityPlayer entity : mc.world.playerEntities)
+                {
+                    if (entity.isInvisible())
+                    {
+                        entity.setInvisible(false);
+                    }
                 }
             }
         }

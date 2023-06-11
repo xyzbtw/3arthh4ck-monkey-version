@@ -8,41 +8,34 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderEnderCrystal;
 import net.minecraft.entity.Entity;
 
-public class CrystalRenderEvent extends Event
-{
+public class CrystalRenderEvent extends Event {
 
     private final RenderEnderCrystal render;
     private final Entity entity;
     private final ModelBase model;
-    private static final ModuleCache<CrystalChams> CHAMS =
-            Caches.getModule(CrystalChams.class);
+    private static final ModuleCache<CrystalChams> CHAMS = Caches.getModule(CrystalChams.class);
 
     private CrystalRenderEvent(RenderEnderCrystal render,
-                               Entity entity,
-                               ModelBase model)
-    {
+            Entity entity,
+            ModelBase model) {
         this.render = render;
         this.entity = entity;
-        this.model  = model;
+        this.model = model;
     }
 
-    public RenderEnderCrystal getRender()
-    {
+    public RenderEnderCrystal getRender() {
         return render;
     }
 
-    public Entity getEntity()
-    {
+    public Entity getEntity() {
         return entity;
     }
 
-    public ModelBase getModel()
-    {
+    public ModelBase getModel() {
         return model;
     }
 
-    public static class Pre extends CrystalRenderEvent
-    {
+    public static class Pre extends CrystalRenderEvent {
         private final float limbSwing;
         private final float limbSwingAmount;
         private final float ageInTicks;
@@ -51,57 +44,49 @@ public class CrystalRenderEvent extends Event
         private final float scale;
 
         public Pre(RenderEnderCrystal render,
-                   Entity entity,
-                   ModelBase model,
-                   float limbSwing,
-                   float limbSwingAmount,
-                   float ageInTicks,
-                   float netHeadYaw,
-                   float headPitch,
-                   float scale)
-        {
+                Entity entity,
+                ModelBase model,
+                float limbSwing,
+                float limbSwingAmount,
+                float ageInTicks,
+                float netHeadYaw,
+                float headPitch,
+                float scale) {
             super(render, entity, model);
-            this.limbSwing       = limbSwing;
-            this.limbSwingAmount = CHAMS.get().modify.getValue() ? CHAMS.get().spinnerspeed.getValue()*limbSwingAmount : limbSwingAmount;
-            this.ageInTicks      = CHAMS.get().modify.getValue() ? CHAMS.get().bouncespeed.getValue()*ageInTicks : ageInTicks;
-            this.netHeadYaw      = netHeadYaw;
-            this.headPitch       = headPitch;
-            this.scale           = scale;
+            this.limbSwing = limbSwing;
+            this.limbSwingAmount = limbSwingAmount;
+            this.ageInTicks = ageInTicks;
+            this.netHeadYaw = netHeadYaw;
+            this.headPitch = headPitch;
+            this.scale = scale;
         }
 
-        public float getLimbSwing()
-        {
+        public float getLimbSwing() {
             return limbSwing;
         }
 
-        public float getLimbSwingAmount()
-        {
+        public float getLimbSwingAmount() {
             return limbSwingAmount;
         }
 
-        public float getAgeInTicks()
-        {
+        public float getAgeInTicks() {
             return ageInTicks;
         }
 
-        public float getNetHeadYaw()
-        {
+        public float getNetHeadYaw() {
             return netHeadYaw;
         }
 
-        public float getHeadPitch()
-        {
+        public float getHeadPitch() {
             return headPitch;
         }
 
-        public float getScale()
-        {
+        public float getScale() {
             return scale;
         }
     }
 
-    public static class Post extends CrystalRenderEvent
-    {
+    public static class Post extends CrystalRenderEvent {
         private final float limbSwing;
         private final float limbSwingAmount;
         private final float ageInTicks;
@@ -110,51 +95,44 @@ public class CrystalRenderEvent extends Event
         private final float scale;
 
         public Post(RenderEnderCrystal render,
-                    Entity entity,
-                    ModelBase model,
-                    float limbSwing,
-                    float limbSwingAmount,
-                    float ageInTicks,
-                    float netHeadYaw,
-                    float headPitch,
-                    float scale)
-        {
+                Entity entity,
+                ModelBase model,
+                float limbSwing,
+                float limbSwingAmount,
+                float ageInTicks,
+                float netHeadYaw,
+                float headPitch,
+                float scale) {
             super(render, entity, model);
-            this.limbSwing       = limbSwing;
-            this.limbSwingAmount = CHAMS.get().modify.getValue() ? CHAMS.get().spinnerspeed.getValue()*limbSwingAmount : limbSwingAmount;
-            this.ageInTicks      = CHAMS.get().modify.getValue() ? CHAMS.get().bouncespeed.getValue()*ageInTicks : ageInTicks;
-            this.netHeadYaw      = netHeadYaw;
-            this.headPitch       = headPitch;
-            this.scale           = scale;
+            this.limbSwing = limbSwing;
+            this.limbSwingAmount = limbSwingAmount;
+            this.ageInTicks = ageInTicks;
+            this.netHeadYaw = netHeadYaw;
+            this.headPitch = headPitch;
+            this.scale = scale;
         }
 
-        public float getLimbSwing()
-        {
+        public float getLimbSwing() {
             return limbSwing;
         }
 
-        public float getLimbSwingAmount()
-        {
+        public float getLimbSwingAmount() {
             return limbSwingAmount;
         }
 
-        public float getAgeInTicks()
-        {
+        public float getAgeInTicks() {
             return ageInTicks;
         }
 
-        public float getNetHeadYaw()
-        {
+        public float getNetHeadYaw() {
             return netHeadYaw;
         }
 
-        public float getHeadPitch()
-        {
+        public float getHeadPitch() {
             return headPitch;
         }
 
-        public float getScale()
-        {
+        public float getScale() {
             return scale;
         }
     }

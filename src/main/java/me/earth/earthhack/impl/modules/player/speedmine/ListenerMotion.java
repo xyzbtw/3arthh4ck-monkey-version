@@ -26,7 +26,7 @@ final class ListenerMotion extends ModuleListener<Speedmine, MotionUpdateEvent>
 
     public ListenerMotion(Speedmine module)
     {
-        super(module, MotionUpdateEvent.class, 999);
+        super(module, MotionUpdateEvent.class, Integer.MAX_VALUE);
     }
 
     @Override

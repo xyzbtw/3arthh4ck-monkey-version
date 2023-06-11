@@ -24,7 +24,7 @@ final class ListenerMotion extends ModuleListener<Surround, MotionUpdateEvent>
 {
     public ListenerMotion(Surround module)
     {
-        super(module, MotionUpdateEvent.class, -999999999);
+        super(module, MotionUpdateEvent.class, Integer.MAX_VALUE);
     }
 
     @Override

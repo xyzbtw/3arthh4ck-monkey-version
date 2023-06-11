@@ -66,31 +66,13 @@ public class InventoryUtil implements Globals {
             if (mc.player.inventory.currentItem != slot
                     && slot > -1 && slot < 9) {
                 int targetSlot = hotbarToInventory(slot);
-                Locks.acquire(Locks.WINDOW_CLICK_LOCK, () -> mc.playerController
-                        .windowClick(0,
-                                targetSlot,
-                                mc.player.inventory.currentItem,
-                                ClickType.SWAP,
-                                mc.player));
+                Locks.acquire(Locks.WINDOW_CLICK_LOCK, () -> mc.playerController.windowClick(0,
+                        targetSlot,
+                        mc.player.inventory.currentItem,
+                        ClickType.SWAP,
+                        mc.player));
             }
             syncItem();
-        });
-    }
-
-    public static void switchToBypassAltXyz(int slot) {
-        Locks.acquire(Locks.WINDOW_CLICK_LOCK, () -> {
-            if (mc.player.inventory.currentItem != slot
-                    && slot > -1 && slot < 9) {
-                int lastSlot = mc.player.inventory.currentItem;
-                int targetSlot = hotbarToInventory(slot);
-                Locks.acquire(Locks.WINDOW_CLICK_LOCK, () -> mc.playerController
-                        .windowClick(0,
-                                targetSlot,
-                                lastSlot,
-                                ClickType.SWAP,
-                                mc.player));
-
-            }
         });
     }
 

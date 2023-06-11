@@ -37,6 +37,8 @@ public class NoRender extends Module
             register(new BooleanSetting("NoFog", true));
     protected final Setting<Boolean> blocks       =
             register(new BooleanSetting("Blocks", true));
+    protected final Setting<Boolean> invisible =
+            register(new BooleanSetting("Invisible", false));
     protected final Setting<Boolean> advancements =
             register(new BooleanSetting("Advancements", false));
     protected final Setting<Boolean> critParticles =
