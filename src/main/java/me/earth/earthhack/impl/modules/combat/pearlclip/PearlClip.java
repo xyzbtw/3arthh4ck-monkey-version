@@ -29,7 +29,7 @@ public class PearlClip extends Module {
     public PearlClip() {
         super("PearlClip", Category.Combat);
     }
-    protected Setting<CooldownBypass> swap = new EnumSetting<>("CDBypass", CooldownBypass.None);
+    protected Setting<CooldownBypass> swap = register(new EnumSetting<>("CDBypass", CooldownBypass.None));
 
 
     @Override

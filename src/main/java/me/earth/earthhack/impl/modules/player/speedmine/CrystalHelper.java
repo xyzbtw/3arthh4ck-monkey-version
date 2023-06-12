@@ -27,15 +27,15 @@ import net.minecraft.util.math.Vec3i;
 
 public class CrystalHelper implements Globals {
     private static final Vec3i[] CRYSTAL_OFFSETS = new Vec3i[] {
+            new Vec3i(1, 0, 0),
+            new Vec3i(-1, 0, 0),
+            new Vec3i(0, 0, 1),
+            new Vec3i(0, 0, -1),
             new Vec3i(1, 1, 0),
             new Vec3i(-1, 1, 0),
             new Vec3i(0, 1, 1),
             new Vec3i(0, 1, -1),
-            new Vec3i(1, 2, 0),
-            new Vec3i(-1, 2, 0),
-            new Vec3i(0, 2, 1),
-            new Vec3i(0, 2, -1),
-            new Vec3i(0, 3, 0),
+            new Vec3i(0, 2, 0),
             new Vec3i(0, 0, 0) // check this one last!
     };
     private static final ModuleCache<AutoCrystal> AUTOCRYSTAL = Caches.getModule(AutoCrystal.class);
