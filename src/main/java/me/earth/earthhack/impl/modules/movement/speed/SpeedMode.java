@@ -1,6 +1,7 @@
 package me.earth.earthhack.impl.modules.movement.speed;
 
 import me.earth.earthhack.api.util.interfaces.Globals;
+import me.earth.earthhack.impl.core.ducks.entity.IEntity;
 import me.earth.earthhack.impl.event.events.movement.MoveEvent;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.modules.movement.badanchor.BadAnchor;
@@ -8,6 +9,7 @@ import me.earth.earthhack.impl.util.math.MathUtil;
 import me.earth.earthhack.impl.util.math.position.PositionUtil;
 import me.earth.earthhack.impl.util.minecraft.KeyBoardUtil;
 import me.earth.earthhack.impl.util.minecraft.MovementUtil;
+import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import net.minecraft.entity.EntityLivingBase;
 
 public enum SpeedMode implements Globals
@@ -20,14 +22,22 @@ public enum SpeedMode implements Globals
             if (module.stopshift.getValue()) {
                 if (mc.player.isSneaking() || KeyBoardUtil.isKeyDown(mc.gameSettings.keyBindSneak)) return;
             }
-            if (mc.player.isElytraFlying()) return;
-            if (module.LONG_JUMP.isEnabled()) return;
-            if (!module.noWaterInstant.getValue()
+           if(module.pauseInAir.getValue()){
+               if(mc.player.motionY>0 ||
+                       !mc.player.onGround ||
+                       mc.player.isOnLadder() ||
+                       mc.player.capabilities.isFlying ||
+                       mc.player.fallDistance > 2 ){
+                   return;
+               }
+           }
+           if(mc.player.isElytraFlying()) return;
+           if (module.LONG_JUMP.isEnabled()) return;
+           if (!module.noWaterInstant.getValue()
                     || (!mc.player.isInWater() && !mc.player.isInLava()))
-            {
-
-                MovementUtil.strafe(event, MovementUtil.getSpeed(module.slow.getValue()));
-            }
+           {
+               MovementUtil.strafe(event, MovementUtil.getSpeed(module.slow.getValue()));
+           }
         }
     },
     OldGround()

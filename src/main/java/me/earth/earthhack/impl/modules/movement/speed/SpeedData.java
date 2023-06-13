@@ -15,6 +15,7 @@ final class SpeedData extends DefaultData<Speed>
         register(module.inWater, "Move quickly while in water.");
         register(module.speedSet, "Speed for Mode-Vanilla.");
         register(module.stopshift, "For mode instant, stops on sneak.");
+        register(module.pauseInAir, "For mode instant, doesn't strafe in air");
     }
 
     @Override

@@ -139,15 +139,11 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
                     && !(blockmap.get(pos).getBlock() instanceof BlockEnderChest)) {
                 if (debug.getValue())
                     ModuleUtil.sendMessage(this, "failed the fucking check xyz", "Blocker");
-                blockmap.remove(pos);
                 return;
             }
 
         BlockPos playerPos = PlayerUtil.getPlayerPos();
 
-        if (HoleUtil.is2x1(playerPos)) {
-
-        }
 
         // checking if we should care about the block in question
         for (Vec3i offset : replaceList) {
@@ -173,6 +169,7 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
 
         if (pos == playerPos.add(0, 2, 0) && anticev.getValue()) {
             scheduledPlacements.add(pos.add(0, 1, 0));
+            blockmap.remove(pos);
             return;
         }
 
@@ -219,6 +216,7 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
                 }
             }
         }
+        blockmap.remove(pos);
     }
 
     @Override

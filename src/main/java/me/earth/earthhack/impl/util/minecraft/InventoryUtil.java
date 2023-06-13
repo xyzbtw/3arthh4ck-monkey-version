@@ -72,7 +72,6 @@ public class InventoryUtil implements Globals {
                         ClickType.SWAP,
                         mc.player));
             }
-            syncItem();
         });
     }
 

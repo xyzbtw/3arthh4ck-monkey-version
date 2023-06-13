@@ -69,7 +69,8 @@ public class Speed extends Module
             register(new BooleanSetting("NoLiquidInstant", false));
     protected final Setting<Boolean> stopshift =
             register(new BooleanSetting("StopOnSneak", false));
-
+    protected final Setting<Boolean> pauseInAir  =
+            register(new BooleanSetting("PauseInAir", false));
     protected final Setting<Boolean> modify =
         register(new BooleanSetting("Modify", false));
     protected final Setting<Double> xzFactor    =
