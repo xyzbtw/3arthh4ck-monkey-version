@@ -52,10 +52,6 @@ public class Chams extends Module
             register(new BooleanSetting("Monsters", false));
     protected final Setting<Boolean> texture       =
             register(new BooleanSetting("Texture", false));
-    protected final Setting<Float> scale =
-            register(new NumberSetting<>("ChildScale", 1.0f, 0.0f, 10.0f));
-    protected final Setting<Boolean> child =
-            register(new BooleanSetting("ChildMode", false));
     protected final Setting<Boolean> xqz           =
             register(new BooleanSetting("XQZ", true));
     protected final Setting<Boolean> armor         =
@@ -176,7 +172,7 @@ public class Chams extends Module
                   wireColor.getBlue() / 255.0f,
                   wireColor.getAlpha() / 255.0f);
         event.getModel().render(event.getEntity(), event.getLimbSwing(), event.getLimbSwingAmount(),
-                                event.getAgeInTicks(), event.getNetHeadYaw(), event.getHeadPitch(),  child.getValue() ? scale.getValue() : event.getScale());
+                                event.getAgeInTicks(), event.getNetHeadYaw(), event.getHeadPitch(), event.getScale());
         glPopAttrib();
     }
 

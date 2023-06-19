@@ -407,7 +407,7 @@ final class ListenerModelPre extends ModuleListener<Chams, ModelRenderEvent.Pre>
                 event.getAgeInTicks(),
                 event.getNetHeadYaw(),
                 event.getHeadPitch(),
-                module.child.getValue() ? module.scale.getValue() : event.getScale());
+                event.getScale());
     }
 
     private float getFOVModifier(float partialTicks, boolean useFOVSetting)

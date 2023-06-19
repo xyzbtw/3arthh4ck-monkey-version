@@ -65,7 +65,7 @@ final class ListenerModelPost extends ModuleListener<Chams, ModelRenderEvent.Pos
                 event.getAgeInTicks(),
                 event.getNetHeadYaw(),
                 event.getHeadPitch(),
-                module.child.getValue() ? module.scale.getValue() : event.getScale());
+                event.getScale());
     }
 
 }

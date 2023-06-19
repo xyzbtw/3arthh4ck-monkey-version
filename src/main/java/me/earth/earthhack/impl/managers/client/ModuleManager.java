@@ -49,7 +49,6 @@ import me.earth.earthhack.impl.modules.combat.holefiller.HoleFiller;
 import me.earth.earthhack.impl.modules.combat.killaura.KillAura;
 import me.earth.earthhack.impl.modules.combat.legswitch.LegSwitch;
 import me.earth.earthhack.impl.modules.combat.offhand.Offhand;
-import me.earth.earthhack.impl.modules.combat.pearlclip.PearlClip;
 import me.earth.earthhack.impl.modules.combat.pistonaura.PistonAura;
 import me.earth.earthhack.impl.modules.combat.automend.AutoMend;
 import me.earth.earthhack.impl.modules.combat.selftrap.SelfTrap;
@@ -232,7 +231,7 @@ public class ModuleManager extends IterationRegister<Module> {
         this.forceRegister(new BowSpam());
         this.forceRegister(new BowKiller());
         this.forceRegister(new Blocker());
-        this.forceRegister(new PearlClip());
+
         this.forceRegister(new Criticals());
         this.forceRegister(new HoleFiller());
         this.forceRegister(new KillAura());

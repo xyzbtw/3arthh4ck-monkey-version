@@ -45,39 +45,11 @@ public class ViewModel extends Module
             register(new NumberSetting<>("Y-Translate", 1.0f, -10.0f, 10.0f));
     protected final Setting<Float> zTranslate =
             register(new NumberSetting<>("Z-Translate", 1.0f, -10.0f, 10.0f));
-    protected final Setting<Float> rotatex =
-            register(new NumberSetting<>("Rotate-X", 1.0f, 0.0f, 360.0f));
-    protected final Setting<Float> rotatey =
-            register(new NumberSetting<>("Rotate-Y", 1.0f, 0.0f, 360.0f));
-    protected final Setting<Float> rotatez =
-            register(new NumberSetting<>("Rotate-Z", 1.0f, 0.0f, 360.0f));
-    protected final Setting<Float> animationSpeed =
-            register(new NumberSetting<>("NnimationSpeed", 1.0f, 0.1f, 10.0f));
-    public final BooleanSetting animation =
-            register(new BooleanSetting("Animations", false));
 
     public ViewModel()
     {
         super("ViewModel", Category.Render);
         this.setData(new ViewModelData(this));
-        this.listeners.add(new LambdaListener<>(UpdateEvent.class, e ->{
-
-            if(this.animation.getValue()){
-                rotatex.setValue((rotatex.getValue() - animationSpeed.getValue()) % 360.0f);
-                if (rotatex.getValue() <= 0.0f) {
-                    rotatex.setValue(rotatex.getValue() + 360.0f);
-                }
-                rotatey.setValue((rotatey.getValue() - animationSpeed.getValue()) % 360.0f);
-                if (rotatey.getValue() <= 0.0f) {
-                    rotatey.setValue(rotatey.getValue() + 360.0f);
-                }
-                rotatez.setValue((rotatez.getValue() - animationSpeed.getValue()) % 360.0f);
-                if (rotatez.getValue() <= 0.0f) {
-                    rotatez.setValue(rotatez.getValue() + 360.0f);
-                }
-            }
-
-        } ));
     }
 
     public float getX(EnumHand hand)
@@ -122,14 +94,5 @@ public class ViewModel extends Module
             {angleTranslate.getValue(), xTranslate.getValue(), yTranslate.getValue(), zTranslate.getValue()};
     }
 
-    public float[] getRotations() {
-        if (this.isEnabled()) {
-            return DEFAULT_ROTATIONS;
-        }
-        return new float[]
-                {
-                    rotatey.getValue(), rotatex.getValue(), rotatez.getValue()
-                };
-    }
 
 }

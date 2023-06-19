@@ -124,9 +124,7 @@ public abstract class MixinItemRenderer
                     ? VIEW_MODEL.get().getTranslation()
                     : ViewModel.DEFAULT_TRANSLATION;
 
-            float[] rotations = VIEW_MODEL.isPresent()
-                    ? VIEW_MODEL.get().getRotations()
-                    : ViewModel.DEFAULT_ROTATIONS;
+
 
             GL11.glScalef(scale[0], scale[1], scale[2]);
 
@@ -136,13 +134,6 @@ public abstract class MixinItemRenderer
                            translation[2],
                            translation[3]);
 
-
-
-
-
-            glRotatef(rotations[0], 0.0f, 1.0f, 0.0f);
-            glRotatef(rotations[1], 1.0f, 0.0f, 0.0f);
-            glRotatef(rotations[2], 0.0f, 0.0f, 1.0f);
 
             // ???????????????????? this fucks nametags
             // GlStateManager.enableDepth();

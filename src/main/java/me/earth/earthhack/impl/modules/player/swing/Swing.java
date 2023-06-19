@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 public class Swing extends Module {
     public final NumberSetting<Integer> swingSpeed =
-            register(new NumberSetting<>("Mode", 6, 0, 20));
+            register(new NumberSetting<>("Speed", 6, 0, 20));
 
     public final BooleanSetting clientside =
             register(new BooleanSetting("ClientSide", false));
