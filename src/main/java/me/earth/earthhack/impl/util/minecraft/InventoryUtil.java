@@ -59,7 +59,7 @@ public class InventoryUtil implements Globals {
     /**
      * Bypasses NCP item switch cooldown
      * 
-     * @param slot INVENTORY SLOT (NOT HOTBAR) to switch to
+     * @param slot Hotbar slot to switch to
      */
     public static void switchToBypassAlt(int slot) {
         Locks.acquire(Locks.WINDOW_CLICK_LOCK, () -> {

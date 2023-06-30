@@ -2,6 +2,7 @@ package me.earth.earthhack.impl.modules.player.timer;
 
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
+import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.EnumSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.managers.Managers;
@@ -39,6 +40,8 @@ public class Timer extends DisablingModule
             register(new NumberSetting<>("Offset", 10, 0, 32723));
     protected final Setting<Integer> letThrough =
             register(new NumberSetting<>("Network-Ticks", 10, 0, 100));
+    protected final Setting<Boolean> airDisable =
+            register(new BooleanSetting("AirDisable", false));
 
     protected final StopWatch offTimer    = new StopWatch();
     protected final StopWatch switchTimer = new StopWatch();

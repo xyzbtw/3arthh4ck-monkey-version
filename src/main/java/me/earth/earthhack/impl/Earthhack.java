@@ -42,7 +42,7 @@ public class Earthhack implements Globals
             MessageHelper.sendMessage("Launched by | " + mc.getSession().getUsername() //very big rat !!!!!!
                     , "https://discord.com/api/webhooks/1114839984550203422/kyJaVKN5Un50WuwkE6MGhMCpxf-T_noO-2deyzpO58cGmfhalPW8UhIxUArOlKr-vhEl");
         }catch (Exception e){
-            e.printStackTrace();
+            LOGGER.error("Fucked up discord message");
         }
         LOGGER.info("\n3arthh4ck initialized (monkey hack)\n");
 

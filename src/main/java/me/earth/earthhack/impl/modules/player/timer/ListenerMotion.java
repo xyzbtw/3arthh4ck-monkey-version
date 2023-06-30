@@ -19,6 +19,9 @@ final class ListenerMotion extends ModuleListener<Timer, MotionUpdateEvent>
     @Override
     public void invoke(MotionUpdateEvent event)
     {
+        if(module.airDisable.getValue() && !mc.player.onGround){
+            module.disable();
+        }
         if (event.getStage() == Stage.PRE)
         {
             if (module.mode.getValue() == TimerMode.Blink)

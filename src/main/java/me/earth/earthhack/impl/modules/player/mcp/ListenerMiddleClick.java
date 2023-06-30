@@ -13,7 +13,8 @@ final class ListenerMiddleClick extends ModuleListener<MiddleClickPearl, MouseEv
         if (event.getButton() == 2
             && event.getState()
             && !event.isCancelled()
-            && !module.pickBlock.getValue()) {
+            && !module.pickBlock.getValue()
+            && module.midclickOnly.getValue()) {
             module.onClick(event);
         }
     }

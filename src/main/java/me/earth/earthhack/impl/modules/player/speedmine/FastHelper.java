@@ -20,6 +20,7 @@ public class FastHelper implements Globals {
     private final StopWatch timer = new StopWatch();
     private final Speedmine module;
     protected boolean sendAbortNextTick;
+    protected float damage;
 
     public FastHelper(Speedmine module) {
         this.module = module;
@@ -105,7 +106,7 @@ public class FastHelper implements Globals {
         module.maxDamage = 0.0f;
         for (int i = 0; i < 9; i++) {
             ItemStack stack = mc.player.inventory.getStackInSlot(i);
-            float damage = 0.0f;
+            damage = 0.0f;
             long ticks = timer.getTime() / module.tickTime.getValue();
             for (Boolean onGround : module.ongroundHistoryHelper) {
                 if (ticks-- <= 0) {

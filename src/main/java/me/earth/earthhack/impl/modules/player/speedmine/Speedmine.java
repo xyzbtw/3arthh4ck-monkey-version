@@ -304,26 +304,33 @@ public class Speedmine extends Module {
         CPacketPlayerDigging start = new CPacketPlayerDigging(CPacketPlayerDigging.Action.START_DESTROY_BLOCK, pos,
                 facing);
         CPacketPlayerDigging abort = new CPacketPlayerDigging(ABORT_DESTROY_BLOCK, pos, facing);
-        // ((ICPacketPlayerDigging) start).setNormalDigging(false);
+        CPacketPlayerDigging stop = new CPacketPlayerDigging(STOP_DESTROY_BLOCK, pos, EnumFacing.DOWN);
+        //((ICPacketPlayerDigging) start).setNormalDigging(false);
         //((ICPacketPlayerDigging) start).setClientSideBreaking(false);
         ((IPlayerControllerMP) mc.playerController).setCurBlockDamageMP(0.0f);
 
+
         mc.world.sendBlockBreakProgress(mc.player.getEntityId(), pos, -1);
-        sentPacket = false;
+        sentPacket = true;
         maxDamage = 0.0f;
+        fastHelper.damage=0.0f;
         for (int i = 0; i < 9; i++) {
             damages[i] = 0.0f;
         }
 
         if (event.getValue()) {
+            NetworkUtil.send(abort);
             NetworkUtil.send(start);
+            NetworkUtil.send(stop);
             //mc.player.connection.sendPacket(abort);
         } else {
+            NetworkUtil.sendPacketNoEvent(abort, false);
             NetworkUtil.sendPacketNoEvent(start, false);
+            NetworkUtil.sendPacketNoEvent(stop, false);
            // NetworkUtil.sendPacketNoEvent(abort, false);
         }
-        mc.player.resetCooldown();
-        mc.playerController.updateController();
+        //mc.player.resetCooldown();
+        //mc.playerController.updateController();
     }
 
     /**

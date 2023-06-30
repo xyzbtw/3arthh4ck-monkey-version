@@ -89,6 +89,7 @@ final class ListenerMotion extends ModuleListener<ReverseStep, MotionUpdateEvent
                         && !mc.gameSettings.keyBindJump.isKeyDown()
                         && module.packets > 0) {
 
+                    module.shouldstopmotion=true;
                     mc.player.motionY = -module.speed.getValue();
                     module.packets = 0;
                 }

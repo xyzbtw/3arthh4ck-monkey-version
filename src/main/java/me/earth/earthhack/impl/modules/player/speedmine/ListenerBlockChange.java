@@ -3,6 +3,7 @@ package me.earth.earthhack.impl.modules.player.speedmine;
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.modules.player.speedmine.mode.MineMode;
+import net.minecraft.block.BlockAir;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.network.play.server.SPacketBlockChange;
@@ -17,8 +18,9 @@ final class ListenerBlockChange extends
     @Override
     public void invoke(PacketEvent.Receive<SPacketBlockChange> event) {
         SPacketBlockChange packet = event.getPacket();
-
-        Speedmine.compatibility.remove(packet.getBlockPosition());
+        if(packet.getBlockState().getBlock() instanceof BlockAir) {
+            Speedmine.compatibility.remove(packet.getBlockPosition());
+        }
 
         if (module.mode.getValue() == MineMode.Fast) {
             module.fastHelper.onBlockChange(packet.getBlockPosition(),

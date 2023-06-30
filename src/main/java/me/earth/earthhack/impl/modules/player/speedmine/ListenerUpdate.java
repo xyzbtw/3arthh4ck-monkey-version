@@ -245,8 +245,8 @@ final class ListenerUpdate extends ModuleListener<Speedmine, UpdateEvent> {
                 }
                 if (module.reBreak.getValue() && module.pos != null && module.facing != null) {
                     if (!BlockUtil.isAir(module.pos)) {
-                        module.updateDamages();
                         mc.playerController.onPlayerDamageBlock(module.pos, module.facing);
+                        return;
                     }
                 }
                 module.onSendPacket();

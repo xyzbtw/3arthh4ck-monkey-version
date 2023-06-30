@@ -4,16 +4,21 @@ import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
+import me.earth.earthhack.api.setting.settings.EnumSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
+import me.earth.earthhack.impl.event.events.movement.MoveEvent;
+import me.earth.earthhack.impl.event.listeners.LambdaListener;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.util.math.BlockPos;
 
 public class ReverseStep extends Module
 {  protected boolean jumped;
     protected boolean waitForOnGround;
+    protected boolean shouldstopmotion =false;
     protected int packets;
 
-
+    protected final Setting<fallmode> mode =
+            register(new EnumSetting<>("Mode", fallmode.normal));
     protected final Setting<Double> speed =
             register(new NumberSetting<>("Speed", 4.0, 0.1, 10.0));
     protected final Setting<Double> distance =
@@ -25,6 +30,14 @@ public class ReverseStep extends Module
     {
         super("ReverseStep", Category.Movement);
         this.listeners.add(new ListenerMotion(this));
+        /*this.listeners.add(new LambdaListener<>(MoveEvent.class, event -> {
+            if(mode.getValue() == ReverseStep.fallmode.strict && shouldstopmotion){
+                event.setCancelled(true);
+                shouldstopmotion=false;
+            }
+        } ));
+
+         */
     }
 
     // y not raytrace???
@@ -39,5 +52,10 @@ public class ReverseStep extends Module
             }
         }
         return -1;
+    }
+
+    protected enum fallmode{
+        normal,
+        strict
     }
 }
