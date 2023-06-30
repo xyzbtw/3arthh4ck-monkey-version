@@ -7,6 +7,7 @@ import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.EnumSetting;
 import me.earth.earthhack.impl.event.events.network.MotionUpdateEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
+import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.movement.blocklag.BlockLag;
 import me.earth.earthhack.impl.modules.movement.longjump.LongJump;
@@ -14,6 +15,7 @@ import me.earth.earthhack.impl.modules.movement.packetfly.PacketFly;
 import me.earth.earthhack.impl.modules.movement.speed.Speed;
 import me.earth.earthhack.impl.modules.movement.speed.SpeedMode;
 import me.earth.earthhack.impl.util.math.position.PositionUtil;
+import me.earth.earthhack.impl.util.minecraft.MovementUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityEnderPearl;
@@ -53,6 +55,7 @@ final class ListenerMotion extends ModuleListener<ReverseStep, MotionUpdateEvent
                     || SPEED.isEnabled()
                         && SPEED_MODE.getValue() != SpeedMode.Instant) {
                 reset = true;
+                module.shouldstopmotion=false;
                 return;
             }
             final List<EntityEnderPearl> pearls = mc.world.loadedEntityList.stream()
@@ -90,9 +93,25 @@ final class ListenerMotion extends ModuleListener<ReverseStep, MotionUpdateEvent
                         && module.packets > 0) {
 
                     module.shouldstopmotion=true;
-                    mc.player.motionY = -module.speed.getValue();
+                    if(module.mode.getValue() == ReverseStep.fallmode.strict && module.shouldstopmotion){
+                        if(module.movementkeys.getValue()) {
+                            mc.player.movementInput.forwardKeyDown = false;
+                            mc.player.movementInput.backKeyDown = false;
+                            mc.player.movementInput.rightKeyDown = false;
+                            mc.player.movementInput.leftKeyDown = false;
+                        }else{
+                            MovementUtil.setMoveSpeed(0);
+                        }
+                        Managers.TIMER.setTimer(module.strictSpeed.getValue());
+                    }
+                    if(module.mode.getValue() == ReverseStep.fallmode.normal){
+                        mc.player.motionY = -module.speed.getValue();
+                    }
                     module.packets = 0;
                 }
+            }else{
+                module.shouldstopmotion=false;
+                Managers.TIMER.reset();
             }
         }
     }

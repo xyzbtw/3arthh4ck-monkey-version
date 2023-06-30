@@ -8,6 +8,7 @@ import me.earth.earthhack.api.setting.settings.EnumSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.event.events.movement.MoveEvent;
 import me.earth.earthhack.impl.event.listeners.LambdaListener;
+import me.earth.earthhack.impl.util.math.RayTraceUtil;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.util.math.BlockPos;
 
@@ -21,23 +22,19 @@ public class ReverseStep extends Module
             register(new EnumSetting<>("Mode", fallmode.normal));
     protected final Setting<Double> speed =
             register(new NumberSetting<>("Speed", 4.0, 0.1, 10.0));
+    protected final Setting<Float> strictSpeed =
+            register(new NumberSetting<>("StrictSpeed", 4.0f, 0.1f, 10.0f));
     protected final Setting<Double> distance =
             register(new NumberSetting<>("Distance", 3.0, 0.1, 10.0));
     protected final Setting<Boolean> strictLiquid =
             register(new BooleanSetting("StrictLiquid", false));
+    protected final Setting<Boolean> movementkeys =
+            register(new BooleanSetting("noMovement", false));
 
     public ReverseStep()
     {
         super("ReverseStep", Category.Movement);
         this.listeners.add(new ListenerMotion(this));
-        /*this.listeners.add(new LambdaListener<>(MoveEvent.class, event -> {
-            if(mode.getValue() == ReverseStep.fallmode.strict && shouldstopmotion){
-                event.setCancelled(true);
-                shouldstopmotion=false;
-            }
-        } ));
-
-         */
     }
 
     // y not raytrace???
