@@ -1,0 +1,36 @@
+package me.earth.earthhack.impl.modules.misc.holdmodules;
+
+import me.earth.earthhack.api.module.Module;
+import me.earth.earthhack.api.module.util.Category;
+import me.earth.earthhack.api.setting.Setting;
+import me.earth.earthhack.api.setting.settings.StringSetting;
+
+public class HoldModule extends Module {
+
+    public HoldModule() {
+        super("HoldModule", Category.Misc);
+    }
+    protected Setting<String> string1 = register(new StringSetting("First", ""));
+    protected Setting<String> string2 =  register(new StringSetting("Second", ""));
+
+    @Override
+    public void onEnable(){
+        super.onEnable();
+        if(!string1.getValue().isEmpty()) {
+            mc.player.sendChatMessage(string1.getValue());
+        }
+        if(!string2.getValue().isEmpty()) {
+            mc.player.sendChatMessage(string2.getValue());
+        }
+    }
+    @Override
+    public void onDisable(){
+        super.onEnable();
+        if(!string1.getValue().isEmpty()) {
+            mc.player.sendChatMessage(string1.getValue());
+        }
+        if(!string2.getValue().isEmpty()) {
+            mc.player.sendChatMessage(string2.getValue());
+        }
+    }
+}
