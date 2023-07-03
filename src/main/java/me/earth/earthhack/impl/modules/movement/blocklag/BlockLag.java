@@ -51,6 +51,8 @@ public class BlockLag extends DisablingModule
             register(new NumberSetting<>("Max-Up", 10.0, 0.0, 1337.0));
     protected final Setting<Integer> delay =
             register(new NumberSetting<>("Delay", 100, 0, 1000));
+    protected final Setting<Boolean> cc =
+            register(new BooleanSetting("CC", true));
     protected final Setting<Boolean> skipZero =
             register(new BooleanSetting("SkipZero", true));
     protected final Setting<Boolean> fallback =

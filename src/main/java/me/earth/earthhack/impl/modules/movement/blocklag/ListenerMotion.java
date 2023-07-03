@@ -25,6 +25,7 @@ import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.play.client.CPacketEntityAction;
+import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -307,7 +308,14 @@ final class ListenerMotion extends ModuleListener<BlockLag, MotionUpdateEvent> {
                             CPacketEntityAction.Action.STOP_SNEAKING));
         }
 
-        PacketUtil.doY(rEntity, y, false);
+        if(module.cc.getValue()){
+            for (int i = 0; i < 20; i++)
+                mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1337, mc.player.posZ, false));
+
+        }else{
+            PacketUtil.doY(rEntity, y, false);
+        }
+
         module.timer.reset();
         if (!module.wait.getValue() || module.placeDisable.getValue())
             module.disable();
