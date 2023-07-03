@@ -11,6 +11,7 @@ import me.earth.earthhack.impl.modules.player.automine.AutoMine;
 import me.earth.earthhack.impl.util.client.ModuleUtil;
 import me.earth.earthhack.impl.util.math.RayTraceUtil;
 import me.earth.earthhack.impl.util.math.StopWatch;
+import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,7 +24,6 @@ public class BlockerBait extends Module {
 
     public BlockerBait() {
         super("BlockerBait", Category.Combat);
-        this.listeners.add(new ListenerUpdate(this));
     }
 
     protected ModuleCache<AutoMine> AUTOMINE = Caches.getModule(AutoMine.class);
@@ -59,7 +59,7 @@ public class BlockerBait extends Module {
         super.onEnable();
         new Thread(() -> {
             EntityPlayer target = EntityUtil.getClosestEnemy();
-            if(target!=null){
+            if(target!=null && PlayerUtil.isInHole(target)){
                 for(Vec3i hit : offsets){
                     BlockPos enemyPos = target.getPosition();
                     BlockPos hitPos = enemyPos.add(hit);
