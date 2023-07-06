@@ -120,6 +120,11 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
         return super.shouldHelp(facing, pos)
                 && helping.getValue();
     }
+    @Override
+    public String getDisplayInfo()
+    {
+        return target !=null ? target.getName() : "No target";
+    }
 
     protected void scanAndPlace(BlockPos pos) {
         if (mc.world == null)

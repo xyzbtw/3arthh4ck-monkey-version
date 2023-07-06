@@ -93,7 +93,7 @@ public class PingBypassModule extends Module
 
         this.protocol.addObserver(e -> this.disable());
 
-        try
+       try
         {
             Managers.MODULES.register(sAutoTotem);
             Managers.MODULES.register(sCrystal);
@@ -106,6 +106,8 @@ public class PingBypassModule extends Module
                     "Couldn't register PingBypass Submodules : "
                             + e.getTrying().getName(), e);
         }
+
+
 
         serializer = new SettingSerializer(this,
                                             sAutoTotem,

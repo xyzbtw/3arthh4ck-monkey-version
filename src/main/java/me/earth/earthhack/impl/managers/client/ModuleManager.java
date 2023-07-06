@@ -217,8 +217,8 @@ public class ModuleManager extends IterationRegister<Module> {
         this.forceRegister(new Compatibility());
         this.forceRegister(new Safety());
         this.forceRegister(new ServerModule());
-        this.forceRegister(new PbGui());
-        this.forceRegister(new PbTeleport());
+        //this.forceRegister(new PbGui());
+      //  this.forceRegister(new PbTeleport());
         this.forceRegister(new SettingsModule());
         this.forceRegister(new TabModule());
         this.forceRegister(new Media());
@@ -272,15 +272,15 @@ public class ModuleManager extends IterationRegister<Module> {
         this.forceRegister(new NoSoundLag());
         //this.forceRegister(new Nuker());
         this.forceRegister(new Packets());
-        this.forceRegister(new PingSpoof());
+        //this.forceRegister(new PingSpoof());
         this.forceRegister(new Portals());
         //this.forceRegister(new SettingSpoof());
         //this.forceRegister(new SkinBlink());
        // this.forceRegister(new Spammer());
         this.forceRegister(new ToolTips());
       //  this.forceRegister(new TpsSync());
-        this.forceRegister(new Undead());
-        this.forceRegister(new Tracker());
+       // this.forceRegister(new Undead());
+        //this.forceRegister(new Tracker());
         this.forceRegister(new TrueDurability());
         //this.forceRegister(new ChorusControl());
        // this.forceRegister(new TargetHud());
@@ -297,13 +297,13 @@ public class ModuleManager extends IterationRegister<Module> {
 
         this.forceRegister(new Anchor());
         this.forceRegister(new AutoSprint());
-        this.forceRegister(new Avoid());
+        //this.forceRegister(new Avoid());
       //  this.forceRegister(new AutoWalk());
         this.forceRegister(new BlockLag());
         //this.forceRegister(new BoatFly());
         this.forceRegister(new ElytraFlight());
         this.forceRegister(new EntityControl());
-        this.forceRegister(new EntitySpeed());
+       // this.forceRegister(new EntitySpeed());
         //this.forceRegister(new Clip());
         //this.forceRegister(new FastSwim());
         //this.forceRegister(new Flight());
@@ -311,10 +311,10 @@ public class ModuleManager extends IterationRegister<Module> {
         this.forceRegister(new HitboxDesync2());
         this.forceRegister(new ReverseStep());
         //this.forceRegister(new IceSpeed());
-        this.forceRegister(new Jesus());
-        this.forceRegister(new LongJump());
+        //this.forceRegister(new Jesus());
+       // this.forceRegister(new LongJump());
        // this.forceRegister(new NoFall());
-        this.forceRegister(new NoMove());
+        //this.forceRegister(new NoMove());
         this.forceRegister(new NoSlowDown());
         this.forceRegister(new PacketFly());
         this.forceRegister(new Phase());
@@ -332,7 +332,7 @@ public class ModuleManager extends IterationRegister<Module> {
        // this.forceRegister(new AutoTool());
         this.forceRegister(new Blink());
         this.forceRegister(new BlockTweaks());
-        this.forceRegister(new Cleaner());
+       // this.forceRegister(new Cleaner());
         this.forceRegister(new ExpTweaks());
         this.forceRegister(new FakePlayer());
         this.forceRegister(new FastPlace());
@@ -341,14 +341,14 @@ public class ModuleManager extends IterationRegister<Module> {
         this.forceRegister(new LiquidInteract());
         this.forceRegister(new MiddleClickPearl());
         this.forceRegister(new MultiTask());
-        this.forceRegister(new NCPTweaks());
-        this.forceRegister(new NoGlitchBlocks());
+        //this.forceRegister(new NCPTweaks());
+        //this.forceRegister(new NoGlitchBlocks());
         this.forceRegister(new NoHunger());
        // this.forceRegister(new InventorySync());
         this.forceRegister(new NoRotate());
         this.forceRegister(new Arrows());
         this.forceRegister(new RayTrace());
-        this.forceRegister(new Reach());
+       // this.forceRegister(new Reach());
         this.forceRegister(new Replenish());
         this.forceRegister(new Scaffold());
         this.forceRegister(new Sorter());
@@ -359,13 +359,13 @@ public class ModuleManager extends IterationRegister<Module> {
         this.forceRegister(new Timer());
         this.forceRegister(new XCarry());
 
-        this.forceRegister(new BlockHighlight());
-        this.forceRegister(new BreadCrumbs());
+      //  this.forceRegister(new BlockHighlight());
+        //this.forceRegister(new BreadCrumbs());
         this.forceRegister(new Chams());
         this.forceRegister(new ESP());
         this.forceRegister(new Fullbright());
         this.forceRegister(new HoleESP());
-        this.forceRegister(new LagOMeter());
+        //this.forceRegister(new LagOMeter());
         this.forceRegister(new LogoutSpots());
         this.forceRegister(new VoidESP());
         this.forceRegister(new Nametags());
@@ -373,9 +373,9 @@ public class ModuleManager extends IterationRegister<Module> {
         this.forceRegister(new NoRender());
         this.forceRegister(new Search());
         this.forceRegister(new OIdChunks());
-        this.forceRegister(new Skeleton());
-        this.forceRegister(new Sounds());
-        this.forceRegister(new Tracers());
+       // this.forceRegister(new Skeleton());
+        //this.forceRegister(new Sounds());
+       // this.forceRegister(new Tracers());
         this.forceRegister(new CameraClip());
         this.forceRegister(new ViewModel());
         this.forceRegister(new HoldModule());
@@ -397,7 +397,7 @@ public class ModuleManager extends IterationRegister<Module> {
        // this.forceRegister(new HitEffects());
         //this.forceRegister(new CevBreaker());
 
-        this.forceRegister(new PingBypassModule());
+      // this.forceRegister(new PingBypassModule());
 
         Bus.EVENT_BUS.post(new PostInitEvent());
     }

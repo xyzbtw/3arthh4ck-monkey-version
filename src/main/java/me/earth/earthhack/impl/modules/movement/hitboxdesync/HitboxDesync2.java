@@ -2,9 +2,12 @@ package me.earth.earthhack.impl.modules.movement.hitboxdesync;
 
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
+import me.earth.earthhack.api.setting.Setting;
+import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
+import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.BlockPos;
 
 // 
@@ -15,6 +18,7 @@ public class HitboxDesync2 extends Module {
     {
         super("HitboxDesync", Category.Movement);
     }
+    protected Setting<Boolean> packet = register(new BooleanSetting("Packet", false));
 
 
     @Override
@@ -35,19 +39,23 @@ public class HitboxDesync2 extends Module {
         float z = 0.3F;
         if (pos.getX() > otherPos.getX()) {
             System.out.println(1);
-            x = -0.70005F;
+            x = -0.7000357028535F;
         } else if (pos.getX() < otherPos.getX()) {
             System.out.println(2);
-            x = 0.70005F;
+            x = 0.7000357028535F;
         }
         if (pos.getZ() > otherPos.getZ()) {
             System.out.println(3);
-            z = -0.70005F;
+            z = -0.70003141882944F;
         } else if (pos.getZ() < otherPos.getZ()) {
             System.out.println(4);
-            z = 0.70005F;
+            z = 0.70003141882944F;
         }
-        mc.player.setPosition(Math.floor( mc.player.posX) + x, mc.player.posY, Math.floor(mc.player.posZ) + z);
+        if(packet.getValue()){
+            mc.player.connection.sendPacket(new CPacketPlayer.Position(Math.floor( mc.player.posX) + x, mc.player.posY, Math.floor(mc.player.posZ) + z, true));
+        }else {
+            mc.player.setPosition(Math.floor( mc.player.posX) + x, mc.player.posY, Math.floor(mc.player.posZ) + z);
+        }
 
     }
 

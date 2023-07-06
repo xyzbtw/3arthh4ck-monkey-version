@@ -7,6 +7,7 @@ import me.earth.earthhack.impl.event.listeners.ModuleListener;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.movement.blocklag.BlockLag;
+import me.earth.earthhack.impl.modules.render.holeesp.invalidation.SimpleHoleManager;
 import me.earth.earthhack.impl.util.math.MathUtil;
 import me.earth.earthhack.impl.util.math.position.PositionUtil;
 import me.earth.earthhack.impl.util.minecraft.PhaseUtil;
@@ -25,7 +26,7 @@ public class ListenerUpdate extends ModuleListener<SmartBlockLag, UpdateEvent> {
     }
     public static final ModuleCache<BlockLag> burrow =
             Caches.getModule(BlockLag.class);
-
+    SimpleHoleManager holeManager = new SimpleHoleManager();
 
     @Override
     public void invoke(UpdateEvent event) {
