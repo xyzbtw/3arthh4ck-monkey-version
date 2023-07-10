@@ -12,19 +12,16 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(RenderGlobal.class)
-public abstract class MixinRenderGlobal
-{
+public abstract class MixinRenderGlobal {
     @Inject(
-        method = "renderEntities",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/util/math/BlockPos$PooledMutableBlockPos;release()V",
-            shift = At.Shift.BEFORE))
-    private void renderEntitiesHook(Entity renderViewEntity,
-                                    ICamera camera,
-                                    float partialTicks,
-                                    CallbackInfo ci)
-    {
+            method = "renderEntities",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/util/math/BlockPos$PooledMutableBlockPos;release()V",
+                    shift = At.Shift.BEFORE
+            )
+    )
+    private void renderEntitiesHook(Entity renderViewEntity, ICamera camera, float partialTicks, CallbackInfo ci) {
         int pass = MinecraftForgeClient.getRenderPass();
         Bus.EVENT_BUS.post(new PostRenderEntitiesEvent(partialTicks, pass));
     }

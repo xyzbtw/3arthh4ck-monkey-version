@@ -16,45 +16,19 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PlayerControllerMP.class)
-public abstract class MixinPlayerControllerMP
-{
-    /**
-     * target = {@link Block#removedByPlayer(IBlockState,
-     * World, BlockPos, EntityPlayer, boolean)}
-     */
+public abstract class MixinPlayerControllerMP {
     @Dynamic
-    @Inject(
-        method = "onPlayerDestroyBlock",
-        at = @At(
-            value = "INVOKE",
-            target = "net/minecraft/block/Block.removedByPlayer" +
-                    "(Lnet/minecraft/block/state/IBlockState;" +
-                     "Lnet/minecraft/world/World;" +
-                     "Lnet/minecraft/util/math/BlockPos;" +
-                     "Lnet/minecraft/entity/player/EntityPlayer;Z)Z",
-            remap = false),
-        cancellable = true)
-    private void onPlayerDestroyBlockHook(BlockPos pos,
-                                          CallbackInfoReturnable<Boolean> info)
-    {
+    @Inject(method = "onPlayerDestroyBlock", at = @At(value = "INVOKE", target = "net/minecraft/block/Block.removedByPlayer(Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/player/EntityPlayer;Z)Z", remap = false), cancellable = true)
+    private void onPlayerDestroyBlockHook(BlockPos pos, CallbackInfoReturnable<Boolean> info) {
         BlockDestroyEvent event = new BlockDestroyEvent(Stage.PRE, pos);
         Bus.EVENT_BUS.post(event);
-        if (event.isCancelled())
-        {
+        if (event.isCancelled()) {
             info.setReturnValue(false);
         }
     }
 
-    @Inject(
-        method = "onPlayerDestroyBlock",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/block/Block;onPlayerDestroy(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;)V",
-            shift = At.Shift.BEFORE))
-    private void onPlayerDestroyHook(BlockPos pos,
-                                     CallbackInfoReturnable<Boolean> cir)
-    {
+    @Inject(method = "onPlayerDestroyBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;onPlayerDestroy(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;)V", shift = At.Shift.BEFORE))
+    private void onPlayerDestroyHook(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         Bus.EVENT_BUS.post(new BlockDestroyEvent(Stage.POST, pos));
     }
-
 }

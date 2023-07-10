@@ -9,17 +9,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Minecraft.class)
 public class MixinMinecraft {
-    @Inject(
-        method = "init",
-        at = @At(
-            value = "INVOKE",
+    @Inject(method = "init", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/client/Minecraft;checkGLError(Ljava/lang/String;)V",
-            ordinal = 2,
-            shift = At.Shift.BEFORE))
-    private void initHook(CallbackInfo ci)
-    {
+            ordinal = 2, shift = At.Shift.BEFORE))
+    private void initHook(CallbackInfo ci) {
         Earthhack.init();
         Earthhack.postInit();
     }
-
 }

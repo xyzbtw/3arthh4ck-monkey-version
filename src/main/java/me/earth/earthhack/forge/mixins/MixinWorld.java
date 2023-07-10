@@ -17,32 +17,27 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(World.class)
-public abstract class MixinWorld
-{
+public abstract class MixinWorld {
     @Shadow
     @Final
     public boolean isRemote;
 
     @Inject(
-        method = "setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;I)Z",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/block/state/IBlockState;getLightOpacity(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;)I",
-            shift = At.Shift.BEFORE,
-            ordinal = 1,
-            remap = false),
-        locals = LocalCapture.CAPTURE_FAILHARD)
-    private void onSetBlockState(
-            BlockPos pos, IBlockState newState, int flags,
-            CallbackInfoReturnable<Boolean> cir, Chunk chunk,
-            BlockSnapshot blockSnapshot, IBlockState oldState,
-            int oldLight, int oldOpacity, IBlockState iblockstate)
-    {
-        if (isRemote)
-        {
+            method = "setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;I)Z",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/block/state/IBlockState;getLightOpacity(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;)I",
+                    shift = At.Shift.BEFORE,
+                    ordinal = 1,
+                    remap = false),
+            locals = LocalCapture.CAPTURE_FAILHARD)
+    private void onSetBlockState(BlockPos pos, IBlockState newState, int flags,
+                                 CallbackInfoReturnable<Boolean> cir, Chunk chunk,
+                                 BlockSnapshot blockSnapshot, IBlockState oldState,
+                                 int oldLight, int oldOpacity, IBlockState iblockstate) {
+        if (isRemote) {
             BlockStateChangeEvent event = new BlockStateChangeEvent(pos, newState, (IChunk) chunk);
             Bus.EVENT_BUS.post(event);
         }
     }
-
 }

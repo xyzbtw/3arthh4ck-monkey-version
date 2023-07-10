@@ -12,26 +12,16 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Block.class)
-public abstract class MixinBlock
-{
+public abstract class MixinBlock {
     @Dynamic
-    @Inject(
-        method = "canRenderInLayer",
-        at = @At("RETURN"),
-        cancellable = true,
-        remap = false)
-    private void canRenderInLayerHook(IBlockState state,
-                                      BlockRenderLayer layer,
-                                      CallbackInfoReturnable<Boolean> info)
-    {
-        Block block = Block.class.cast(this);
+    @Inject(method = "canRenderInLayer", at = @At("RETURN"), cancellable = true, remap = false)
+    private void canRenderInLayerHook(IBlockState state, BlockRenderLayer layer, CallbackInfoReturnable<Boolean> info) {
+        Block block = (Block) (Object) this;
         BlockLayerEvent event = new BlockLayerEvent(block);
         Bus.EVENT_BUS.post(event);
 
-        if (event.getLayer() != null)
-        {
+        if (event.getLayer() != null) {
             info.setReturnValue(event.getLayer() == layer);
         }
     }
-
 }

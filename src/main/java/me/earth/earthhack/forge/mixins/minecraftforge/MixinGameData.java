@@ -14,29 +14,24 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import java.util.List;
 
 @Mixin(value = GameData.class, remap = false)
-public abstract class MixinGameData
-{
-    private static final SettingCache
-     <Boolean, BooleanSetting, Management> IGNORE =
-     Caches.getSetting(Management.class, BooleanSetting.class, "IgnoreForgeRegistries", false);
+public abstract class MixinGameData {
+    private static final SettingCache<Boolean, BooleanSetting, Management> IGNORE =
+            Caches.getSetting(Management.class, BooleanSetting.class, "IgnoreForgeRegistries", false);
 
     @Redirect(
-        method = "injectSnapshot",
-        at = @At(
-            value = "INVOKE",
-            target = "Ljava/util/List;size()I",
-            ordinal = 0))
-    private static int injectSnapshotHook(List<ResourceLocation> list)
-    {
-        if (IGNORE.getValue() && list.size() != 0)
-        {
-            Earthhack
-              .getLogger()
-              .info("Ignored " + list.size() + " missing forge registries.");
+            method = "injectSnapshot",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Ljava/util/List;size()I",
+                    ordinal = 0
+            )
+    )
+    private static int injectSnapshotHook(List<ResourceLocation> list) {
+        if (IGNORE.getValue() && list.size() != 0) {
+            Earthhack.getLogger().info("Ignored " + list.size() + " missing forge registries.");
             return 0;
         }
 
         return list.size();
     }
-
 }

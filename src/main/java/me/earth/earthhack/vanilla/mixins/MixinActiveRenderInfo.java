@@ -9,16 +9,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ActiveRenderInfo.class)
-public abstract class MixinActiveRenderInfo
-{
+public abstract class MixinActiveRenderInfo {
     @Inject(
-        method = "updateRenderInfo(Lnet/minecraft/entity/player/EntityPlayer;Z)V",
-        at = @At("HEAD"))
-    private static void updateRenderInfo(EntityPlayer entityplayerIn,
-                                         boolean p_74583_1_,
-                                         CallbackInfo ci)
-    {
+            method = "updateRenderInfo(Lnet/minecraft/entity/player/EntityPlayer;Z)V",
+            at = @At("HEAD"))
+    private static void updateRenderInfo(EntityPlayer entityplayerIn, boolean p_74583_1_, CallbackInfo ci) {
         RenderUtil.updateMatrices();
     }
-
 }
