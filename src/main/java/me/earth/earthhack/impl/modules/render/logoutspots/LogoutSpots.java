@@ -47,7 +47,7 @@ public class LogoutSpots extends BlockESPModule
             register(new NumberSetting<>("Scale", 3f, 0.01f, 10f))
                     .setComplexity(Complexity.Expert);
 
-    protected static final Map<UUID, LogoutSpot> spots = new ConcurrentHashMap<>();
+    public static final Map<UUID, LogoutSpot> spots = new ConcurrentHashMap<>();
 
     public LogoutSpots()
     {

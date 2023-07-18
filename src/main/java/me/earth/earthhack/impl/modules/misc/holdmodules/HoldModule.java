@@ -11,26 +11,30 @@ public class HoldModule extends Module {
         super("HoldModule", Category.Misc);
     }
     protected Setting<String> string1 = register(new StringSetting("First", ""));
-    protected Setting<String> string2 =  register(new StringSetting("Second", ""));
+    protected Setting<String> string2 = register(new StringSetting("Second", ""));
 
     @Override
     public void onEnable(){
         super.onEnable();
-        if(!string1.getValue().isEmpty()) {
-            mc.player.sendChatMessage(string1.getValue());
-        }
-        if(!string2.getValue().isEmpty()) {
-            mc.player.sendChatMessage(string2.getValue());
+        if(mc.world!=null && mc.player!=null) {
+            if(!string1.getValue().isEmpty()) {
+                mc.player.sendChatMessage(string1.getValue());
+            }
+            if(!string2.getValue().isEmpty() ) {
+                mc.player.sendChatMessage(string2.getValue());
+            }
         }
     }
     @Override
     public void onDisable(){
         super.onEnable();
-        if(!string1.getValue().isEmpty()) {
-            mc.player.sendChatMessage(string1.getValue());
-        }
-        if(!string2.getValue().isEmpty()) {
-            mc.player.sendChatMessage(string2.getValue());
+        if( mc.world!=null && mc.player!=null) {
+            if(!string1.getValue().isEmpty()) {
+                mc.player.sendChatMessage(string1.getValue());
+            }
+            if(!string2.getValue().isEmpty() ) {
+                mc.player.sendChatMessage(string2.getValue());
+            }
         }
     }
 }

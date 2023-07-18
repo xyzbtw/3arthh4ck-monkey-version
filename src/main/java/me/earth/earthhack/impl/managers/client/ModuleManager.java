@@ -359,7 +359,7 @@ public class ModuleManager extends IterationRegister<Module> {
         this.forceRegister(new Timer());
         this.forceRegister(new XCarry());
 
-      //  this.forceRegister(new BlockHighlight());
+        this.forceRegister(new BlockHighlight());
         //this.forceRegister(new BreadCrumbs());
         this.forceRegister(new Chams());
         this.forceRegister(new ESP());

@@ -14,7 +14,7 @@ public class MovementInputFromRemotePlayer extends MovementInput
 
     public void updatePlayerMoveState()
     {
-        MovementInput input = MovementUtil.inverse(player, 0.2783);
+        MovementInput input = MovementUtil.inverse(player, 0.2873);
         this.moveForward = input.moveForward;
         this.moveStrafe = input.moveStrafe;
 

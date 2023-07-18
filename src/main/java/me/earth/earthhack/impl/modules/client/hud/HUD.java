@@ -315,8 +315,8 @@ public class HUD extends Module {
                             fakecoords.getValue() ? fakez.getValue()+z : z,  fakecoords.getValue() ? (x+fakez.getValue())*8 : z * 8) :
                     (mc.player.dimension == 0
                             ? String.format(ChatFormatting.PREFIX_CODE + "f%,d " + ChatFormatting.PREFIX_CODE + "7[%,d]" + ChatFormatting.PREFIX_CODE + "8, " + ChatFormatting.PREFIX_CODE + "f%,d" + ChatFormatting.PREFIX_CODE + "8, " + ChatFormatting.PREFIX_CODE + "f%,d " + ChatFormatting.PREFIX_CODE + "7[%,d]",
-                            fakecoords.getValue() ? fakex.getValue() + x : x,  fakecoords.getValue() ? (x+fakex.getValue())/8 : x / 8, y,
-                            fakecoords.getValue() ? fakez.getValue()+z : z,  fakecoords.getValue() ? (x+fakez.getValue())/8 : z / 8)
+                                        fakecoords.getValue() ? fakex.getValue() + x : x,  fakecoords.getValue() ? (x+fakex.getValue())/8 : x / 8, y,
+                                        fakecoords.getValue() ? fakez.getValue()+z : z,  fakecoords.getValue() ? (x+fakez.getValue())/8 : z / 8)
                             : String.format(ChatFormatting.PREFIX_CODE + "f%,d" + ChatFormatting.PREFIX_CODE + "8, " + ChatFormatting.PREFIX_CODE + "f%,d" + ChatFormatting.PREFIX_CODE + "8, " + ChatFormatting.PREFIX_CODE + "f%,d",
                             fakecoords.getValue() ? fakex.getValue() + x : x, y, fakecoords.getValue() ? fakez.getValue() + z : z));
             renderText(coords, 2, height - 2 - RENDERER.getStringHeightI() - animationY);

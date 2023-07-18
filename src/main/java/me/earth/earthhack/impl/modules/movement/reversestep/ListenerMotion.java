@@ -100,7 +100,8 @@ final class ListenerMotion extends ModuleListener<ReverseStep, MotionUpdateEvent
                             mc.player.movementInput.rightKeyDown = false;
                             mc.player.movementInput.leftKeyDown = false;
                         }else{
-                            MovementUtil.setMoveSpeed(0);
+                            mc.player.motionX=0;
+                            mc.player.motionZ=0;
                         }
                         Managers.TIMER.setTimer(module.strictSpeed.getValue());
                     }

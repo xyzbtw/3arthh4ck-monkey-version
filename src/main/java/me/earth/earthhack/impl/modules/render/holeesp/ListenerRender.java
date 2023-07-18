@@ -23,21 +23,25 @@ final class ListenerRender extends ModuleListener<HoleESP, Render3DEvent>
         {
             module.renderListNew(module.invalidationHoleManager.get1x1Unsafe(),
                     module.unsafeColor.getValue(),
+                    module.unsafeOutline.getValue(),
                     module.unsafeHeight.getValue(),
                     module.holes.getValue());
 
             module.renderListNew(module.invalidationHoleManager.get1x1(),
                     module.safeColor.getValue(),
+                    module.safeOutline.getValue(),
                     module.height.getValue(),
                     module.safeHole.getValue());
 
             module.renderListNew(module.invalidationHoleManager.get2x1(),
                     module.wideColor.getValue(),
+                    module.wideOutline.getValue(),
                     module.wideHeight.getValue(),
                     module.wide.getValue());
 
             module.renderListNew(module.invalidationHoleManager.get2x2(),
                     module.bigColor.getValue(),
+                    module.bigOutline.getValue(),
                     module.bigHeight.getValue(),
                     module.big.getValue());
         }
@@ -45,16 +49,19 @@ final class ListenerRender extends ModuleListener<HoleESP, Render3DEvent>
         {
             module.renderListOld(Managers.HOLES.getUnsafe(),
                     module.unsafeColor.getValue(),
+                    module.unsafeOutline.getValue(),
                     module.unsafeHeight.getValue(),
                     module.holes.getValue());
 
             module.renderListOld(Managers.HOLES.getSafe(),
                     module.safeColor.getValue(),
+                    module.safeOutline.getValue(),
                     module.height.getValue(),
                     module.safeHole.getValue());
 
             module.renderListOld(Managers.HOLES.getLongHoles(),
                     module.wideColor.getValue(),
+                    module.wideOutline.getValue(),
                     module.wideHeight.getValue(),
                     module.wide.getValue());
 
@@ -92,13 +99,13 @@ final class ListenerRender extends ModuleListener<HoleESP, Render3DEvent>
                                         alphaInt);
 
                                 int boxInt = (int) (alphaInt * module.alphaFactor.getValue());
-                                RenderUtil.renderBox(pos, bC1, bH, boxInt);
+                                RenderUtil.renderBox(pos, bC1, module.bigOutline.getValue(), bH, boxInt);
                                 module.mPos.setPos(pos.getX(), pos.getY(), pos.getZ() + 1);
-                                RenderUtil.renderBox(module.mPos, bC1, bH, boxInt);
+                                RenderUtil.renderBox(module.mPos, bC1, module.bigOutline.getValue(), bH, boxInt);
                                 module.mPos.setPos(pos.getX() + 1, pos.getY(), pos.getZ());
-                                RenderUtil.renderBox(module.mPos, bC1, bH, boxInt);
+                                RenderUtil.renderBox(module.mPos, bC1, module.bigOutline.getValue(), bH, boxInt);
                                 module.mPos.setPos(pos.getX() + 1, pos.getY(), pos.getZ() + 1);
-                                RenderUtil.renderBox(module.mPos, bC1, bH, boxInt);
+                                RenderUtil.renderBox(module.mPos, bC1, module.bigOutline.getValue(), bH, boxInt);
                             }
                             else if (alpha < 0)
                             {
@@ -106,13 +113,13 @@ final class ListenerRender extends ModuleListener<HoleESP, Render3DEvent>
                             }
                         }
 
-                        RenderUtil.renderBox(pos, bC, bH);
+                        RenderUtil.renderBox(pos, bC, module.bigOutline.getValue(), bH);
                         module.mPos.setPos(pos.getX(), pos.getY(), pos.getZ() + 1);
-                        RenderUtil.renderBox(module.mPos, bC, bH);
+                        RenderUtil.renderBox(module.mPos, bC, module.bigOutline.getValue(), bH);
                         module.mPos.setPos(pos.getX() + 1, pos.getY(), pos.getZ());
-                        RenderUtil.renderBox(module.mPos, bC, bH);
+                        RenderUtil.renderBox(module.mPos, bC, module.bigOutline.getValue(), bH);
                         module.mPos.setPos(pos.getX() + 1, pos.getY(), pos.getZ() + 1);
-                        RenderUtil.renderBox(module.mPos, bC, bH);
+                        RenderUtil.renderBox(module.mPos, bC, module.bigOutline.getValue(), bH);
                         i++;
                     }
                 }

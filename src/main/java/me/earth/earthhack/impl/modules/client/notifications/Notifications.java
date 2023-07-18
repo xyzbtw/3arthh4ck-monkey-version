@@ -139,9 +139,14 @@ public class Notifications extends Module
                                 + module.getDisplayName()
                                 + (enabled ? TextColor.GREEN : TextColor.RED)
                                 + (enabled ? " enabled." : " disabled.");
+            String message1 =
+                             watermarkcolor.getValue() + chatwatermark.getValue() + " "
+                            + (enabled ? TextColor.DARK_GREEN : TextColor.DARK_RED)
+                            + (enabled ? "[+] " : "[-] ")
+                            + TextColor.WHITE + module.getDisplayName();
 
             mc.addScheduledTask(() ->
-                Managers.CHAT.sendDeleteMessage(message,
+                Managers.CHAT.sendDeleteMessage(message1,
                                                 module.getName(),
                                                 ChatIDs.MODULE));
         }

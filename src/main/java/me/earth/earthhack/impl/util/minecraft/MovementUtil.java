@@ -201,7 +201,7 @@ public class MovementUtil implements Globals
     // TODO: Slowness?
     public static double getSpeed()
     {
-        return getSpeed(false);
+        return getSpeed(true); //was false
     }
 
     public static double getSpeed(boolean slowness, double defaultSpeed)

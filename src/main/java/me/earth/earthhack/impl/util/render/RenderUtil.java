@@ -305,6 +305,24 @@ public class RenderUtil implements Globals
         glPopAttrib();
         glPopMatrix();
     }
+    public static void renderBox(BlockPos pos, Color color, Color outline, float height)
+    {
+        glPushMatrix();
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+
+        AxisAlignedBB bb = Interpolation.interpolatePos(pos, height);
+        startRender();
+        drawOutline(bb, 1.5f, outline);
+        endRender();
+        Color boxColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), 76);
+        startRender();
+        drawBox(bb, boxColor);
+        endRender();
+
+        glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        glPopAttrib();
+        glPopMatrix();
+    }
 
     public static void renderBox(BlockPos pos,
                                  Color color,
@@ -317,6 +335,28 @@ public class RenderUtil implements Globals
         AxisAlignedBB bb = Interpolation.interpolatePos(pos, height);
         startRender();
         drawOutline(bb, 1.5f, color);
+        endRender();
+        Color boxColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), boxAlpha);
+        startRender();
+        drawBox(bb, boxColor);
+        endRender();
+
+        glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        glPopAttrib();
+        glPopMatrix();
+    }
+    public static void renderBox(BlockPos pos,
+                                 Color color,
+                                 Color outline,
+                                 float height,
+                                 int boxAlpha)
+    {
+        glPushMatrix();
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+
+        AxisAlignedBB bb = Interpolation.interpolatePos(pos, height);
+        startRender();
+        drawOutline(bb, 1.5f, outline);
         endRender();
         Color boxColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), boxAlpha);
         startRender();

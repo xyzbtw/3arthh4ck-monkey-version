@@ -23,6 +23,7 @@ import me.earth.earthhack.impl.util.math.MathUtil;
 import me.earth.earthhack.impl.util.math.position.PositionUtil;
 import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
 import me.earth.earthhack.impl.util.minecraft.DamageUtil;
+import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
 import me.earth.earthhack.impl.util.minecraft.blocks.HoleUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
@@ -86,10 +87,9 @@ protected final Setting<Boolean> top               =
             register(new BooleanSetting("Upper-FP", false));
     protected final Setting<Boolean> instant     =
             register(new BooleanSetting("Instant", false));
-    /*protected final Setting<Boolean> logoutTrap =
+    protected final Setting<Boolean> logoutTrap =
            register(new BooleanSetting("TrapLogouts", false));
 
-     */
 
 
 
@@ -189,6 +189,8 @@ protected final Setting<Boolean> top               =
         }
 
         List<BlockPos> newTrapping = cached.get(newTarget);
+
+
         if (newTrapping == null)
         {
             newTrapping = getPositions(newTarget);
@@ -217,8 +219,36 @@ protected final Setting<Boolean> top               =
                 distance = playerDist;
             }
         }
+        if(logoutTrap.getValue() && LOGOUTSPOTS.isEnabled()){
+            for (LogoutSpot spot : LogoutSpots.spots.values()) {
+                if(spot.getDistance() <= range.getValue() && isValidLogout(spot.getModel().getPlayer())){
+                    return spot.getModel().getPlayer();
+                }
+            }
+        }
 
         return closest;
+    }
+
+    private boolean isValidLogout(EntityPlayer player){
+        if(player != null && !player.equals(mc.player) && !Managers.FRIENDS.contains(player)){
+                if (player.getDistanceSq(mc.player) <= 36
+                        && getSpeed(player) <= speed.getValue())
+                {
+                    if (targetMode.getValue() == TrapTarget.Untrapped)
+                    {
+                        List<BlockPos> positions = getPositions(player);
+                        cached.put(player, positions);
+                        return positions.stream()
+                                .anyMatch(pos ->
+                                        mc.world.getBlockState(pos)
+                                                .getMaterial()
+                                                .isReplaceable());
+                    }
+                    return true;
+                }
+        }
+        return false;
     }
 
     /**

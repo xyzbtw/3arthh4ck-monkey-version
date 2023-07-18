@@ -69,8 +69,14 @@ public class HoleESP extends Module implements HoleObserver, InvalidationConfig
             register(new ColorSetting("2x1-Color", new Color(90, 9, 255)));
     protected final Setting<Color> bigColor =
             register(new ColorSetting("2x2-Color", new Color(0, 80, 255)));
-    protected final Setting<Color> outlineColor =
-            register(new ColorSetting("OutlineColor", new Color(104, 100, 255)));
+    protected final Setting<Color> safeOutline =
+            register(new ColorSetting("SafeOutline", new Color(90, 9, 255)));
+    protected final Setting<Color> unsafeOutline =
+            register(new ColorSetting("UnsafeOutline", new Color(90, 9, 255)));
+    protected final Setting<Color> wideOutline =
+            register(new ColorSetting("2x1-Outline", new Color(90, 9, 255)));
+    protected final Setting<Color> bigOutline =
+            register(new ColorSetting("2x2-Outline", new Color(90, 9, 255)));
 
     protected final Setting<Boolean> async =
             register(new BooleanSetting("Async", true));
@@ -123,6 +129,7 @@ public class HoleESP extends Module implements HoleObserver, InvalidationConfig
 
     public void renderListNew(List<Hole> holes,
                               Color color,
+                              Color outline,
                               float height,
                               int max)
     {
@@ -183,7 +190,7 @@ public class HoleESP extends Module implements HoleObserver, InvalidationConfig
                         continue;
                     }
 
-                    BBRender.renderBox(bb, color, 1.5f);
+                    BBRender.renderBox(bb, color, outline , 1.5f);
                     i++;
                 }
             }
@@ -192,6 +199,7 @@ public class HoleESP extends Module implements HoleObserver, InvalidationConfig
 
     public void renderListOld(List<BlockPos> positions,
                                Color color,
+                               Color outline,
                                float height,
                                int max)
     {
@@ -224,18 +232,18 @@ public class HoleESP extends Module implements HoleObserver, InvalidationConfig
                                                      color.getBlue(),
                                                      alphaInt);
                             RenderUtil.renderBox(pos,
-                                    color1, height, (int) (alphaInt * alphaFactor.getValue()));
+                                    color1, outline,  height, (int) (alphaInt * alphaFactor.getValue()));
                         }
                         else if (alpha >= 1)
                         {
-                            RenderUtil.renderBox(pos, color, height);
+                            RenderUtil.renderBox(pos, color, outline, height);
                             continue;
                         }
 
                         continue;
                     }
 
-                    RenderUtil.renderBox(pos, color, height);
+                    RenderUtil.renderBox(pos, color, outline, height);
                     i++;
                 }
             }

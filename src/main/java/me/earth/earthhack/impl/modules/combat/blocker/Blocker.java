@@ -22,6 +22,7 @@ import me.earth.earthhack.impl.util.helpers.blocks.ObbyListenerModule;
 import me.earth.earthhack.impl.util.helpers.render.BlockESPBuilder;
 import me.earth.earthhack.impl.util.helpers.render.BlockESPModule;
 import me.earth.earthhack.impl.util.helpers.render.IAxisESP;
+import me.earth.earthhack.impl.util.math.StopWatch;
 import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 import me.earth.earthhack.impl.util.minecraft.blocks.HoleUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
@@ -50,6 +51,7 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
     protected final Setting<Boolean> extend = register(new BooleanSetting("Extend", true));
     protected final Setting<Boolean> face = register(new BooleanSetting("Face", true));
     protected final Setting<Boolean> hole = register(new BooleanSetting("HoleCheck", true));
+    protected final Setting<Integer> clownDelay = register(new NumberSetting<>("ClownDelay", 300, 0, 4000));
     protected final Setting<Boolean> fullExtend = register(new BooleanSetting("FullExtend", true));
     protected final Setting<Boolean> extendxyz = register(new BooleanSetting("Extend-diag", false));
     protected final Setting<Boolean> helping = register(new BooleanSetting("HelpingBlocks", false));
@@ -68,6 +70,7 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
 
     protected EntityPlayer target;
     protected final ModuleCache<Speedmine> speedmine = Caches.getModule(Speedmine.class);
+    protected final StopWatch blockerTimer = new StopWatch();
 
     public Blocker() {
         super("Blocker", Category.Combat);
