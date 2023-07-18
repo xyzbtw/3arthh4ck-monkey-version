@@ -30,10 +30,8 @@ public class Notifications extends Module
             register(new EnumSetting<>("Player-Color", TextColor.None));
     protected final Setting<TextColor> watermarkcolor =
             register(new EnumSetting<>("ChatWaterMarkColor", TextColor.None));
-    protected final Setting<TextColor> watermarbraceskcolor =
-            register(new EnumSetting<>("ChatBracesColor", TextColor.None));
     protected final Setting<String> chatwatermark =
-            register(new StringSetting("ChatString", ""));
+            register(new StringSetting("phobos", ""));
     protected final Setting<Boolean> visualRange =
             register(new BooleanSetting("VisualRange", false));
     protected final Setting<Boolean> leave  =
@@ -129,18 +127,8 @@ public class Notifications extends Module
         Setting<Boolean> setting = announceMap.get(module);
         if (setting != null && setting.getValue())
         {
-            String message = TextColor.BOLD
-                                + watermarbraceskcolor.getValue().getColor() + "["
-                                + watermarkcolor.getValue().getColor()
-                                + chatwatermark.getValue()
-                                + watermarbraceskcolor.getValue().getColor() + "]"
-                                + " "
-                                + TextColor.WHITE
-                                + module.getDisplayName()
-                                + (enabled ? TextColor.GREEN : TextColor.RED)
-                                + (enabled ? " enabled." : " disabled.");
             String message1 =
-                             watermarkcolor.getValue() + chatwatermark.getValue() + " "
+                             watermarkcolor.getValue().getColor() + chatwatermark.getValue() + " "
                             + (enabled ? TextColor.DARK_GREEN : TextColor.DARK_RED)
                             + (enabled ? "[+] " : "[-] ")
                             + TextColor.WHITE + module.getDisplayName();
