@@ -47,6 +47,7 @@ final class ListenerMotion extends ModuleListener<ReverseStep, MotionUpdateEvent
     @Override
     public void invoke(MotionUpdateEvent event) {
         if (event.getStage() == Stage.POST) {
+            if(module.mode.getValue() == ReverseStep.fallmode.forever) return;
             if (PositionUtil.inLiquid(true)
                     || PositionUtil.inLiquid(false)
                     || PACKET_FLY.isEnabled()

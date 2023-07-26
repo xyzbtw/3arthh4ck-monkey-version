@@ -3,6 +3,7 @@ package me.earth.earthhack.impl.modules.render.chams;
 import me.earth.earthhack.impl.core.ducks.render.IRenderManager;
 import me.earth.earthhack.impl.event.events.render.Render3DEvent;
 import me.earth.earthhack.impl.event.listeners.ModuleListener;
+import me.earth.earthhack.impl.modules.render.chams.mode.ChamsMode;
 import me.earth.earthhack.impl.modules.render.esp.ESP;
 import me.earth.earthhack.impl.modules.render.nametags.Nametag;
 import me.earth.earthhack.impl.util.render.Render2DUtil;
@@ -30,6 +31,10 @@ public class ListenerRender
     public void invoke(Render3DEvent event)
     {
         // TODO: read stenciling for army and people who can't use shaders
+        if(module.mode.getValue() == ChamsMode.ShaderFill){
+            module.runPreFill();
+            module.runPostFill();
+        }
         if (false)
         {
             if (true) return;

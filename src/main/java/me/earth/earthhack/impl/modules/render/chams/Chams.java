@@ -13,6 +13,7 @@ import me.earth.earthhack.impl.modules.render.chams.mode.WireFrameMode;
 import me.earth.earthhack.impl.util.minecraft.EntityType;
 import me.earth.earthhack.impl.util.render.GlShader;
 import me.earth.earthhack.impl.util.render.RenderUtil;
+import me.earth.earthhack.impl.util.render.forevershader.FillShader;
 import me.earth.earthhack.impl.util.text.ChatUtil;
 import me.earth.earthhack.impl.util.text.TextColor;
 import net.minecraft.client.renderer.texture.DynamicTexture;
@@ -56,6 +57,7 @@ public class Chams extends Module
             register(new BooleanSetting("XQZ", true));
     protected final Setting<Boolean> armor         =
             register(new BooleanSetting("Armor", true));
+    protected final Setting<Float> speedfill = register(new NumberSetting<>("SpeedFill", 10f, 1f, 100f));
     protected final Setting<Float> z             =
             new NumberSetting<>("Z", -2000.0f, -5000.0f, 5000.0f); // not registered until we need it later
     protected final Setting<Float> mixFactor      =
@@ -264,7 +266,18 @@ public class Chams extends Module
     public boolean isImageChams() {
         return mode.getValue() == ChamsMode.Image;
     }
-
+    public void runPreFill() {
+        float ticks = mc.getRenderPartialTicks();
+        if(mode.getValue() == ChamsMode.ShaderFill){
+             FillShader.INSTANCE.startDraw(ticks);
+        }
+    }
+    public void runPostFill() {
+        if(mode.getValue() == ChamsMode.ShaderFill){
+            FillShader.INSTANCE.stopDraw(color.getValue());
+            FillShader.INSTANCE.update(speedfill.getValue() / 1000.0f);
+        }
+    }
     public float getAlpha() {
         return color.getValue().getAlpha() / 255.0f;
     }

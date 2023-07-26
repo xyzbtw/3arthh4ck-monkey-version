@@ -220,8 +220,8 @@ protected final Setting<Boolean> top               =
             }
         }
         if(logoutTrap.getValue() && LOGOUTSPOTS.isEnabled()){
-            for (LogoutSpot spot : LogoutSpots.spots.values()) {
-                if(spot.getDistance() <= range.getValue() && isValidLogout(spot.getModel().getPlayer())){
+            for (LogoutSpot spot : LOGOUTSPOTS.get().getSpots().values()) {
+                if(spot.getDistance() <= range.getValue() && isValid(spot.getModel().getPlayer())){
                     return spot.getModel().getPlayer();
                 }
             }
@@ -230,26 +230,6 @@ protected final Setting<Boolean> top               =
         return closest;
     }
 
-    private boolean isValidLogout(EntityPlayer player){
-        if(player != null && !player.equals(mc.player) && !Managers.FRIENDS.contains(player)){
-                if (player.getDistanceSq(mc.player) <= 36
-                        && getSpeed(player) <= speed.getValue())
-                {
-                    if (targetMode.getValue() == TrapTarget.Untrapped)
-                    {
-                        List<BlockPos> positions = getPositions(player);
-                        cached.put(player, positions);
-                        return positions.stream()
-                                .anyMatch(pos ->
-                                        mc.world.getBlockState(pos)
-                                                .getMaterial()
-                                                .isReplaceable());
-                    }
-                    return true;
-                }
-        }
-        return false;
-    }
 
     /**
      * Checks if a given player is valid,

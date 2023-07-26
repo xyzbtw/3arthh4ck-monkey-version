@@ -51,6 +51,9 @@ public class MMQuiver extends Module {
     @Override
     public void onEnable(){
         super.onEnable();
+        if(mc.world==null || mc.player==null){
+            return;
+        }
         currslot=mc.player.inventory.currentItem;
         if (auto.getValue()) usePressed = true;
         bowslot = InventoryUtil.findInHotbar(bow -> bow.getItem() == Items.BOW);
@@ -64,6 +67,9 @@ public class MMQuiver extends Module {
     @Override
     public void onDisable(){
         super.onDisable();
+        if(mc.world==null || mc.player==null){
+            return;
+        }
         usePressed = false;
         cdbypass.getValue().switchBack(currslot, bowslot);
     }

@@ -7,8 +7,12 @@ import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.EnumSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
+import me.earth.earthhack.impl.event.events.movement.MoveEvent;
+import me.earth.earthhack.impl.event.events.network.PacketEvent;
+import me.earth.earthhack.impl.event.listeners.LambdaListener;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.modules.Caches;
+import me.earth.earthhack.impl.modules.movement.anchor.Anchor;
 import me.earth.earthhack.impl.modules.movement.blocklag.BlockLag;
 import me.earth.earthhack.impl.modules.movement.longjump.LongJump;
 import me.earth.earthhack.impl.modules.movement.packetfly.PacketFly;
@@ -17,7 +21,12 @@ import me.earth.earthhack.impl.modules.movement.speed.SpeedMode;
 import me.earth.earthhack.impl.util.helpers.disabling.DisablingModule;
 import me.earth.earthhack.impl.util.helpers.render.BlockESPModule;
 import me.earth.earthhack.impl.util.math.StopWatch;
+import me.earth.earthhack.impl.util.minecraft.MovementUtil;
+import me.earth.earthhack.impl.util.minecraft.PlayerUtil;
 import net.minecraft.block.BlockSlab;
+import net.minecraft.network.play.server.SPacketEntityVelocity;
+import net.minecraft.network.play.server.SPacketExplosion;
+import net.minecraft.network.play.server.SPacketPlayerPosLook;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
@@ -51,11 +60,24 @@ public class Step extends BlockESPModule
             register(new NumberSetting<>("Speed", 4.0, 0.1, 10.0));
     protected final Setting<Double> distance =
             register(new NumberSetting<>("Distance", 3.0, 0.1, 10.0));
+    protected final Setting<Boolean> pauseInAir  =
+            register(new BooleanSetting("PauseBypassAir", false));
+    protected final Setting<Boolean> boost = register(new BooleanSetting("Boost", false));
+    protected StopWatch bypasstime = new StopWatch();
+    protected StopWatch velocityTimer = new StopWatch();
+    double maxVelocity = 0;
 
     protected final Setting<Boolean> strictLiquid =
             register(new BooleanSetting("StrictLiquid", false));
     protected final Setting<Boolean> gapple =
             register(new BooleanSetting("Mine-Gapple", false));
+    public final Setting<Boolean> bypass = register(new BooleanSetting("SpeedBypass", false));
+    public final  Setting<Integer> bypassTime = register(new NumberSetting<>("Time", 100, 0, 1000));
+    protected Setting<Float> bypassspeed = register(new NumberSetting<>("BypassSpeed", 1.5f, 0f, 5f));
+    protected final Setting<Float> crystalFactor    =
+            register(new NumberSetting<>("ExplosionFactor", 1.0f, 0.0f, 5.0f));
+    protected final Setting<Float> bowFactor    =
+            register(new NumberSetting<>("VelocityFactor", 1.0f, 0.0f, 5.0f));
 
 
     protected final StopWatch breakTimer = new StopWatch();
@@ -82,6 +104,45 @@ public class Step extends BlockESPModule
         this.listeners.add(new ListenerWorldClient(this));
         this.listeners.add(new ListenerMotion(this));
         this.listeners.add(new ListenerPreMotionUpdate(this));
+        this.listeners.add(new LambdaListener<>(PacketEvent.Receive.class, event-> {
+                if (event.getPacket() instanceof SPacketExplosion) {
+                    SPacketExplosion velocity = (SPacketExplosion) event.getPacket();
+
+                    maxVelocity = Math.sqrt(velocity.getMotionX() * velocity.getMotionX() + velocity.getMotionZ() * velocity.getMotionZ());
+
+
+                    maxVelocity *= crystalFactor.getValue();
+
+                    velocityTimer.reset();
+                    event.setCancelled(true);
+                }
+            if (event.getPacket() instanceof SPacketEntityVelocity) {
+                SPacketEntityVelocity velocity = (SPacketEntityVelocity) event.getPacket();
+
+                if (velocity.getEntityID() != mc.player.entityId) {
+                    event.setCancelled(true);
+                    return;
+                }
+
+
+                maxVelocity = Math.sqrt(velocity.getMotionX() * velocity.getMotionX() + velocity.getMotionZ() * velocity.getMotionZ()) / 8000.0;
+
+
+                maxVelocity *= bowFactor.getValue();
+
+                velocityTimer.reset();
+                event.setCancelled(true);
+            }
+
+
+        }));
+
+
+        this.listeners.add(new LambdaListener<>(MoveEvent.class, e-> {
+            if (!bypasstime.passed(bypassTime.getValue()) && bypass.getValue() && mode.getValue() ==StepMode.Vanilla ) {
+               strafe(e, bypassspeed.getValue());
+            }
+        }));
         register(new BooleanSetting("Compatibility", false));
         DisablingModule.makeDisablingModule(this);
         super.color.setValue(new Color(0, 255, 255, 76));
@@ -89,7 +150,42 @@ public class Step extends BlockESPModule
         mode.addObserver(e -> mc.addScheduledTask(this::reset));
         this.setData(new StepData(this));
     }
+    public void strafe(MoveEvent event, float speed1) {
+        //if (Anchor.pulling) return;
+        if(pauseInAir.getValue() && !mc.player.onGround) return;
+        double speed = MovementUtil.getSpeedforever(true, speed1);
 
+        if (boost.getValue() && velocityTimer.passed(75) && maxVelocity > 0) {
+            speed = Math.max(speed, maxVelocity);
+        }
+
+        float moveForward = mc.player.movementInput.moveForward;
+        float moveStrafe = mc.player.movementInput.moveStrafe;
+        float rotationYaw = mc.player.prevRotationYaw
+                + (mc.player.rotationYaw - mc.player.prevRotationYaw)
+                * mc.getRenderPartialTicks();
+
+        if (moveForward != 0.0f) {
+            if (moveStrafe > 0.0f) {
+                rotationYaw += ((moveForward > 0.0f) ? -45 : 45);
+            } else if (moveStrafe < 0.0f) {
+                rotationYaw += ((moveForward > 0.0f) ? 45 : -45);
+            }
+            moveStrafe = 0.0f;
+            if (moveForward > 0.0f) {
+                moveForward = 1.0f;
+            } else if (moveForward < 0.0f) {
+                moveForward = -1.0f;
+            }
+        }
+        double v = moveForward * speed * -Math.sin(Math.toRadians(rotationYaw))
+                + moveStrafe * speed * Math.cos(Math.toRadians(rotationYaw));
+        double v1 = moveForward * speed * Math.cos(Math.toRadians(rotationYaw))
+                - moveStrafe * speed * -Math.sin(Math.toRadians(rotationYaw));
+        event.setX(v);
+        event.setZ(v1);
+
+    }
     @Override
     public String getDisplayInfo() {
         return mode.getValue().toString();
@@ -137,6 +233,11 @@ public class Step extends BlockESPModule
         stepping = false;
         bb = null;
         offsets = null;
+        if (bypass.getValue()) {
+            bypasstime.setTime(System.currentTimeMillis() + System.currentTimeMillis());
+            velocityTimer.reset();
+            maxVelocity = 0;
+        }
         index = 0;
     }
     protected double getNearestBlockBelow()

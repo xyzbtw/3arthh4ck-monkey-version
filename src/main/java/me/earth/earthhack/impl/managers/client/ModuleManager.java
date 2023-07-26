@@ -276,7 +276,7 @@ public class ModuleManager extends IterationRegister<Module> {
         this.forceRegister(new Portals());
         //this.forceRegister(new SettingSpoof());
         //this.forceRegister(new SkinBlink());
-       // this.forceRegister(new Spammer());
+        this.forceRegister(new Spammer());
         this.forceRegister(new ToolTips());
       //  this.forceRegister(new TpsSync());
        // this.forceRegister(new Undead());

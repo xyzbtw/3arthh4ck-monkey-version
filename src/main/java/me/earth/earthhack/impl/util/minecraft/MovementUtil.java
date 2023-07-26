@@ -227,6 +227,27 @@ public class MovementUtil implements Globals
 
         return defaultSpeed;
     }
+    public static double getSpeedforever(boolean slowness, float s) {
+        double defaultSpeed = 0.2873 * s;
+
+        if (mc.player.isPotionActive(MobEffects.SPEED)) {
+            int amplifier = Objects.requireNonNull(
+                            mc.player.getActivePotionEffect(MobEffects.SPEED))
+                    .getAmplifier();
+
+            defaultSpeed *= 1.0 + 0.2 * (amplifier + 1);
+        }
+
+        if (slowness && mc.player.isPotionActive(MobEffects.SLOWNESS)) {
+            int amplifier = Objects.requireNonNull(
+                            mc.player.getActivePotionEffect(MobEffects.SLOWNESS))
+                    .getAmplifier();
+
+            defaultSpeed /= 1.0 + 0.2 * (amplifier + 1);
+        }
+
+        return defaultSpeed;
+    }
 
     public static double getSpeed(boolean slowness)
     {

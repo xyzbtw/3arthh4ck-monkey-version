@@ -5,11 +5,12 @@ public enum ChamsMode
     Normal,
     Better,
     CSGO,
+    ShaderFill,
     JelloBottom,
     JelloTop,
     FireShader,
     GalaxyShader,
     WaterShader,
     CustomShader,
-    Image
+    Image,
 }
