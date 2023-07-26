@@ -141,6 +141,7 @@ import me.earth.earthhack.impl.modules.player.fastplace.FastPlace;
 import me.earth.earthhack.impl.modules.player.freecam.Freecam;
 import me.earth.earthhack.impl.modules.player.liquids.LiquidInteract;
 import me.earth.earthhack.impl.modules.player.mcp.MiddleClickPearl;
+import me.earth.earthhack.impl.modules.player.mioclip.MioClip;
 import me.earth.earthhack.impl.modules.player.multitask.MultiTask;
 import me.earth.earthhack.impl.modules.player.ncptweaks.NCPTweaks;
 import me.earth.earthhack.impl.modules.player.noglitchblocks.NoGlitchBlocks;
@@ -247,7 +248,7 @@ public class ModuleManager extends IterationRegister<Module> {
         this.forceRegister(new AutoMend());
         this.forceRegister(new SelfTrap());
         this.forceRegister(new WebAura());
-
+        this.forceRegister(new MioClip());
        // this.forceRegister(new Announcer());
         //this.forceRegister(new AntiAim());
         //this.forceRegister(new AntiPackets());
