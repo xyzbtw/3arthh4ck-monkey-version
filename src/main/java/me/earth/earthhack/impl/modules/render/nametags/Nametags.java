@@ -46,7 +46,7 @@ public class Nametags extends Module
     protected final Setting<Boolean> fov        =
             register(new BooleanSetting("Fov", true));
     protected final Setting<Float> scale        =
-            register(new NumberSetting<>("Scale", 3f, 1f, 10f));
+            register(new NumberSetting<>("Scale", 10f, 1f, 50f));
     protected final Setting<Double> yoffset        =
             register(new NumberSetting<>("ChildOffset", 0.0d, -10.0d, 10.0d));
     protected final Setting<Integer> delay      =

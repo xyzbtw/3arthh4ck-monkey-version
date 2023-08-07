@@ -18,6 +18,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.*;
 import net.minecraft.world.IBlockAccess;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.function.BiPredicate;
 
@@ -440,28 +441,28 @@ public class RotationUtil implements Globals
     public static String getDirection8D() {
         switch (getDirection4D()) {
             case 0:
-                return "S "
-                        + TextColor.GRAY  + "[" + TextColor.WHITE + "+Z" + TextColor.GRAY + "]";
+                return "South "
+                        + TextColor.GRAY + "[" + TextColor.WHITE + "+Z" + TextColor.GRAY + "]";
             case 1:
-                return "SW "
-                        + TextColor.GRAY + "[" + TextColor.WHITE + "-X" + TextColor.GRAY + ", " + TextColor.WHITE + "+Z" + TextColor.GRAY + "]";
+                return "SouthWest "
+                        + TextColor.GRAY + "[" + TextColor.WHITE + "-X" +TextColor.GRAY + ", " + TextColor.WHITE + "+Z" + TextColor.GRAY + "]";
             case 2:
-                return "W "
-                        + TextColor.GRAY + "[" + TextColor.WHITE + "-X" + TextColor.GRAY + "]";
+                return "West "
+                        +TextColor.GRAY + "[" + TextColor.WHITE + "-X" + TextColor.GRAY + "]";
             case 3:
-                return "NW "
-                        + TextColor.GRAY + "[" + TextColor.WHITE + "-X" + TextColor.GRAY + ", " + TextColor.WHITE + "-Z" + TextColor.GRAY + "]";
+                return "NorthWest "
+                        + TextColor.GRAY + "[" + TextColor.WHITE + "-X" +TextColor.GRAY + ", " + TextColor.WHITE + "-Z" + TextColor.GRAY + "]";
             case 4:
-                return "N "
+                return "North "
                         + TextColor.GRAY + "[" + TextColor.WHITE + "-Z" + TextColor.GRAY + "]";
             case 5:
-                return "NE "
+                return "NorthEast "
                         + TextColor.GRAY + "[" + TextColor.WHITE + "+X" + TextColor.GRAY + ", " + TextColor.WHITE + "-Z" + TextColor.GRAY + "]";
             case 6:
-                return "E "
-                        + TextColor.GRAY  + "[" + TextColor.WHITE + "+X" + TextColor.GRAY + "]";
+                return "East "
+                        + TextColor.GRAY + "[" + TextColor.WHITE + "+X" +TextColor.GRAY + "]";
             case 7:
-                return "SE "
+                return "SouthEast "
                         + TextColor.GRAY + "[" + TextColor.WHITE + "+X" + TextColor.GRAY + ", " + TextColor.WHITE + "+Z" + TextColor.GRAY + "]";
             default:
                 return "";

@@ -42,6 +42,7 @@ final class ListenerRender extends ModuleListener<HUD, Render2DEvent> {
         }
 
         module.renderLogo();
+        module.renderGreeter();
         module.renderModules();
         GL11.glPopMatrix();
     }

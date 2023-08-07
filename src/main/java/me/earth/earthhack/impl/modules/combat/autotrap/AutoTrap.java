@@ -89,6 +89,8 @@ protected final Setting<Boolean> top               =
             register(new BooleanSetting("Instant", false));
     protected final Setting<Boolean> logoutTrap =
            register(new BooleanSetting("TrapLogouts", false));
+    protected final Setting<Boolean> priologout =
+            register(new BooleanSetting("PrioLogout", false));
 
 
 
@@ -222,7 +224,9 @@ protected final Setting<Boolean> top               =
         if(logoutTrap.getValue() && LOGOUTSPOTS.isEnabled()){
             for (LogoutSpot spot : LOGOUTSPOTS.get().getSpots().values()) {
                 if(spot.getDistance() <= range.getValue() && isValid(spot.getModel().getPlayer())){
-                    return spot.getModel().getPlayer();
+                    if(closest== null || priologout.getValue()){
+                        closest=spot.getModel().getPlayer();
+                    }
                 }
             }
         }

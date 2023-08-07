@@ -1,7 +1,6 @@
 package me.earth.earthhack.impl.modules.client.hud;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
@@ -48,7 +47,6 @@ import net.minecraft.potion.PotionEffect;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.io.IOException;
 import java.net.URL;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
@@ -65,16 +63,23 @@ public class HUD extends Module {
             register(new EnumSetting<>("Rainbow", HudRainbow.None));
     public final Setting<Color> color =
             register(new ColorSetting("Color", Color.WHITE));
+
     protected final Setting<Boolean> logo =
             register(new BooleanSetting("Logo", true));
     protected final Setting<String> logoText =
             register(new StringSetting("LogoText", "3arthh4ck"));
+    protected final Setting<Boolean> greeter =
+            register(new BooleanSetting("Greeter", false));
+    protected final Setting<greeterpos> GreeterPosition =
+            register(new EnumSetting<>("GreeterPos", greeterpos.LEFT));
     protected final Setting<Boolean> motd =
             register(new BooleanSetting("MOTD", false));
     protected final Setting<String> serverstring =
             register(new StringSetting("ServerString", "2b2t.org"));
     protected final Setting<Boolean> coordinates =
             register(new BooleanSetting("Coordinates", true));
+    //protected final Setting<TextColor> colorsecond =
+           // register(new EnumSetting<>("CoordColor", TextColor.None));
     protected final Setting<Boolean> fakecoords =
             register(new BooleanSetting("Fakecoords", false));
     protected final Setting<Integer> fakex =
@@ -206,10 +211,60 @@ public class HUD extends Module {
         }
         return y;
     }
-
     protected void renderLogo() {
         if (logo.getValue()) {
-            renderText(logoText.getValue(), 2, 2);
+            char letter = logoText.getValue().charAt(0);
+            String logostring = logoText.getValue().substring(1);
+            String mcversion = "1.12.2";
+            //renderText(String.valueOf(letter) + Color.WHITE.getRGB() + logostring + " " + color.getValue().getRGB() + "[" + Color.WHITE.getRGB() + "1.12.2" + color.getValue().getRGB() + "]", 2, 2);
+            RENDERER.drawStringWithShadow(String.valueOf(letter),
+                    2,
+                    2, color.getValue().getRGB());
+            RENDERER.drawStringWithShadow(logostring + " ",
+                    2 + RENDERER.getStringWidth(String.valueOf(letter)),
+                    2, Color.WHITE.getRGB());
+            RENDERER.drawStringWithShadow("[",
+                    2 + RENDERER.getStringWidth(logoText.getValue() + " " ),
+                    2, color.getValue().getRGB());
+            RENDERER.drawStringWithShadow(mcversion,
+                    2 + RENDERER.getStringWidth(logoText.getValue() + " " + "["),
+                    2, Color.WHITE.getRGB());
+            RENDERER.drawStringWithShadow("]",
+                    2 + RENDERER.getStringWidth(logoText.getValue() + " " + "[" + mcversion),
+                    2, color.getValue().getRGB());
+        }
+    }
+
+    protected void renderGreeter(){
+        if(greeter.getValue()) {
+            int width = resolution.getScaledWidth();
+            String text = getTimeOfDay();
+            String text2 = getTimeOfDay() + mc.player.getName();
+            String ending = "! :^)";
+
+            float x = GreeterPosition.getValue() == greeterpos.LEFT
+                    ? 2
+                    : (width / 2.0f) - (Managers.TEXT.getStringWidth(text2) / 2.0f) + 2;
+
+            float y = GreeterPosition.getValue() == greeterpos.LEFT ? (logo.getValue() ? 10f + textOffset.getValue() : 2f) : 2f;
+            //renderText(color.getValue().getRGB() + text + Color.WHITE.getRGB() + greeterName.getValue() +  color.getValue().getRGB(), x, y);
+            RENDERER.drawStringWithShadow(text, x, y, color.getValue().getRGB());
+            RENDERER.drawStringWithShadow(" " + mc.player.getName(), x + Managers.TEXT.getStringWidth(text), y, Color.WHITE.getRGB());
+            RENDERER.drawStringWithShadow(ending, x+Managers.TEXT.getStringWidth(text2 + " "), y, color.getValue().getRGB());
+        }
+    }
+    public static String getTimeOfDay() {
+        Calendar c = Calendar.getInstance();
+        int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
+
+        if (timeOfDay < 12 && timeOfDay > 7){
+            return "Good Morning. ";
+        } else if(timeOfDay < 16 && timeOfDay > 12){
+            return "Good Afternoon. ";
+        } else if(timeOfDay < 21 && timeOfDay > 16){
+            return "Good Evening. ";
+        } else {
+            return "Good Night. ";
         }
     }
 
@@ -522,5 +577,8 @@ public class HUD extends Module {
         }
         return "Not Defined";
     }
-
+    protected enum greeterpos{
+        LEFT,
+        CENTER
+    }
 }

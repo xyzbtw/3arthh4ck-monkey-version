@@ -129,8 +129,9 @@ public class Notifications extends Module
         {
             String message1 =
                              watermarkcolor.getValue().getColor() + chatwatermark.getValue() + " "
-                            + (enabled ? TextColor.DARK_GREEN : TextColor.DARK_RED)
-                            + (enabled ? "[+] " : "[-] ")
+                            + (enabled
+                                     ? TextColor.DARK_GREEN + "[" + TextColor.GREEN + "+" + TextColor.DARK_GREEN + "] "
+                                     : TextColor.DARK_RED + "[" + TextColor.RED + "-" + TextColor.DARK_RED + "] ")
                             + TextColor.WHITE + module.getDisplayName();
 
             mc.addScheduledTask(() ->

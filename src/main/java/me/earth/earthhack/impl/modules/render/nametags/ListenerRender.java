@@ -97,7 +97,7 @@ final class ListenerRender extends ModuleListener<Nametags, Render3DEvent>
         y = MathHelper.sqrt(xDist * xDist + yDist * yDist + zDist * zDist);
 
         int nameWidth = nametag.nameWidth / 2;
-        double scaling = 0.0018 + module.scale.getValue()/1000 * y;
+        double scaling = 0.0018 + module.scale.getValue()/1000 * (y>1 ? y : 1) + (mc.gameSettings.thirdPersonView!= 0 ? (double) 10/1000 : 0);
 
 
         GlStateManager.pushMatrix();
