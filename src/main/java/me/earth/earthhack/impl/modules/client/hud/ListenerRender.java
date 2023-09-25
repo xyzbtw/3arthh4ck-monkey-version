@@ -40,10 +40,11 @@ final class ListenerRender extends ModuleListener<HUD, Render2DEvent> {
                 module.animationY = 0;
             }
         }
-
-        module.renderLogo();
-        module.renderGreeter();
-        module.renderModules();
+        if(!mc.gameSettings.showDebugInfo) {
+            module.renderLogo();
+            module.renderGreeter();
+            module.renderModules();
+        }
         GL11.glPopMatrix();
     }
 

@@ -88,7 +88,7 @@ public class InvalidationHoleManager extends SubscriberImpl implements Globals, 
                             h -> h.getDistanceSq(x, y, z)));
                     _2x2.sort(Comparator.comparingDouble(
                             h -> h.getDistanceSq(x, y, z)));
-                    sortTimer.reset();
+                sortTimer.reset();
                 }
 
                 if (removeTimer.passed(config.getRemoveTime()))

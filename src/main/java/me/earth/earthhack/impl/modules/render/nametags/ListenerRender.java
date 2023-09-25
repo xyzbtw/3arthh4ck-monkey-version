@@ -132,9 +132,9 @@ final class ListenerRender extends ModuleListener<Nametags, Render3DEvent>
                             module.getBoxColor()); //module.getBoxColor()
 
         GlStateManager.disableBlend();
-
+        String name = nametag.nameString.equals(module.oldnameToChange.getValue())  ? module.newNameChange.getValue() : nametag.nameString;
         Managers.TEXT.drawStringWithShadow(
-                nametag.nameString,
+                name,
                 -nameWidth,
                 -(Managers.TEXT.getStringHeightI() - 1),
                 nametag.nameColor);

@@ -9,9 +9,11 @@ import me.earth.earthhack.impl.util.helpers.blocks.util.TargetResult;
 import me.earth.earthhack.impl.util.math.MathUtil;
 import me.earth.earthhack.impl.util.math.position.PositionUtil;
 import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
+import me.earth.earthhack.impl.util.minecraft.MotionTracker;
 import me.earth.earthhack.impl.util.minecraft.blocks.BlockUtil;
 import me.earth.earthhack.impl.util.minecraft.blocks.HoleUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -51,8 +53,16 @@ final class ListenerObby extends ObbyListener<HoleFiller>
         if (module.requireTarget.getValue())
         {
             module.target = EntityUtil.getClosestEnemy();
+            MotionTracker extrapolationEntity = null;
+            if(module.target!=null) {
+                 extrapolationEntity = module.extrapolationHelper.getTrackerFromEntity(module.target);
+            }
+            BlockPos pos = null;
+            if(module.target != null){
+                pos = extrapolationEntity == null ? module.target.getPosition() : extrapolationEntity.getPosition();
+            }
             if (module.target == null
-                || module.target.getDistanceSq(mc.player)
+                || mc.player.getDistanceSq(pos)
                     > MathUtil.square(module.targetRange.getValue())
                 || module.waitForHoleLeave.getValue()
                     && (HoleUtil.is1x1(
@@ -123,11 +133,13 @@ final class ListenerObby extends ObbyListener<HoleFiller>
         module.target = EntityUtil.getClosestEnemy();
         if (module.target != null)
         {
-            targets.removeIf(p -> BlockUtil.getDistanceSq(module.target, p)
+            MotionTracker extrapolationEntity = module.extrapolationHelper.getTrackerFromEntity(module.target);
+            EntityPlayer enemy = extrapolationEntity == null ? module.target : extrapolationEntity;
+            targets.removeIf(p -> BlockUtil.getDistanceSq(enemy, p)
                                     > MathUtil.square(
                                         module.targetDistance.getValue()));
             targets.sort(Comparator.comparingDouble(p ->
-                    BlockUtil.getDistanceSq(module.target, p)));
+                    BlockUtil.getDistanceSq(enemy, p)));
         }
 
         result.setTargets(targets);

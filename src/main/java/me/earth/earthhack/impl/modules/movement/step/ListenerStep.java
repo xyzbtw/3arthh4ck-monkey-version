@@ -48,7 +48,7 @@ final class ListenerStep extends ModuleListener<Step, StepEvent> {
                         Managers.TIMER.setTimer(module.timer.getValue().floatValue());
                     }
                     event.setHeight(module.height.getValue());
-                    if(event.getStage()== Stage.POST && module.bypass.getValue()) {
+                    if(event.getStage()== Stage.POST && module.bypass.getValue() && !module.bypassAlways.getValue()) {
                         module.bypasstime.reset();
                     }
                 } else {

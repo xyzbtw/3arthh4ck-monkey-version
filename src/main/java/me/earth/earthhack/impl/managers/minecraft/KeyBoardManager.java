@@ -44,7 +44,7 @@ public class KeyBoardManager extends SubscriberImpl {
                     if (isModuleValid(module) && KeyBoardUtil.isKeyDown(module.getBind())) {
                         switch (module.getBindMode()) {
                             case Hold:
-                                module.disable();
+                                module.toggle();
                                 break;
                             case Disable:
                                 module.disable();

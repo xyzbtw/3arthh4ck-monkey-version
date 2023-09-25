@@ -21,6 +21,7 @@ import me.earth.earthhack.api.util.interfaces.Displayable;
 import me.earth.earthhack.api.util.interfaces.Globals;
 import me.earth.earthhack.api.util.interfaces.Hideable;
 import me.earth.earthhack.api.util.interfaces.Nameable;
+import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -262,6 +263,17 @@ public abstract class Module extends SettingContainer
     public int hashCode()
     {
         return this.name.getInitial().hashCode();
+    }
+    /**
+     * Checks if <tt>{@link Minecraft#world} != null</tt>
+     * and <tt>{@link Minecraft#player} != null</tt> (at the
+     * timer this event was posted!).
+     *
+     * @return <tt>true</tt> if mc.player != null && mc.world != null.
+     */
+    public boolean isSafe()
+    {
+        return mc.player != null && mc.world != null;
     }
 
     // TODO: this is shit!!!!

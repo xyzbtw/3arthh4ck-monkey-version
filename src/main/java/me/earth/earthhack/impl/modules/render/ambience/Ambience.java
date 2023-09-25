@@ -20,10 +20,6 @@ public class Ambience extends Module
 
     protected final Setting<Color> color =
             register(new ColorSetting("Color", new Color(255, 255, 255, 255)));
-    protected final Setting<Boolean> useSaturation =
-            register(new BooleanSetting("UseSaturation", false));
-    protected final Setting<Float> saturation =
-            register(new NumberSetting<>("Saturation", 0.5f, 0.0f, 1.0f));
     protected final Setting<Boolean> fogModulation =
             register(new BooleanSetting("Fog", false));
     protected final Setting<Float> fogDensity =
@@ -61,16 +57,6 @@ public class Ambience extends Module
     public Color getColor()
     {
         return new Color(color.getValue().getRed(), color.getValue().getGreen(), color.getValue().getBlue(), color.getValue().getAlpha());
-    }
-
-    public boolean useSaturation()
-    {
-        return useSaturation.getValue();
-    }
-    // why are these unused? hmm
-    public float getSaturation()
-    {
-        return saturation.getValue();
     }
 
     @Override

@@ -5,10 +5,7 @@ import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Complexity;
 import me.earth.earthhack.api.setting.Setting;
-import me.earth.earthhack.api.setting.settings.BooleanSetting;
-import me.earth.earthhack.api.setting.settings.ColorSetting;
-import me.earth.earthhack.api.setting.settings.EnumSetting;
-import me.earth.earthhack.api.setting.settings.NumberSetting;
+import me.earth.earthhack.api.setting.settings.*;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.render.esp.ESP;
@@ -78,6 +75,10 @@ public class Nametags extends Module
             register(new ColorSetting("FriendText", new Color(255, 255, 255, 255)));
     protected final Setting<Color> boxcolor =
             register(new ColorSetting("BoxColor", new Color(255, 255, 255, 255)));
+    protected final Setting<String> oldnameToChange =
+            register(new StringSetting("oldPlayerToChange", "Monkey"));
+    protected final Setting<String> newNameChange =
+            register(new StringSetting("newPlayerToChange", "Monkey"));
 
     protected List<Nametag> nametags = new ArrayList<>();
     protected final StopWatch timer = new StopWatch();

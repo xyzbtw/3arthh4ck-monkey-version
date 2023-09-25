@@ -3,6 +3,7 @@ package me.earth.earthhack.impl.util.helpers.blocks.util;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TargetResult
@@ -19,6 +20,9 @@ public class TargetResult
     {
         this.targets = targets;
         return this;
+    }
+    public void addTargets(BlockPos... target){
+        targets.addAll(Arrays.asList(target));
     }
 
     public boolean isValid()

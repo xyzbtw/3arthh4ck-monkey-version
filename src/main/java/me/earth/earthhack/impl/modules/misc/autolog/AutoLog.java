@@ -1,5 +1,6 @@
 package me.earth.earthhack.impl.modules.misc.autolog;
 
+import me.earth.earthhack.api.cache.ModuleCache;
 import me.earth.earthhack.api.module.Module;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
@@ -7,6 +8,7 @@ import me.earth.earthhack.api.setting.settings.BooleanSetting;
 import me.earth.earthhack.api.setting.settings.NumberSetting;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.misc.autoreconnect.AutoReconnect;
+import me.earth.earthhack.impl.modules.player.fakeplayer.FakePlayer;
 import me.earth.earthhack.impl.util.math.MathUtil;
 import me.earth.earthhack.impl.util.network.ServerUtil;
 import net.minecraft.client.multiplayer.ServerData;
@@ -27,8 +29,11 @@ public class AutoLog extends Module
             register(new BooleanSetting("Y-Kick", false));
     protected final Setting<Float> ylevel       =
             register(new NumberSetting<>("Y-Level", 30f, -20f, 255f));
+    protected final Setting<Boolean> onRender =
+            register(new BooleanSetting("onRender", false));
     protected final Setting<Boolean> disablereconnect =
             register(new BooleanSetting("DisableAutoreconnect", false));
+    protected ModuleCache<FakePlayer> FAKEPLAYER = Caches.getModule(FakePlayer.class);
 
     protected ServerData serverData;
     protected String message;

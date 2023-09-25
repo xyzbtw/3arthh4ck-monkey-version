@@ -7,6 +7,7 @@ import me.earth.earthhack.impl.util.math.RayTraceUtil;
 import me.earth.earthhack.impl.util.math.position.PositionUtil;
 import me.earth.earthhack.impl.util.math.rotation.RotationUtil;
 import me.earth.earthhack.impl.util.minecraft.entity.EntityUtil;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -20,6 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -27,6 +29,88 @@ import static net.minecraft.util.EnumFacing.HORIZONTALS;
 
 public class BlockUtil implements Globals
 {
+    public static EnumFacing getFirstFacing(BlockPos pos) {
+        return getFirstFacing(pos,false);
+    }
+    public static EnumFacing getFirstFacing(BlockPos pos, boolean strict) {
+        for (EnumFacing facing : getPossibleSides(pos,strict)) {
+            return facing;
+        }
+        return null;
+    }
+    public static Block getBlock(BlockPos pos) {
+        return getState(pos).getBlock();
+    }
+
+    private static IBlockState getState(BlockPos pos) {
+        return mc.world.getBlockState(pos);
+    }
+    public static List<EnumFacing> getPossibleSides(BlockPos pos, boolean strict) {
+        List<EnumFacing> facings = new ArrayList<>();
+        for (EnumFacing side : EnumFacing.values()) {
+            if (strict && !BlockUtil.getVisibleSides(pos).contains(side.getOpposite())) {
+                continue;
+            }
+            BlockPos neighbour = pos.offset(side);
+            if (mc.world.getBlockState(neighbour).getBlock().canCollideCheck(mc.world.getBlockState(neighbour), false)) {
+                IBlockState blockState = mc.world.getBlockState(neighbour);
+                if (!blockState.getMaterial().isReplaceable()) {
+                    facings.add(side);
+                }
+            }
+        }
+        return facings;
+    }
+    public static List<EnumFacing> getVisibleSides(BlockPos position) {
+        List<EnumFacing> visibleSides = new ArrayList<>();
+
+        // pos vector
+        Vec3d positionVector = new Vec3d(position).add(0.5, 0.5, 0.5);
+
+        // facing
+        double facingX = mc.player.getPositionEyes(1).x - positionVector.x;
+        double facingY = mc.player.getPositionEyes(1).y - positionVector.y;
+        double facingZ = mc.player.getPositionEyes(1).z - positionVector.z;
+
+        // x
+        {
+            if (facingX < -0.5) {
+                visibleSides.add(EnumFacing.WEST);
+            } else if (facingX > 0.5) {
+                visibleSides.add(EnumFacing.EAST);
+            } else if (!mc.world.getBlockState(position).isFullBlock() || !mc.world.isAirBlock(position)) {
+                visibleSides.add(EnumFacing.WEST);
+                visibleSides.add(EnumFacing.EAST);
+            }
+        }
+
+        // y
+        {
+            if (facingY < -0.5) {
+                visibleSides.add(EnumFacing.DOWN);
+            } else if (facingY > 0.5) {
+                visibleSides.add(EnumFacing.UP);
+            } else {
+                visibleSides.add(EnumFacing.DOWN);
+                visibleSides.add(EnumFacing.UP);
+            }
+        }
+
+        // z
+        {
+            if (facingZ < -0.5) {
+                visibleSides.add(EnumFacing.NORTH);
+            } else if (facingZ > 0.5) {
+                visibleSides.add(EnumFacing.SOUTH);
+            } else if (!mc.world.getBlockState(position).isFullBlock() || !mc.world.isAirBlock(position)) {
+                visibleSides.add(EnumFacing.NORTH);
+                visibleSides.add(EnumFacing.SOUTH);
+            }
+        }
+
+        return visibleSides;
+    }
+
     /**
      * Checks if the given Position (which should be
      * the BlockPosition underneath the crystal) lies

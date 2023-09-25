@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static me.earth.earthhack.api.util.interfaces.Globals.mc;
+
 public class SimpleHoleManager implements HoleManager
 {
     private final Map<BlockPos, Hole> holes;
@@ -62,5 +64,6 @@ public class SimpleHoleManager implements HoleManager
     {
         return _2x2;
     }
+
 
 }

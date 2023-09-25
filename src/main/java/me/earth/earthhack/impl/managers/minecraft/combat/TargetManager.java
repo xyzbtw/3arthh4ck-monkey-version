@@ -31,6 +31,10 @@ public class TargetManager
     {
         return AUTO_CRYSTAL.returnIfPresent(AutoCrystal::getTarget, null);
     }
+    public void setAutoCrystal(EntityPlayer enemy)
+    {
+         AUTO_CRYSTAL.get().setTarget(enemy);
+    }
 
     public Entity getCrystal()
     {

@@ -93,6 +93,7 @@ public class MathUtil {
         }
         return high;
     }
+    
     /**
      * A simple to Math.pow operation, taking
      * integers as power.

@@ -72,6 +72,7 @@ public class Step extends BlockESPModule
     protected final Setting<Boolean> gapple =
             register(new BooleanSetting("Mine-Gapple", false));
     public final Setting<Boolean> bypass = register(new BooleanSetting("SpeedBypass", false));
+    public final Setting<Boolean> bypassAlways = register(new BooleanSetting("AlwaysEnabled", false));
     public final  Setting<Integer> bypassTime = register(new NumberSetting<>("Time", 100, 0, 1000));
     protected Setting<Float> bypassspeed = register(new NumberSetting<>("BypassSpeed", 1.5f, 0f, 5f));
     protected final Setting<Float> crystalFactor    =

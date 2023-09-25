@@ -397,6 +397,20 @@ final class ListenerModelPre extends ModuleListener<Chams, ModelRenderEvent.Pre>
             mc.gameSettings.entityShadows = shadows;
             glPopAttrib();
             glPopMatrix();
+            if (module.shouldLightning(event.getEntity()))
+            {
+                EntityLivingBase e = event.getEntity();
+                module.renderLightning(event.getModel(),
+                        event.getEntity(),
+                        event.getLimbSwing(),
+                        event.getLimbSwingAmount(),
+                        mc.getRenderPartialTicks(),
+                        event.getAgeInTicks(),
+                        event.getNetHeadYaw(),
+                        event.getHeadPitch(),
+                        module.lightningScale.getValue(),
+                        module.lightningColor.getValue());
+            }
         }
     }
 

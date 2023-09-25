@@ -64,7 +64,7 @@ public abstract class BlockPlacingModule extends DisablingModule
     public final Setting<Integer> blocks =
             register(new NumberSetting<>("Blocks/Place", 4, 1, 10));
     public final Setting<Integer> delay  =
-            register(new NumberSetting<>("Delay", 25, 0, 1000))
+            register(new NumberSetting<>("Delay", 25, 0, 10000))
                 .setComplexity(Complexity.Medium);
     public final Setting<Rotate> rotate  =
             register(new EnumSetting<>("Rotations", Rotate.None));

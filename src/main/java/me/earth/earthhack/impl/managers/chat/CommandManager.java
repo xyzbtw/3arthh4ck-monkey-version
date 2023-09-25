@@ -18,6 +18,7 @@ import me.earth.earthhack.impl.commands.hidden.HSettingCommand;
 import me.earth.earthhack.impl.commands.packet.PacketCommandImpl;
 import me.earth.earthhack.impl.commands.util.CommandUtil;
 import me.earth.earthhack.impl.event.events.network.PacketEvent;
+import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.modules.client.commands.Commands;
 import me.earth.earthhack.impl.util.misc.collections.CollectionUtil;
 import net.minecraft.client.gui.GuiTextField;
@@ -214,7 +215,7 @@ public class CommandManager extends SubscriberImpl
         commands.add(MODULE_COMMAND);
         concatenated = concatenateCommands();
     }
-
+    
     public void renderCommandGui(String message, int x, int y)
     {
         if (message != null
@@ -245,25 +246,14 @@ public class CommandManager extends SubscriberImpl
         return true;
     }
 
-    // TODO: WHY REQUIRE PREFIX HERE IM SO RETARDED WTF
+   
     public void applyCommand(String message)
     {
-        if (message != null && message.length() > 1)
-        {
-            applyCommandNoPrefix(removePrefix(message));
-        }
+        if(message.substring(0, Commands.getPrefix().length()) == Commands.getPrefix()) removePrefix(message);
+        String[] array = createArray(message);
+        executeArgs(array);
     }
 
-    public void applyCommandNoPrefix(String message)
-    {
-        if (message != null && message.length() > 1)
-        {
-            // String[] commandSplit = message.split(";"); TODO this
-            // for (String s : commandSplit)
-            String[] array = createArrayNoPrefix(message);
-            executeArgs(array);
-        }
-    }
 
     public void executeArgs(String... args)
     {
@@ -301,17 +291,12 @@ public class CommandManager extends SubscriberImpl
 
     public String[] createArray(String message)
     {
-        String noPrefix = removePrefix(message);
-        return CommandUtil.toArgs(noPrefix);
+        if(message.substring(0, Commands.getPrefix().length()) == Commands.getPrefix()) removePrefix(message); 
+        return CommandUtil.toArgs(message);
     }
 
     public String removePrefix(String message) {
         return message.substring(Commands.getPrefix().length());
-    }
-
-    public String[] createArrayNoPrefix(String message)
-    {
-        return CommandUtil.toArgs(message);
     }
 
     private Command getHiddenCommand(String[] array)

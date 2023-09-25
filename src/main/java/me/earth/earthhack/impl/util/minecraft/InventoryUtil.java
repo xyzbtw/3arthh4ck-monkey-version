@@ -19,6 +19,7 @@ import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.client.CPacketHeldItemChange;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 
@@ -34,6 +35,11 @@ public class InventoryUtil implements Globals {
             mc.player.inventory.currentItem = slot;
             syncItem();
         }
+    }
+    public static void setCurrentItem(int slot) {
+        mc.player.inventory.currentItem = slot;
+        mc.player.connection.sendPacket(new CPacketHeldItemChange(slot));
+        mc.playerController.updateController();
     }
 
     public static void switchToBypass(int slot) {

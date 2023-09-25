@@ -66,17 +66,25 @@ public abstract class ObbyListener<T extends ObbyListenerModule<?>> extends Modu
     }
 
     protected void placeTargets() {
+        targets.sort((s1, s2) -> {
+            double distance1 = s1.distanceSq(mc.player.posX, mc.player.posY, mc.player.posZ);
+            double distance2 = s2.distanceSq(mc.player.posX, mc.player.posY, mc.player.posZ);
+            return Double.compare(distance2, distance1);
+        });
+
         for (BlockPos pos : targets) {
             if (!placed.containsKey(pos)
                     && HELPER.getBlockState(pos)
-                            .getMaterial()
-                            .isReplaceable()) {
+                    .getMaterial()
+                    .isReplaceable()) {
                 if (module.placeBlock(pos)) {
                     break;
                 }
             }
         }
     }
+
+
 
     protected boolean attackCrystalFirst() {
         boolean hasPlaced = false;

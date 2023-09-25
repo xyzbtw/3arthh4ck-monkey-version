@@ -34,6 +34,8 @@ public class PopChams extends BlockESPModule
             register(new ColorSetting("Friend-Color", new Color(45, 255, 45, 80)));
     public final ColorSetting friendOutline =
             register(new ColorSetting("Friend-Outline", new Color(45, 255, 45, 255)));
+    public final Setting<Integer> spinTime =
+            register(new NumberSetting<>("SpinTime", 500, 0, 5000));
     private final List<PopData> popDataList = new ArrayList<>();
 
     public PopChams()

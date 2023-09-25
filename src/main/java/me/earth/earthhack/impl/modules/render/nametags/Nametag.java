@@ -106,7 +106,6 @@ public class Nametag implements Globals
     private String getName(EntityPlayer player)
     {
         String name = player.getDisplayName().getFormattedText().trim();
-
         String s;
         if (module.media.getValue())
         {

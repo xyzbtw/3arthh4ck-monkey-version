@@ -52,7 +52,7 @@ public class AutoTrap extends ObbyListenerModule<ListenerAutoTrap>
     };
 
     protected final Setting<Float> range           =
-            register(new NumberSetting<>("Range", 6.0f, 0.0f, 6.0f));
+            register(new NumberSetting<>("Range", 6.0f, 0.0f, 8.0f));
     protected final Setting<Boolean> noScaffold    =
             register(new BooleanSetting("NoScaffold", false));
 protected final Setting<Boolean> top               =

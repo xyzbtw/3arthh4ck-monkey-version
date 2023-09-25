@@ -51,9 +51,9 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
     protected final Setting<Boolean> extend = register(new BooleanSetting("Extend", true));
     protected final Setting<Boolean> face = register(new BooleanSetting("Face", true));
     protected final Setting<Boolean> hole = register(new BooleanSetting("HoleCheck", true));
-    protected final Setting<Integer> clownDelay = register(new NumberSetting<>("ClownDelay", 300, 0, 4000));
     protected final Setting<Boolean> fullExtend = register(new BooleanSetting("FullExtend", true));
     protected final Setting<Boolean> extendxyz = register(new BooleanSetting("Extend-diag", false));
+    protected final Setting<Boolean> antidiag = register(new BooleanSetting("AntiDiag", false));
     protected final Setting<Boolean> helping = register(new BooleanSetting("HelpingBlocks", false));
     protected final Setting<Boolean> undersurround = register(new BooleanSetting("UnderSurround", true));
     protected final Setting<Float> enemyrange = register(new NumberSetting<>("EnemyRange", 6.0f, 0.0f, 10.0f));
@@ -64,13 +64,17 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
     protected final Setting<Color> outLine = register(new ColorSetting("Outline", new Color(255, 255, 255, 240)));
     protected final Setting<Float> linewidth = register(new NumberSetting<>("LineWidth", 1.0f, 0.0f, 5.0f));
     protected final Setting<Float> renderheight = register(new NumberSetting<>("Height", 1.0f, -1.0f, 1.0f));
+   // protected final Setting<Double> mineTime = register(new NumberSetting<>("Mine Time",1.,0.,10.));
+
+   // protected final Setting<Double> maxMineTime = register(new NumberSetting<>("Max Mine Time",5.,0.,10.));
     protected final Setting<Boolean> debug = register(new BooleanSetting("Debug", false));
 
     protected HashMap<BlockPos, IBlockState> blockmap = new HashMap<>();
 
     protected EntityPlayer target;
     protected final ModuleCache<Speedmine> speedmine = Caches.getModule(Speedmine.class);
-    protected final StopWatch blockerTimer = new StopWatch();
+    protected MineStart mineStart = null;
+    protected final ArrayList<MineStart> mining = new ArrayList<>();
 
     public Blocker() {
         super("Blocker", Category.Combat);
@@ -104,8 +108,20 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
             new Vec3i(1, 1, 0), // side cev checks
             new Vec3i(-1, 1, 0),
             new Vec3i(0, 1, 1),
-            new Vec3i(0, 1, -1)
+            new Vec3i(0, 1, -1),
 
+
+            new Vec3i(1, 1, 1), //diag cev ??
+            new Vec3i(1, 1, -1),
+            new Vec3i(-1, 1, 1),
+            new Vec3i(-1, 1, -1)
+
+    };
+    protected Vec3i[] offsetsDiag = new Vec3i[]{
+            new Vec3i(1, 1, 1),
+            new Vec3i(1, 1, -1),
+            new Vec3i(-1, 1, 1),
+            new Vec3i(-1, 1, -1)
     };
 
     protected IAxisESP esp = new BlockESPBuilder()
@@ -175,9 +191,19 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
         if (hole.getValue() && !PlayerUtil.isInHoleAll(mc.player))
             return;
 
+
+        for (Vec3i offset : offsetsDiag){
+            BlockPos thing = mc.player.getPosition().add(offset);
+            if(pos == thing && antidiag.getValue()){
+               scheduledPlacements.add(thing);
+                return;
+            }
+        }
+
+
         if (pos == playerPos.add(0, 2, 0) && anticev.getValue()) {
-            scheduledPlacements.add(pos.add(0, 1, 0));
-            blockmap.remove(pos);
+                scheduledPlacements.add(pos.add(0, 1, 0));
+                blockmap.remove(pos);
             return;
         }
 
@@ -185,7 +211,7 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
             for (EnumFacing facing : EnumFacing.VALUES) {
                 if (pos.offset(facing).equals(playerPos))
                     continue;
-                scheduledPlacements.add(pos.offset(facing));
+               scheduledPlacements.add(pos.offset(facing));
             }
         } else if (pos == playerPos.add(0, -1, 0) && !undersurround.getValue()) {
             return;
@@ -204,7 +230,7 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
 
             if (fullExtend.getValue()) {
                 if (pos.getY() == playerPos.getY()) {
-                    scheduledPlacements.add(pos.offset(face));
+                  scheduledPlacements.add(pos.offset(face));
                 } else {
                     scheduledPlacements.add(pos.add(0, 1, 0));
                 }
@@ -218,13 +244,25 @@ public class Blocker extends ObbyListenerModule<ListenerObsidian> {
                         scheduledPlacements.add(playerPos.offset(face).add(0, 1, 0));
                     }
                     if (this.extendxyz.getValue()) {
-                        scheduledPlacements.add(playerPos.offset(face).offset(face.rotateYCCW()));
-                        scheduledPlacements.add(playerPos.offset(face).offset(face.rotateY()));
+                      scheduledPlacements.add(playerPos.offset(face).offset(face.rotateYCCW()));
+                      scheduledPlacements.add(playerPos.offset(face).offset(face.rotateY()));
                     }
                 }
             }
         }
         blockmap.remove(pos);
+    }
+    protected boolean contains() {
+        for (MineStart m : mining) {
+            if (m.getId() == mineStart.getId() && m.getPos().equals(mineStart.getPos())) return true;
+        }
+        return false;
+    }
+    protected boolean containsPos(BlockPos pos) {
+        for (MineStart m : mining) {
+            //if (System.currentTimeMillis() > m.getTime() + mineTime.getValue() * 1000 && m.getPos().equals(pos)) return true;
+        }
+        return false;
     }
 
     @Override

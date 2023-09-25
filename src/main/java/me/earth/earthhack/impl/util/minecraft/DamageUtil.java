@@ -3,6 +3,7 @@ package me.earth.earthhack.impl.util.minecraft;
 import me.earth.earthhack.api.util.interfaces.Globals;
 import me.earth.earthhack.impl.core.ducks.entity.IEntityLivingBase;
 import me.earth.earthhack.impl.core.mixins.item.IItemTool;
+import me.earth.earthhack.impl.modules.player.foreverspeedmine.IBlockStateHelper;
 import me.earth.earthhack.impl.util.math.DistanceUtil;
 import me.earth.earthhack.impl.util.math.raytrace.RayTracer;
 import me.earth.earthhack.impl.util.math.rotation.RotationUtil;

@@ -6,6 +6,7 @@ import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
 import me.earth.earthhack.api.setting.SettingContainer;
 import me.earth.earthhack.api.setting.settings.*;
+import me.earth.earthhack.impl.core.mixins.render.entity.IRenderEnderCrystal;
 import me.earth.earthhack.impl.event.events.render.ModelRenderEvent;
 import me.earth.earthhack.impl.managers.Managers;
 import me.earth.earthhack.impl.modules.render.chams.mode.ChamsMode;
@@ -16,10 +17,18 @@ import me.earth.earthhack.impl.util.render.RenderUtil;
 import me.earth.earthhack.impl.util.render.forevershader.FillShader;
 import me.earth.earthhack.impl.util.text.ChatUtil;
 import me.earth.earthhack.impl.util.text.TextColor;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderEnderCrystal;
+import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.EXTFramebufferObject;
@@ -95,6 +104,12 @@ public class Chams extends Module
         register(new StringSetting("CustomShaderLocation", "None!"));
     protected final Setting<Boolean> refreshCustomShader =
         register(new BooleanSetting("RefreshCustomShader", false));
+    public final Setting<Boolean> lightning =
+            register(new BooleanSetting("Lightning", false));
+    protected final Setting<Float> lightningScale = register(new NumberSetting<>("lightningScale", 1f, 0f, 15f));
+    public final Setting<Color> lightningColor =
+            register(new ColorSetting("LightningColor", new Color(255, 255, 255, 255)));
+
 
     protected boolean force;
     protected boolean hasImageChammed;
@@ -211,6 +226,14 @@ public class Chams extends Module
             return true;
         }
     }
+    public boolean shouldLightning(Entity entity)
+    {
+        if (entity instanceof EntityPlayer)
+        {
+                return lightning.getValue();
+        }
+        return false;
+    }
 
     protected Color getVisibleColor(Entity entity) {
         if (Managers.FRIENDS.contains(entity)) {
@@ -258,7 +281,14 @@ public class Chams extends Module
         EXTFramebufferObject.glFramebufferRenderbufferEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT, EXTFramebufferObject.GL_STENCIL_ATTACHMENT_EXT, EXTFramebufferObject.GL_RENDERBUFFER_EXT, stencilDepthBufferID);
         EXTFramebufferObject.glFramebufferRenderbufferEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT, EXTFramebufferObject.GL_DEPTH_ATTACHMENT_EXT, EXTFramebufferObject.GL_RENDERBUFFER_EXT, stencilDepthBufferID);
     }
-
+    public boolean shouldWallsLightning(Entity entity)
+    {
+        if (entity instanceof EntityPlayer)
+        {
+            return xqz.getValue();
+        }
+        return false;
+    }
     public boolean shouldArmorChams() {
         return armor.getValue();
     }
@@ -280,5 +310,70 @@ public class Chams extends Module
     }
     public float getAlpha() {
         return color.getValue().getAlpha() / 255.0f;
+    }
+
+
+    protected void renderLightning(ModelBase modelBase, EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale, Color color)
+    {
+        Render<? extends EntityLivingBase> render = mc.getRenderManager().getEntityRenderObject(entitylivingbaseIn);
+        RenderLivingBase<?> renderLivingBase = (RenderLivingBase<?>) render;
+        assert renderLivingBase != null;
+        boolean flag = entitylivingbaseIn.isInvisible();
+        GlStateManager.enableTexture2D();
+        GlStateManager.depthMask(!flag);
+        mc.getTextureManager().bindTexture(LIGHTNING_TEXTURE);
+        GlStateManager.matrixMode(5890);
+        GlStateManager.loadIdentity();
+        float f = (float)entitylivingbaseIn.ticksExisted + partialTicks;
+        GlStateManager.translate(f * 0.01F, f * 0.01F, 0.0F);
+        GlStateManager.matrixMode(5888);
+        GlStateManager.enableBlend();
+        float f1 = 0.5F;
+        GlStateManager.color(color.getRed() / 255.0f, color.getGreen() / 255.0f, color.getBlue() / 255.0f, color.getAlpha() / 255.0f);
+        GlStateManager.disableLighting();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
+        modelBase.setModelAttributes(renderLivingBase.getMainModel());
+        Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
+        modelBase.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+        Minecraft.getMinecraft().entityRenderer.setupFogColor(false);
+        GlStateManager.matrixMode(5890);
+        GlStateManager.loadIdentity();
+        GlStateManager.matrixMode(5888);
+        GlStateManager.enableLighting();
+        GlStateManager.disableBlend();
+        GlStateManager.depthMask(flag);
+    }
+    private static final ResourceLocation ENCHANTED_ITEM_GLINT_RES = new ResourceLocation("textures/misc/enchanted_item_glint.png");
+    private static final ResourceLocation LIGHTNING_TEXTURE = new ResourceLocation("earthhack:textures/client/lightning.png");
+
+    private static void renderLightning(ModelBase modelBase, EntityEnderCrystal entityEnderCrystal, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale, Color color)
+    {
+        Render<? extends EntityEnderCrystal> render = mc.getRenderManager().getEntityRenderObject(entityEnderCrystal);
+        RenderEnderCrystal renderLivingBase = (RenderEnderCrystal) render;
+        assert renderLivingBase != null;
+        boolean flag = entityEnderCrystal.isInvisible();
+        GlStateManager.enableTexture2D();
+        GlStateManager.depthMask(!flag);
+        mc.getTextureManager().bindTexture(LIGHTNING_TEXTURE);
+        GlStateManager.matrixMode(5890);
+        GlStateManager.loadIdentity();
+        float f = (float)entityEnderCrystal.ticksExisted + partialTicks;
+        GlStateManager.translate(f * 0.01F, f * 0.01F, 0.0F);
+        GlStateManager.matrixMode(5888);
+        GlStateManager.enableBlend();
+        float f1 = 0.5F;
+        GlStateManager.color(color.getRed() / 255.0f, color.getGreen() / 255.0f, color.getBlue() / 255.0f, color.getAlpha() / 255.0f);
+        GlStateManager.disableLighting();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
+        modelBase.setModelAttributes(((IRenderEnderCrystal) renderLivingBase).getModelEnderCrystal());
+        Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
+        modelBase.render(entityEnderCrystal, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+        Minecraft.getMinecraft().entityRenderer.setupFogColor(false);
+        GlStateManager.matrixMode(5890);
+        GlStateManager.loadIdentity();
+        GlStateManager.matrixMode(5888);
+        GlStateManager.enableLighting();
+        GlStateManager.disableBlend();
+        GlStateManager.depthMask(flag);
     }
 }

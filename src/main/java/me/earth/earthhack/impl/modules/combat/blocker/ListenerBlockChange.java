@@ -51,10 +51,8 @@ public class ListenerBlockChange extends ModuleListener<Blocker, PacketEvent.Rec
             if(module.debug.getValue()){
                 ModuleUtil.sendMessage(module, "Received at blockchange " + blockPosition.toString());
             }
-            if(module.blockerTimer.passed(module.clownDelay.getValue())) {
-                module.scanAndPlace(blockPosition);
-                module.blockerTimer.reset();
-            }
+            module.scanAndPlace(blockPosition);
+
             Speedmine.compatibility.remove(blockPosition);
         }
     }

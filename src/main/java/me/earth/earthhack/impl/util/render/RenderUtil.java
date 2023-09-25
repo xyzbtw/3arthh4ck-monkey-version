@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec2f;
@@ -268,7 +269,62 @@ public class RenderUtil implements Globals
         glDisableClientState(GL_VERTEX_ARRAY);
         endRender();
     }
+    public static void drawText(BlockPos pos, String text,float scale,Color color) {
+        GlStateManager.pushMatrix();
+        glBillboardDistanceScaled((float) pos.getX() + 0.5f, (float) pos.getY() + 0.5f, (float) pos.getZ() + 0.5f, mc.player, 1);
+        GlStateManager.disableDepth();
+        GlStateManager.translate(-(Managers.TEXT.getStringWidth(text) / 2.0d), 0, 0);
+        GlStateManager.scale(scale,scale,scale);
+        Managers.TEXT.drawStringWithShadow(text, 0, 0, color.getRGB());
+        GlStateManager.enableDepth();
+        GlStateManager.popMatrix();
+    }
 
+    public static void drawText(BlockPos pos, String text, boolean shadow) {
+        GlStateManager.pushMatrix();
+        glBillboardDistanceScaled((float) pos.getX() + 0.5f, (float) pos.getY() + 0.5f, (float) pos.getZ() + 0.5f, mc.player, 1);
+        GlStateManager.disableDepth();
+        GlStateManager.translate(-(Managers.TEXT.getStringWidth(text) / 2.0d), 0, 0);
+        Managers.TEXT.drawString(text, 0, 0, 0xFFAAAAAA, shadow);
+        GlStateManager.popMatrix();
+    }
+
+    public static void drawText(double x, double y, double z, String text, boolean shadow) {
+        GlStateManager.pushMatrix();
+        glBillboardDistanceScaled((float) x + 0.5f, (float) y + 0.5f, (float) z + 0.5f, mc.player, 1);
+        GlStateManager.disableDepth();
+        GlStateManager.translate(-(Managers.TEXT.getStringWidth(text) / 2.0d), 0, 0);
+        Managers.TEXT.drawString(text, 0, 0, 0xFFAAAAAA, shadow);
+        GlStateManager.popMatrix();
+    }
+    public static void glBillboard(float x, float y, float z) {
+        float scale = 0.016666668f * 1.6f;
+        GlStateManager.translate(x - mc.getRenderManager().renderPosX, y - mc.getRenderManager().renderPosY, z - mc.getRenderManager().renderPosZ);
+        GlStateManager.glNormal3f(0.0f, 1.0f, 0.0f);
+        GlStateManager.rotate(-mc.player.rotationYaw, 0.0f, 1.0f, 0.0f);
+        GlStateManager.rotate(mc.player.rotationPitch, mc.gameSettings.thirdPersonView == 2 ? -1.0f : 1.0f, 0.0f, 0.0f);
+        GlStateManager.scale(-scale, -scale, scale);
+    }
+    public static void glBillboardDistanceScaled(float x, float y, float z, EntityPlayer player, float scale) {
+        glBillboard(x, y, z);
+        int distance = (int) player.getDistance(x, y, z);
+        float scaleDistance = (distance / 2.0f) / (2.0f + (2.0f - scale));
+        if (scaleDistance < 1f)
+            scaleDistance = 1;
+        GlStateManager.scale(scaleDistance, scaleDistance, scaleDistance);
+    }
+
+    public static void drawText(AxisAlignedBB pos, String text) {
+        if (pos == null || text == null) {
+            return;
+        }
+        GlStateManager.pushMatrix();
+        RenderUtil.glBillboardDistanceScaled((float) pos.minX + 0.5f, (float) pos.minY + 0.5f, (float) pos.minZ + 0.5f, RenderUtil.mc.player, 1.0f);
+        GlStateManager.disableDepth();
+        GlStateManager.translate(-((double) Managers.TEXT.getStringWidth(text) / 2.0), 0.0, 0.0);
+        Managers.TEXT.drawStringWithShadow(text, 0.0f, 0.0f, -5592406);
+        GlStateManager.popMatrix();
+    }
     public static void renderOutline(double x, double y, double z)
     {
         startRender();

@@ -1,5 +1,6 @@
 package me.earth.earthhack.impl.modules.combat.holefiller;
 
+import jdk.nashorn.internal.ir.Block;
 import me.earth.earthhack.api.cache.ModuleCache;
 import me.earth.earthhack.api.module.util.Category;
 import me.earth.earthhack.api.setting.Setting;
@@ -10,7 +11,10 @@ import me.earth.earthhack.impl.managers.thread.holes.IHoleManager;
 import me.earth.earthhack.impl.modules.Caches;
 import me.earth.earthhack.impl.modules.combat.offhand.Offhand;
 import me.earth.earthhack.impl.modules.combat.offhand.modes.OffhandMode;
+import me.earth.earthhack.impl.modules.render.holeesp.invalidation.Hole;
+import me.earth.earthhack.impl.modules.render.holeesp.invalidation.SimpleHoleManager;
 import me.earth.earthhack.impl.util.helpers.blocks.ObbyListenerModule;
+import me.earth.earthhack.impl.util.math.MathUtil;
 import me.earth.earthhack.impl.util.math.StopWatch;
 import me.earth.earthhack.impl.util.minecraft.InventoryUtil;
 import me.earth.earthhack.impl.util.text.TextColor;
@@ -18,8 +22,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class HoleFiller extends ObbyListenerModule<ListenerObby> implements HoleObserver, IHoleManager {
     protected static final ModuleCache<Offhand> OFFHAND = Caches.getModule(Offhand.class);
@@ -37,7 +43,12 @@ public class HoleFiller extends ObbyListenerModule<ListenerObby> implements Hole
     protected final Setting<Boolean> waitForHoleLeave = register(new BooleanSetting("WaitForHoleLeave", false));
     protected final Setting<Boolean> offhand = register(new BooleanSetting("Offhand", false));
     protected final Setting<Boolean> requireOffhand = register(new BooleanSetting("RequireOffhand", false));
+    public final Setting<Integer> extrapol =
+            register(new NumberSetting<>("Extrapolation", 0, 0, 10));
+    protected final me.earth.earthhack.impl.modules.combat.holefiller.ExtrapolationHelper extrapolationHelper =
+            new ExtrapolationHelper(this);
 
+    SimpleHoleManager simpleHoleManager = new SimpleHoleManager();
     protected List<BlockPos> safes = Collections.emptyList();
     protected List<BlockPos> unsafes = Collections.emptyList();
     protected List<BlockPos> longs = Collections.emptyList();
@@ -53,6 +64,7 @@ public class HoleFiller extends ObbyListenerModule<ListenerObby> implements Hole
         super("HoleFiller", Category.Combat);
         this.listeners.clear(); // Remove DisablingModule listeners
         this.listeners.add(this.listener);
+        this.listeners.addAll(extrapolationHelper.getListeners());
         this.setData(new HoleFillerData(this));
     }
 
@@ -113,6 +125,27 @@ public class HoleFiller extends ObbyListenerModule<ListenerObby> implements Hole
         return super.execute();
     }
 
+    public int getClosestHolesOneByOne(){
+        List<Hole> holes = simpleHoleManager.getHoles()
+                .values()
+                .stream()
+                .filter(h-> !h.is2x2())
+                .filter(h-> !h.is2x1())
+                .filter(h-> h.getDistanceSq(mc.player.posX, mc.player.posY, mc.player.posZ) <= MathUtil.square(getRange()))
+                .filter(h-> h.getDistanceSq(mc.player.posX, mc.player.posY, mc.player.posZ) > MathUtil.square(minSelf.getValue()))
+                .collect(Collectors.toList());
+        return holes.size();
+    }
+    public int getClosestHoleBig(){
+        List<Hole> holes = simpleHoleManager.getHoles()
+                .values()
+                .stream()
+                .filter(h-> h.getDistanceSq(mc.player.posX, mc.player.posY, mc.player.posZ) <= MathUtil.square(getRange()))
+                .filter(h-> h.getDistanceSq(mc.player.posX, mc.player.posY, mc.player.posZ) > MathUtil.square(minSelf.getValue()))
+                .collect(Collectors.toList());
+        return holes.size();
+    }
+
     @Override
     public double getRange() {
         return range.getValue();
@@ -120,8 +153,6 @@ public class HoleFiller extends ObbyListenerModule<ListenerObby> implements Hole
 
     @Override
     public int getSafeHoles() {
-        // TODO: this isn't perfect yet since we basically want to sort holes
-        // towards a player when using Smart Mode. Maybe an extra HoleManager?
         return 20;
     }
 
