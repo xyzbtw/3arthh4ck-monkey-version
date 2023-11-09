@@ -30,6 +30,7 @@ import me.earth.earthhack.impl.modules.combat.autoarmor.AutoArmor;
 import me.earth.earthhack.impl.modules.combat.autocrystal.AutoCrystal;
 import me.earth.earthhack.impl.modules.combat.autotrap.AutoTrap;
 import me.earth.earthhack.impl.modules.combat.bowkill.BowKiller;
+import me.earth.earthhack.impl.modules.combat.bowspam.BowSpam;
 import me.earth.earthhack.impl.modules.combat.criticals.Criticals;
 import me.earth.earthhack.impl.modules.combat.blocker.Blocker;
 import me.earth.earthhack.impl.modules.combat.holefiller.HoleFiller;
@@ -43,8 +44,10 @@ import me.earth.earthhack.impl.modules.misc.antiaim.AntiAim;
 import me.earth.earthhack.impl.modules.misc.autoeat.AutoEat;
 import me.earth.earthhack.impl.modules.misc.autolog.AutoLog;
 import me.earth.earthhack.impl.modules.misc.chat.Chat;
+import me.earth.earthhack.impl.modules.misc.extratab.ExtraTab;
 import me.earth.earthhack.impl.modules.misc.holdmodules.*;
 import me.earth.earthhack.impl.modules.misc.noafk.NoAFK;
+import me.earth.earthhack.impl.modules.movement.idealtick.IdealTick;
 import me.earth.earthhack.impl.modules.movement.nomovesneak.NoMoveSneak;
 import me.earth.earthhack.impl.modules.misc.nosoundlag.NoSoundLag;
 import me.earth.earthhack.impl.modules.misc.packets.Packets;
@@ -67,6 +70,7 @@ import me.earth.earthhack.impl.modules.movement.tickshift.TickShift;
 import me.earth.earthhack.impl.modules.movement.velocity.Velocity;
 import me.earth.earthhack.impl.modules.player.arrows.Arrows;
 import me.earth.earthhack.impl.modules.player.arrows.MMQuiver;
+import me.earth.earthhack.impl.modules.player.autochorus.AutoChorus;
 import me.earth.earthhack.impl.modules.player.automine.AutoMine;
 import me.earth.earthhack.impl.modules.player.blink.Blink;
 import me.earth.earthhack.impl.modules.player.blocktweaks.BlockTweaks;
@@ -122,9 +126,8 @@ public class ModuleManager extends IterationRegister<Module> {
         this.forceRegister(new Colors());
         this.forceRegister(new Commands());
         this.forceRegister(new ConfigModule());
-        this.forceRegister(new HoldModule8());
-        this.forceRegister(new HoldModule9());
        // this.forceRegister(new Debug());
+        this.forceRegister(new IdealTick());
         this.forceRegister(new FontMod());
         this.forceRegister(new HUD());
         this.forceRegister(new PrivateCevBreaker());
@@ -133,6 +136,7 @@ public class ModuleManager extends IterationRegister<Module> {
         this.forceRegister(new Notifications());
         this.forceRegister(new Compatibility());
         this.forceRegister(new Safety());
+        this.forceRegister(new AutoChorus());
         this.forceRegister(new ServerModule());
         this.forceRegister(new Skeleton());
         this.forceRegister(new PingSpoof());
@@ -142,6 +146,7 @@ public class ModuleManager extends IterationRegister<Module> {
         //this.forceRegister(new TabModule());
         this.forceRegister(new Media());
 
+
         //this.forceRegister(new AntiSurround());
         this.forceRegister(new AntiTrap());
         //this.forceRegister(new Auto32k());
@@ -150,7 +155,7 @@ public class ModuleManager extends IterationRegister<Module> {
         this.forceRegister(new AutoCrystal());
         this.forceRegister(new AutoTrap());
         //this.forceRegister(new BedBomb());
-        //this.forceRegister(new BowSpam());
+        this.forceRegister(new BowSpam());
         this.forceRegister(new BowKiller());
         this.forceRegister(new Blocker());
         this.forceRegister(new Criticals());
@@ -164,9 +169,7 @@ public class ModuleManager extends IterationRegister<Module> {
        //this.forceRegister(new Snowballer());
         this.forceRegister(new AutoMend());
         this.forceRegister(new ForeverSpeedMine());
-        this.forceRegister(new HoldModule5());
-        this.forceRegister(new HoldModule6());
-        this.forceRegister(new HoldModule7());
+
         this.forceRegister(new AntiAim());
         this.forceRegister(new SelfTrap());
        // this.forceRegister(new Announcer());
@@ -182,7 +185,7 @@ public class ModuleManager extends IterationRegister<Module> {
         this.forceRegister(new HoldModule4());
         this.forceRegister(new Chat());
        // this.forceRegister(new CoordAnnouncer());
-        //this.forceRegister(new ExtraTab());
+        this.forceRegister(new ExtraTab());
        // this.forceRegister(new Logger());
        // this.forceRegister(new MCF());
        // this.forceRegister(new MobOwner());
@@ -223,8 +226,6 @@ public class ModuleManager extends IterationRegister<Module> {
       //  this.forceRegister(new AutoWalk());
         this.forceRegister(new BlockLag());
         //this.forceRegister(new BoatFly());
-        this.forceRegister(new HoldModule2());
-        this.forceRegister(new HoldModule3());
        // this.forceRegister(new EntitySpeed());
         //this.forceRegister(new Clip());
         //this.forceRegister(new FastSwim());

@@ -48,5 +48,10 @@ public interface Hole {
             && y >= this.getY() && y < this.getY() + 1
             && z > this.getZ() && z < this.getMaxZ();
     }
+    default boolean contains(BlockPos pos) {
+        return pos.getX() > this.getX() &&pos.getX() < this.getMaxX()
+                && pos.getY() >= this.getY() && pos.getY() < this.getY() + 1
+                && pos.getZ() > this.getZ() && pos.getZ() < this.getMaxZ();
+    }
 
 }

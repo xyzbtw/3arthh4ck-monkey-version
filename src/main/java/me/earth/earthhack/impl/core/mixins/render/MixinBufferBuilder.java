@@ -39,15 +39,6 @@ public abstract class MixinBufferBuilder
             int green = (bgr[1] + color.getGreen()) / 2;
             int blue = (bgr[0] + color.getBlue()) / 2;
             float[] hsb = Color.RGBtoHSB(red, green, blue, null);
-            if (AMBIENCE.get().useSaturation())
-            {
-                hsb[1] = AMBIENCE.get().getSaturation();
-                int rgb = Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]);
-                int[] bgr1 = MathUtil.toRGBAArray(rgb);
-                red = bgr1[2];
-                green = bgr1[1];
-                blue = bgr1[0];
-            }
             i = MathUtil.toRGBAReversed(red, green, blue);
         }
 

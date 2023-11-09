@@ -65,5 +65,9 @@ public class SimpleHoleManager implements HoleManager
         return _2x2;
     }
 
+    public boolean isPlayerInHole(){
+        return this.getHoles().values().stream().anyMatch(h-> h.contains(mc.player.getPosition()));
+    }
+
 
 }
